@@ -1,11 +1,13 @@
 package com.buzzit.Logic;
 
-import java.io.FileInputStream;
+import com.badlogic.gdx.Gdx;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
+
 
 /**
  * Created by wnfuk_000 on 20/04/2016.
@@ -13,7 +15,6 @@ import java.util.Random;
 public class Play {
 
 	ArrayList<Question> questions;
-
 
 	Match match;
 
@@ -26,17 +27,16 @@ public class Play {
 
 
 	public void getFile(){
-		System.out.println("alo");
+		Gdx.app.log("ACTION","getting file");
 		Properties prop = new Properties();
 		InputStream input = null;
 
-		try {
 
+		try {
 			String filename = "a.properties";
 			input = getClass().getClassLoader().getResourceAsStream(filename);
-			//input = new FileInputStream("C:/Users/wnfuk_000/git/LPOO-Buzz/BuzzIt/a.properties");
 			if(input==null){
-				System.out.println("Sorry, unable to find " + filename);
+				Gdx.app.log("ERROR","Sorry, unable to find " + filename);
 				return;
 			}
 
@@ -67,7 +67,7 @@ public class Play {
 
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			System.out.println("ei");
+			Gdx.app.log("EXCEPTION","IO Exception");
 		} finally{
 			if(input!=null){
 				try {
