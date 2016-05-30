@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
+import com.buzzit.Logic.Play;
+
 
 public class SingleplayerScreen extends SuperScreen {
 
@@ -24,6 +26,8 @@ public class SingleplayerScreen extends SuperScreen {
     Pixmap pixmap;
     Texture pixmapTexture;
     Stage stage;
+
+    Play play;
 
     public SingleplayerScreen(Game g, Screen p) {
         create();
@@ -66,6 +70,7 @@ public class SingleplayerScreen extends SuperScreen {
         labelStyle.fontColor = Color.WHITE;
         labelStyle.background = skin.getDrawable("question_background");
         skin.add("default", labelStyle);
+
 
 
         /*** Creating views ***/
