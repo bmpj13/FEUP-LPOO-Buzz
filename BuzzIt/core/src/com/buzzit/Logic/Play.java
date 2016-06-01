@@ -19,8 +19,6 @@ public class Play {
 
 	Match match;
 
-	private boolean playing = false;
-
 	public Play(){
 		questions = new ArrayList<Question>();
 		getFile(Difficulty.EASY);
@@ -39,13 +37,7 @@ public class Play {
 			if(input==null){
 				Gdx.app.log("ERROR","Sorry, unable to find " + filename);
 				return;
-<<<<<<< HEAD
 			}
-=======
-			} else
-				Gdx.app.log("DIRECTORY", "right place");
-
->>>>>>> 65faa9477730809a16a48006ae2befdc3cc1c794
 			//load a properties file from class path, inside static method
 			prop.load(input);
 
@@ -120,11 +112,11 @@ public class Play {
 		return match.generateOptions();
 	}
 
-	public boolean isPlaying() {
-		return playing;
-	}
+	/*public static void main(String[] args) {
 
-	public void setPlaying(boolean playing) {
-		this.playing = playing;
-	}
+		Play g = new Play();
+
+		g.getFile();
+		g.play();
+	}*/
 }
