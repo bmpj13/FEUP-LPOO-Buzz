@@ -11,11 +11,13 @@ public class Question {
     public ArrayList<String> wrong;
     public String correct;
     public String category;
+    public Difficulty difficulty;
 
-    public Question(String question, ArrayList<String> wrong, String correct){
+    public Question(String question, ArrayList<String> wrong, String correct, Difficulty difficulty){
         this.question = question;
         this.wrong = wrong;
         this.correct = correct;
+        this.difficulty = difficulty;
     }
 
 
@@ -27,19 +29,16 @@ public class Question {
 
         Random rand = new Random();
         String[] options = new String[num];
-        ArrayList<String> temp = (ArrayList<String>) wrong.clone();
 
-
-        int correctPos = rand.nextInt(num);
+        ArrayList<Integer> indices = Play.scramble(wrong.size());
+        int perin = rand.nextInt(num);
 
         for (int i = 0; i < num ; i++) {
-            if (i == correctPos)
-                options[correctPos] = correct;
+            if (i == perin)
+                options[i] = correct;
             else
             {
-                int wrongPos = rand.nextInt(temp.size());
-                options[i] = temp.get(wrongPos);
-                temp.remove(wrongPos);
+                options[i] = wrong.get(indices.get(i));
             }
         }
 

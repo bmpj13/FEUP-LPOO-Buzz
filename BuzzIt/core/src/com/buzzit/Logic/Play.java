@@ -15,36 +15,33 @@ import java.util.Random;
 public class Play {
 
 	ArrayList<Question> questions;
+	//ArrayList<ArrayList<Question>> questionsByDifficulties;
 
 	Match match;
 
 	public Play(){
-		//players = new Player[1];
 		questions = new ArrayList<Question>();
-		getFile();
-		//play();
+		getFile(Difficulty.EASY);
+		play(1);
 	}
 
 
-	public void getFile(){
+	public void getFile(Difficulty difficulty){
 		Gdx.app.log("ACTION","getting file");
 		Properties prop = new Properties();
 		InputStream input = null;
 
-
 		try {
 			String filename = "a.properties";
-			input = getClass().getClassLoader().getResourceAsStream(filename);
+			input = getClass().getClassLoader().getResourceAsStream("assets/data/" + filename);
 			if(input==null){
 				Gdx.app.log("ERROR","Sorry, unable to find " + filename);
 				return;
 			}
-
 			//load a properties file from class path, inside static method
 			prop.load(input);
 
 			//get the property value and print it out
-
 			int t = Integer.parseInt(prop.getProperty("numquestions"));
 			for(int i = 0; i < t; i++){
 				String question = prop.getProperty("question"+i);
@@ -61,7 +58,7 @@ public class Play {
 					}
 				}
 
-				Question q = new Question(question, wrong, correct);
+				Question q = new Question(question, wrong, correct, difficulty);
 				questions.add(q);
 			}
 
@@ -79,19 +76,35 @@ public class Play {
 		}
 	}
 
-	public void play(){
-		ArrayList<Question> q = new ArrayList<Question>();
+	static public ArrayList<Integer> scramble(int numIndices){
 		Random rand = new Random();
-		int i ;//= rand.nextInt(questions.size());
+		ArrayList<Integer> indices = new ArrayList<Integer>();
+		for(int t = 0; t < numIndices; t++){
+			indices.add(t);
+		}
+		int j, temp;
+		for (int i = indices.size()-1; i > 0; i--){
+			j = rand.nextInt(i+1);
+			temp = indices.get(j);
+			indices.set(j, indices.get(i));
+			indices.set(i, temp);
+		}
+		return indices;
+	}
 
-		//System.out.println(questions.get(i).question);
-		do{
-			i = rand.nextInt(questions.size());
-			q.add(questions.get(i));
-		}while(1==0);
-		//String[] options = questions.get(i).generateOptions(3);
 
-		//match = new Match(q, 1);
+	public void play(int numQuestions){
+		ArrayList<Question> q = new ArrayList<Question>();
+		ArrayList<Integer> indices = scramble(questions.size());
+		Gdx.app.log("UEUEUEUEUEUEUEUE - QUESTIONS SIZE",  new Integer(questions.size()).toString());
+		for(int i = 0; i < numQuestions; i++){
+			q.add(questions.get(indices.get(i)));
+		}
+		for(int i=0; i< indices.size(); i++){
+			Gdx.app.log("UEUEUEUEUEUEUEUE - INDICES", indices.get(i).toString());
+		}
+		match = new Match(q, 1, 1);
+		match.generateOptions();
 	}
 
 	public String[] getOptions(){

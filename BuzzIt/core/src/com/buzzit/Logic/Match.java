@@ -1,10 +1,10 @@
 package com.buzzit.Logic;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.ArrayList;
 
-/**
- * Created by wnfuk_000 on 18/05/2016.
- */
+
 public class Match {
 
     private ArrayList<Question> questions;
@@ -12,27 +12,34 @@ public class Match {
     private int questionIndex;
     private Player[] players;
 
-    public Match(ArrayList<Question> questions, int rounds){
+    public Match(ArrayList<Question> questions, int rounds, int numPlayers){
         this.questions = questions;
         this.rounds = rounds;
         this.questionIndex = 0;
-        players = new Player[1];
+        players = new Player[numPlayers];
     }
 
     public String[] generateOptions(){
         String[] options = questions.get(questionIndex).generateOptions(4);
-
+        Gdx.app.log("UEUEUEUEUEUEUEUE - QUESTION", questions.get(questionIndex).question);
+        for(int i = 0; i < options.length; i++){
+            Gdx.app.log("UEUEUEUEUEUEUEUE - OPTIONS", options[i]);
+        }
         return options;
     }
 
-    public boolean isCorrect(String answer){
-        if(questions.get(questionIndex++).correct == answer){
-            players[0].setPoints(5);
+    public boolean isCorrect(int playerIndex, String answer){
+        if(questions.get(questionIndex).correct == answer){
+            players[playerIndex].addPoints(questions.get(questionIndex).difficulty.getPoints());
             return true;
         }
         else{
-            players[0].setPoints(-5);
+            players[playerIndex].setPoints(-questions.get(questionIndex).difficulty.getPoints());
             return true;
         }
+    }
+
+    public void nextQuestion(){
+        questionIndex++;
     }
 }

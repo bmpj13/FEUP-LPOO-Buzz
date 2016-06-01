@@ -22,6 +22,10 @@ public class Player {
         this.points = points;
     }
 
+    public void addPoints (int points) {
+        this.points += points;
+    }
+
     public String getName() {
         return name;
     }
