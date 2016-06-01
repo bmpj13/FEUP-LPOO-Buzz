@@ -18,6 +18,8 @@ public class Play {
 
 	Match match;
 
+	private boolean playing = false;
+
 	public Play(){
 		//players = new Player[1];
 		questions = new ArrayList<Question>();
@@ -34,11 +36,12 @@ public class Play {
 
 		try {
 			String filename = "a.properties";
-			input = getClass().getClassLoader().getResourceAsStream(filename);
+			input = getClass().getClassLoader().getResourceAsStream("assets/data/" + filename);
 			if(input==null){
 				Gdx.app.log("ERROR","Sorry, unable to find " + filename);
 				return;
-			}
+			} else
+				Gdx.app.log("DIRECTORY", "right place");
 
 			//load a properties file from class path, inside static method
 			prop.load(input);
@@ -99,11 +102,11 @@ public class Play {
 		return match.generateOptions();
 	}
 
-	/*public static void main(String[] args) {
+	public boolean isPlaying() {
+		return playing;
+	}
 
-		Play g = new Play();
-
-		g.getFile();
-		g.play();
-	}*/
+	public void setPlaying(boolean playing) {
+		this.playing = playing;
+	}
 }
