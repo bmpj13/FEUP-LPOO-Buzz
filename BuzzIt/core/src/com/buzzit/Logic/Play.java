@@ -14,15 +14,18 @@ import java.util.Random;
  */
 public class Play {
 
-	ArrayList<Question> questions;
+	static private ArrayList<Question> questions;
 	//ArrayList<ArrayList<Question>> questionsByDifficulties;
 
-	Match match;
+	private static Play ourInstance = new Play();
 
-	public Play(){
+	public static Play getInstance() {
+		return ourInstance;
+	}
+
+	private Play(){
 		questions = new ArrayList<Question>();
-		getFile(Difficulty.EASY);
-		play(1);
+		getFile(Difficulty.MEDIUM);
 	}
 
 
@@ -93,7 +96,7 @@ public class Play {
 	}
 
 
-	public void play(int numQuestions){
+	public ArrayList<Question> play(int numQuestions){
 		ArrayList<Question> q = new ArrayList<Question>();
 		ArrayList<Integer> indices = scramble(questions.size());
 		Gdx.app.log("UEUEUEUEUEUEUEUE - QUESTIONS SIZE",  new Integer(questions.size()).toString());
@@ -103,20 +106,8 @@ public class Play {
 		for(int i=0; i< indices.size(); i++){
 			Gdx.app.log("UEUEUEUEUEUEUEUE - INDICES", indices.get(i).toString());
 		}
-		match = new Match(q, 1, 1);
-		match.generateOptions();
+		//match = new Match(q, 1, 1);
+		return q;
 	}
 
-	public String[] getOptions(){
-
-		return match.generateOptions();
-	}
-
-	/*public static void main(String[] args) {
-
-		Play g = new Play();
-
-		g.getFile();
-		g.play();
-	}*/
 }

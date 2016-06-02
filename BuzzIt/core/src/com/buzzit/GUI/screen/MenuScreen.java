@@ -92,6 +92,7 @@ public class MenuScreen extends SuperScreen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 ScreenState.getInstance().changeState(ScreenState.ScreenType.SINGLEPLAYER);
+
             }
         });
     }

@@ -62,7 +62,7 @@ public class Interactor {
         labelCategory.setFontScale(LABEL_CATEGORY_FSCALE);
         labelCategory.setAlignment(Align.center);
 
-        labelQuestion = new Label("Qual o nivel de amizade?", skin, "question_background");
+        labelQuestion = new Label("", skin, "question_background");
         labelQuestion.setWrap(true);
         labelQuestion.setFontScale(LABEL_QUESTION_FSCALE);
         labelQuestion.setAlignment(Align.center);
@@ -82,7 +82,6 @@ public class Interactor {
         btnOptionD = new OptionButton("D", skin);
         btnOptionD.setTransform(true);
         btnOptionD.getLabel().setFontScale(BUTTON_SCALE_X, BUTTON_SCALE_Y);
-        btnOptionD.setText("teste");
 
 
         labelStatus = new Label("", skin);

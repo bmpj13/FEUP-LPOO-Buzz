@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.buzzit.GUI.OptionButton;
 import com.buzzit.GUI.state.*;
 import com.buzzit.GUI.Interactor;
+import com.buzzit.Logic.Match;
 
 
 public class SingleplayerScreen extends SuperScreen {
@@ -43,10 +44,13 @@ public class SingleplayerScreen extends SuperScreen {
     private final int SECONDS_TO_ANSWER = 10;
     private final float TIME_BETWEEN_QUESTIONS = 1f;
 
+    private Match match;
+
     public SingleplayerScreen(Game g, ScreenState.ScreenType pType) {
         create();
         game = g;
         parentType = pType;
+
     }
 
     public void create() {
@@ -129,7 +133,7 @@ public class SingleplayerScreen extends SuperScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                handleButton(interactor.btnOptionA, "");
+                handleButton(interactor.btnOptionA);
             }
         });
 
@@ -137,7 +141,7 @@ public class SingleplayerScreen extends SuperScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                handleButton(interactor.btnOptionB, "");
+                handleButton(interactor.btnOptionB);
             }
         });
 
@@ -145,7 +149,7 @@ public class SingleplayerScreen extends SuperScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                handleButton(interactor.btnOptionC, "");
+                handleButton(interactor.btnOptionC);
             }
         });
 
@@ -153,7 +157,7 @@ public class SingleplayerScreen extends SuperScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                handleButton(interactor.btnOptionD, "");
+                handleButton(interactor.btnOptionD);
             }
         });
     }
@@ -167,7 +171,8 @@ public class SingleplayerScreen extends SuperScreen {
         super.show();
         Gdx.input.setInputProcessor(stage);
 
-        strat = new ShowQuestion(interactor, 0, 0.8f, 0.8f, SECONDS_TO_ANSWER);
+        match = new Match(3);
+        strat = new ShowQuestion(interactor, 0, 0.8f, 0.8f, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         strat.start();
     }
 
@@ -198,13 +203,14 @@ public class SingleplayerScreen extends SuperScreen {
 
         if (strat instanceof ShowQuestion)
             strat = new WaitingAnswer(interactor, SECONDS_TO_ANSWER);
-        else if (strat instanceof WaitingAnswer)
-            strat = new Unanswered(interactor, -5);
+        else if (strat instanceof WaitingAnswer) {
+            strat = new Unanswered(interactor, -match.getCurrentQuestion().getDifficulty().getPoints());
+            match.nextQuestion();
+        }
         else if (strat instanceof Decision) {
             interactor.nextQuestion(TIME_BETWEEN_QUESTIONS/2, TIME_BETWEEN_QUESTIONS/2 - 0.3f);
-            strat = new ShowQuestion(interactor, TIME_BETWEEN_QUESTIONS, 0.8f, 0.8f, SECONDS_TO_ANSWER);
+            strat = new ShowQuestion(interactor, TIME_BETWEEN_QUESTIONS, 0.8f, 0.8f, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         }
-
         strat.start();
     }
 
@@ -249,12 +255,14 @@ public class SingleplayerScreen extends SuperScreen {
 
 
 
-    void handleButton(OptionButton button, String answer) {
+    void handleButton(OptionButton button) {
         strat.finish();
 
-        if (button.getContent().equals(answer))     strat = new Answered(interactor, 5, true);
-        else                                        strat = new Answered(interactor, -5, false);
+        int points = match.getCurrentQuestion().getDifficulty().getPoints();
 
+        if (match.isCorrect(button.getContent()))     strat = new Answered(interactor, points, true);
+        else                                          strat = new Answered(interactor, -points, false);
+        match.nextQuestion();
         strat.start();
     }
 }

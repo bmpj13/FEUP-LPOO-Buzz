@@ -7,11 +7,11 @@ import java.util.Random;
  * Created by wnfuk_000 on 20/04/2016.
  */
 public class Question {
-    public String question;
-    public ArrayList<String> wrong;
-    public String correct;
-    public String category;
-    public Difficulty difficulty;
+    private String question;
+    private ArrayList<String> wrong;
+    private String correct;
+    private String category;
+    private Difficulty difficulty;
 
     public Question(String question, ArrayList<String> wrong, String correct, Difficulty difficulty){
         this.question = question;
@@ -43,6 +43,48 @@ public class Question {
         }
 
         return options;
+    }
+
+
+
+    public String getCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(String correct) {
+        this.correct = correct;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public ArrayList<String> getWrong() {
+        return wrong;
+    }
+
+    public void setWrong(ArrayList<String> wrong) {
+        this.wrong = wrong;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
 }
