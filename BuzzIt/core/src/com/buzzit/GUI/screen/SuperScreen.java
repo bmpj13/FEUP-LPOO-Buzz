@@ -1,4 +1,4 @@
-package com.buzzit.GUI;
+package com.buzzit.GUI.screen;
 
 
 import com.badlogic.gdx.Game;
@@ -6,18 +6,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 
-import java.util.ArrayList;
-
 public class SuperScreen implements Screen {
-
     protected Game game;
-    protected Screen parent = null;
-
-    static ArrayList<Screen> screens = new ArrayList<Screen>();
+    protected ScreenState.ScreenType parentType;
 
 
-    public void create(Screen s) {
-        screens.add(s);
+    protected void create() {
         Gdx.input.setCatchBackKey(true);
     }
 
@@ -40,12 +34,8 @@ public class SuperScreen implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
 
-            if (parent != null) {
-                game.setScreen(parent);
-            }
-            else {
-                disposeScreens();
-                Gdx.app.exit();
+            if (parentType != null) {
+                ScreenState.getInstance().changeState(parentType);
             }
         }
     }
@@ -82,12 +72,5 @@ public class SuperScreen implements Screen {
     @Override
     public void dispose() {
 
-    }
-
-
-    private static void disposeScreens() {
-        for (Screen s: screens) {
-            s.dispose();
-        }
     }
 }

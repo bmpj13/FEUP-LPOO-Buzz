@@ -1,8 +1,7 @@
-package com.buzzit.GUI;
+package com.buzzit.GUI.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -15,28 +14,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-public class MainMenuScreen extends SuperScreen {
-
-    Screen newGameScreen;
-    Screen highscoresScreen;
-    Screen creditsScreen;
-
+public class MenuScreen extends SuperScreen {
     Skin skin;
     BitmapFont font;
     Pixmap pixmap;
     Texture pixmapTexture;
     Stage stage;
 
-    public MainMenuScreen(Game g) {
+    public MenuScreen(Game g, ScreenState.ScreenType pType) {
         create();
         game = g;
-
-        newGameScreen = new NewGameMenuScreen(game,this);
     }
 
 
     public void create() {
-        super.create(this);
+        super.create();
 
         /*** Creating a skin ***/
         skin = new Skin();
@@ -65,25 +57,25 @@ public class MainMenuScreen extends SuperScreen {
 
 
         /*** Creating buttons ***/
-        TextButton btnNewGame = new TextButton("NEW GAME", skin);
-        btnNewGame.getLabel().setFontScale(3, 3);
+        TextButton btnSingleplayer = new TextButton("SINGLE PLAYER", skin);
+        btnSingleplayer.getLabel().setFontScale(3, 3);
 
-        TextButton btnHighscores = new TextButton("Highscores", skin);
-        btnHighscores.getLabel().setFontScale(3, 3);
+        TextButton btnTwoplayer = new TextButton("TWO PLAYER", skin);
+        btnTwoplayer.getLabel().setFontScale(3, 3);
 
-        TextButton btnCredits = new TextButton("credits", skin);
-        btnCredits.getLabel().setFontScale(3, 3);
+        TextButton btnMultiplayer = new TextButton("MULTI PLAYER", skin);
+        btnMultiplayer.getLabel().setFontScale(3, 3);
 
 
         /*** Creating stage ***/
         Table buttonsTable = new Table();
-        buttonsTable.add(btnNewGame).width(Gdx.graphics.getWidth()/2).padBottom(100);
+        buttonsTable.add(btnSingleplayer).width(Gdx.graphics.getWidth()/2).padBottom(100);
         buttonsTable.row();
 
-        buttonsTable.add(btnHighscores).width(Gdx.graphics.getWidth()/2).padBottom(100);
+        buttonsTable.add(btnTwoplayer).width(Gdx.graphics.getWidth()/2).padBottom(100);
         buttonsTable.row();
 
-        buttonsTable.add(btnCredits).width(Gdx.graphics.getWidth()/2);
+        buttonsTable.add(btnMultiplayer).width(Gdx.graphics.getWidth()/2);
         buttonsTable.row();
 
         buttonsTable.setFillParent(true);
@@ -95,11 +87,11 @@ public class MainMenuScreen extends SuperScreen {
 
 
         /*** Listeners ***/
-        btnNewGame.addListener(new ClickListener() {
+        btnSingleplayer.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                game.setScreen(newGameScreen);
+                ScreenState.getInstance().changeState(ScreenState.ScreenType.SINGLEPLAYER);
             }
         });
     }
