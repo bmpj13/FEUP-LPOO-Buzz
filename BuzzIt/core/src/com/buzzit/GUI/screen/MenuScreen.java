@@ -7,77 +7,54 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 
 public class MenuScreen extends SuperScreen {
-    Skin skin;
-    BitmapFont font;
-    Pixmap pixmap;
-    Texture pixmapTexture;
     Stage stage;
+    Texture playTexture;
+    Texture settingsTexture;
+    Texture highscoreTexture;
 
     public MenuScreen(Game g, ScreenState.ScreenType pType) {
         create();
         game = g;
+        parentType = pType;
     }
 
 
     public void create() {
         super.create();
 
-        /*** Creating a skin ***/
-        skin = new Skin();
-
-        // Creating fonts
-        font = new BitmapFont();
-        skin.add("default", font);
-
-        // Creating textures
-        pixmap = new Pixmap(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/10, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-
-        pixmapTexture = new Texture(pixmap);
-        skin.add("background", pixmapTexture);
-
-
-        // Creating button styles
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
-        textButtonStyle.down = skin.newDrawable("background", Color.GRAY);
-        textButtonStyle.checked = skin.newDrawable("background", Color.GRAY);
-        textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
-        textButtonStyle.font = skin.getFont("default");
-        skin.add("default", textButtonStyle);
-
-
         /*** Creating buttons ***/
-        TextButton btnSingleplayer = new TextButton("SINGLE PLAYER", skin);
-        btnSingleplayer.getLabel().setFontScale(3, 3);
+        playTexture = new Texture(Gdx.files.internal("menu/play.png"));
+        ImageButton btnSingleplayer = new ImageButton(new SpriteDrawable(new Sprite(playTexture)));
 
-        TextButton btnTwoplayer = new TextButton("TWO PLAYER", skin);
-        btnTwoplayer.getLabel().setFontScale(3, 3);
+        settingsTexture = new Texture(Gdx.files.internal("menu/settings.png"));
+        ImageButton btnSettings = new ImageButton(new SpriteDrawable(new Sprite((settingsTexture))));
 
-        TextButton btnMultiplayer = new TextButton("MULTI PLAYER", skin);
-        btnMultiplayer.getLabel().setFontScale(3, 3);
-
+        highscoreTexture = new Texture(Gdx.files.internal("menu/highscore.png"));
+        ImageButton btnHighscore = new ImageButton(new SpriteDrawable(new SpriteDrawable( new Sprite(highscoreTexture))));
 
         /*** Creating stage ***/
         Table buttonsTable = new Table();
-        buttonsTable.add(btnSingleplayer).width(Gdx.graphics.getWidth()/2).padBottom(100);
+        buttonsTable.add(btnSingleplayer).padBottom(100);
         buttonsTable.row();
 
-        buttonsTable.add(btnTwoplayer).width(Gdx.graphics.getWidth()/2).padBottom(100);
+        buttonsTable.add(btnSettings).padBottom(100);
         buttonsTable.row();
 
-        buttonsTable.add(btnMultiplayer).width(Gdx.graphics.getWidth()/2);
+        buttonsTable.add(btnHighscore);
         buttonsTable.row();
-
         buttonsTable.setFillParent(true);
 
 
@@ -93,6 +70,14 @@ public class MenuScreen extends SuperScreen {
                 super.clicked(event, x, y);
                 ScreenState.getInstance().changeState(ScreenState.ScreenType.SINGLEPLAYER);
 
+            }
+        });
+
+        btnSettings.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                ScreenState.getInstance().changeState(ScreenState.ScreenType.SETTINGS);
             }
         });
     }
@@ -149,11 +134,7 @@ public class MenuScreen extends SuperScreen {
     @Override
     public void dispose() {
         super.dispose();
-
+        playTexture.dispose();
         stage.dispose();
-        skin.dispose();
-        font.dispose();
-        pixmap.dispose();
-        pixmapTexture.dispose();
     }
 }

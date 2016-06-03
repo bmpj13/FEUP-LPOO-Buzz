@@ -6,18 +6,20 @@ public class ScreenState {
     private static Game game;
     private static MenuScreen menu;
     private static SingleplayerScreen singlePlayer;
+    private static SettingsScreen settingsScreen;
 
     private static ScreenState ourInstance = new ScreenState();
 
     public static ScreenState getInstance() { return ourInstance; }
 
 
-    public enum ScreenType { MENU, SINGLEPLAYER };
+    public enum ScreenType { MENU, SINGLEPLAYER, SETTINGS };
 
 
     private ScreenState() {
         menu = new MenuScreen(game, null);
         singlePlayer = new SingleplayerScreen(game, ScreenType.MENU);
+        settingsScreen = new SettingsScreen(game, ScreenType.MENU);
     }
 
     public void setGame(Game g) {
@@ -34,6 +36,10 @@ public class ScreenState {
             case SINGLEPLAYER:
                 game.setScreen(singlePlayer);
                 break;
+
+            case SETTINGS:
+                game.setScreen(settingsScreen);
+                break;
         }
     }
 
@@ -43,5 +49,6 @@ public class ScreenState {
         super.finalize();
         menu.dispose();
         singlePlayer.dispose();
+        settingsScreen.dispose();
     }
 }

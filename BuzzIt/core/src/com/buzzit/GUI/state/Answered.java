@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Timer;
 import com.buzzit.GUI.Interactor;
+import com.buzzit.GUI.OptionButton;
 
 public class Answered extends Decision implements GameStrategy {
     private Interactor interactor;
+    private OptionButton button;
     private int timerTicksCount;
     private final int numberAnimations;
     private Color color;
@@ -17,15 +19,16 @@ public class Answered extends Decision implements GameStrategy {
     private final Color finalColor;
     private boolean finished;
 
-    public Answered(final Interactor interactor, int pointsToAdd, boolean answeredCorrectly) {
+    public Answered(final Interactor interactor, OptionButton button, int pointsToAdd, boolean answeredCorrectly) {
         super(interactor, pointsToAdd);
 
         this.interactor = interactor;
+        this.button = button;
         this.timerTicksCount = 0;
         this.delay = 0;                     // Default value
         this.delta = 0.7f;                  // Default value
         this.numberAnimations = 4;          // Default value
-        this.color = Color.GREEN;
+        this.color = interactor.RightColor;
         this.finished = false;
         this.timerTask = answeredTask();
 
@@ -64,23 +67,23 @@ public class Answered extends Decision implements GameStrategy {
         return new Timer.Task() {
             @Override
             public void run() {
-                interactor.textButtonStyle.checked = interactor.skin.newDrawable("btn_background", color);
+                button.getButtonStyle().checked = interactor.skin.newDrawable("btn_background", color);
                 switchColor();
 
                 if (timerTicksCount == numberAnimations) {
                     finished = true;
                     Answered.super.start();
-                    interactor.textButtonStyle.checked = interactor.skin.newDrawable("btn_background", finalColor);
+                    button.getButtonStyle().checked = interactor.skin.newDrawable("btn_background", finalColor);
                 }
 
                 timerTicksCount++;
             }
 
             private void switchColor() {
-                if (color == Color.DARK_GRAY)
-                    color = interactor.RightColor;
+                if (color == interactor.RightColor)
+                    color = button.getCheckedColor();
                 else
-                    color = color.DARK_GRAY;
+                    color = interactor.RightColor;
             }
         };
     }

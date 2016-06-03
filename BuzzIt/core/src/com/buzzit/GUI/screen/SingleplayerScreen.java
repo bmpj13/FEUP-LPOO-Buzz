@@ -26,12 +26,11 @@ public class SingleplayerScreen extends SuperScreen {
     private GameStrategy strat = null;
 
     /* Disposable elements */
-    private SpriteBatch batch;
     private Skin skin;
     private BitmapFont txtFont;
     private Pixmap pixmap;
     private Texture btnBackgroundTexture;
-    private Texture backgroundTexture;
+    private Texture questionBackgroundTexture;
     private Stage stage;
 
     /* Displayed elements */
@@ -53,40 +52,7 @@ public class SingleplayerScreen extends SuperScreen {
     public void create() {
         super.create();
 
-        batch = new SpriteBatch();
-
-        /*** Creating a skin ***/
-        skin = new Skin();
-
-        // Creating fonts
-        txtFont = new BitmapFont();
-        skin.add("default", txtFont);
-
-        // Creating textures
-        pixmap = new Pixmap(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/10, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        btnBackgroundTexture = new Texture(pixmap);
-        skin.add("btn_background", btnBackgroundTexture);
-
-        skin.add("question_background", new NinePatch(new Texture(Gdx.files.internal("questionBackground.PNG"))));
-
-        backgroundTexture = new Texture(Gdx.files.internal("playBackground.jpg"));
-
-
-        // Creating styles (that are not needed by interactor)
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = skin.getFont("default");
-        labelStyle.fontColor = Color.WHITE;
-        labelStyle.background = skin.getDrawable("question_background");
-        skin.add("question_background", labelStyle);
-
-        labelStyle = new Label.LabelStyle();
-        labelStyle.font = skin.getFont("default");
-        labelStyle.fontColor = Color.WHITE;
-        skin.add("default", labelStyle);
-
-
+        createSkin();
         interactor = new Interactor(skin);
 
         /*** Creating stage ***/
@@ -159,6 +125,40 @@ public class SingleplayerScreen extends SuperScreen {
     }
 
 
+    void createSkin() {
+        /*** Creating a skin ***/
+        skin = new Skin();
+
+        // Creating fonts
+        txtFont = new BitmapFont();
+        txtFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        skin.add("default", txtFont);
+
+        // Creating textures
+        pixmap = new Pixmap(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/10, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        btnBackgroundTexture = new Texture(pixmap);
+        skin.add("btn_background", btnBackgroundTexture);
+
+        questionBackgroundTexture = new Texture(Gdx.files.internal("play/questionBackground.PNG"));
+        skin.add("question_background", new NinePatch(questionBackgroundTexture));
+
+
+        // Creating styles (that are not needed by interactor)
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = skin.getFont("default");
+        labelStyle.fontColor = Color.WHITE;
+        labelStyle.background = skin.getDrawable("question_background");
+        skin.add("question_background", labelStyle);
+
+        labelStyle = new Label.LabelStyle();
+        labelStyle.font = skin.getFont("default");
+        labelStyle.fontColor = Color.WHITE;
+        skin.add("default", labelStyle);
+    }
+
+
     /**
      * Called when this screen becomes the current screen for a {@link Game}.
      */
@@ -181,10 +181,6 @@ public class SingleplayerScreen extends SuperScreen {
     public void render(float delta) {
         super.render(delta);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.end();
 
         if (strat.finished())
             switchStrategy();
@@ -245,8 +241,7 @@ public class SingleplayerScreen extends SuperScreen {
         txtFont.dispose();
         pixmap.dispose();
         btnBackgroundTexture.dispose();
-        backgroundTexture.dispose();
-        batch.dispose();
+        questionBackgroundTexture.dispose();
     }
 
 
@@ -256,8 +251,8 @@ public class SingleplayerScreen extends SuperScreen {
 
         int points = match.getCurrentQuestion().getDifficulty().getPoints();
 
-        if (match.isCorrect(button.getContent()))     strat = new Answered(interactor, points, true);
-        else                                          strat = new Answered(interactor, -points, false);
+        if (match.isCorrect(button.getContent()))     strat = new Answered(interactor, button, points, true);
+        else                                          strat = new Answered(interactor, button, -points, false);
         match.nextQuestion();
         strat.start();
     }

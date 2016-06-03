@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 
+import java.util.Random;
+
 
 public class Interactor {
 
@@ -32,7 +34,6 @@ public class Interactor {
     public Label labelQuestion;
     public Label labelStatus;
 
-    public TextButton.TextButtonStyle textButtonStyle;
     public Label.LabelStyle labelPointsStyle;
 
 
@@ -40,15 +41,6 @@ public class Interactor {
         this.skin = skin;
 
         // Creating styles
-        textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("btn_background", Color.GRAY);
-        textButtonStyle.down = skin.newDrawable("btn_background", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("btn_background", Color.DARK_GRAY);
-        textButtonStyle.over = skin.newDrawable("btn_background", Color.LIGHT_GRAY);
-        textButtonStyle.font = skin.getFont("default");
-        textButtonStyle.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        skin.add("default", textButtonStyle);
-
         labelPointsStyle = new Label.LabelStyle();
         labelPointsStyle.font = skin.getFont("default");
         labelPointsStyle.fontColor = Color.WHITE;
@@ -67,20 +59,35 @@ public class Interactor {
         labelQuestion.setFontScale(LABEL_QUESTION_FSCALE);
         labelQuestion.setAlignment(Align.center);
 
-        btnOptionA = new OptionButton("A", skin);
-        btnOptionA.setTransform(true);
+
+        TextButton.TextButtonStyle textButtonStyle;
+        Color uncheckedColor;
+        Color checkedColor = Color.GRAY;
+
+        // Button A
+        uncheckedColor = generateColor();
+        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
+        btnOptionA = new OptionButton("A", textButtonStyle, uncheckedColor, checkedColor);
         btnOptionA.getLabel().setFontScale(BUTTON_SCALE_X, BUTTON_SCALE_Y);
 
-        btnOptionB = new OptionButton("B", skin);
-        btnOptionB.setTransform(true);
+
+        // Button B
+        uncheckedColor = generateColor();
+        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
+        btnOptionB = new OptionButton("B", textButtonStyle, uncheckedColor, checkedColor);
         btnOptionB.getLabel().setFontScale(BUTTON_SCALE_X, BUTTON_SCALE_Y);
 
-        btnOptionC = new OptionButton("C", skin);
-        btnOptionC.setTransform(true);
+
+        // Button C
+        uncheckedColor = generateColor();
+        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
+        btnOptionC = new OptionButton("C", textButtonStyle, uncheckedColor, checkedColor);
         btnOptionC.getLabel().setFontScale(BUTTON_SCALE_X, BUTTON_SCALE_Y);
 
-        btnOptionD = new OptionButton("D", skin);
-        btnOptionD.setTransform(true);
+        // Button D
+        uncheckedColor = generateColor();
+        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
+        btnOptionD = new OptionButton("D", textButtonStyle, uncheckedColor, checkedColor);
         btnOptionD.getLabel().setFontScale(BUTTON_SCALE_X, BUTTON_SCALE_Y);
 
 
@@ -137,5 +144,24 @@ public class Interactor {
                 labelStatus.addAction(Actions.fadeOut(duration));
             }
         }, delay);
+    }
+
+    private Color generateColor() {
+        Random rand = new Random();
+
+        float r = rand.nextFloat();
+        float g = rand.nextFloat();
+        float b = rand.nextFloat();
+
+        return new Color(r, g, b, 1);
+    }
+
+    private TextButton.TextButtonStyle createTextButtonStyle(Skin skin, Color unchecked, Color checked) {
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = skin.newDrawable("btn_background", unchecked);
+        textButtonStyle.checked = skin.newDrawable("btn_background", checked);
+        textButtonStyle.font = skin.getFont("default");
+
+        return textButtonStyle;
     }
 }
