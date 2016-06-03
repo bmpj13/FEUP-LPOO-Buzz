@@ -12,16 +12,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.buzzit.GUI.OptionButton;
 import com.buzzit.GUI.state.*;
 import com.buzzit.GUI.Interactor;
-import com.buzzit.Logic.Match;
+import com.buzzit.logic.Match;
 
 
 public class SingleplayerScreen extends SuperScreen {
@@ -29,7 +27,6 @@ public class SingleplayerScreen extends SuperScreen {
 
     /* Disposable elements */
     private SpriteBatch batch;
-    private Sprite backgroundSprite;
     private Skin skin;
     private BitmapFont txtFont;
     private Pixmap pixmap;
@@ -75,7 +72,6 @@ public class SingleplayerScreen extends SuperScreen {
         skin.add("question_background", new NinePatch(new Texture(Gdx.files.internal("questionBackground.PNG"))));
 
         backgroundTexture = new Texture(Gdx.files.internal("playBackground.jpg"));
-        backgroundSprite = new Sprite(backgroundTexture);
 
 
         // Creating styles (that are not needed by interactor)

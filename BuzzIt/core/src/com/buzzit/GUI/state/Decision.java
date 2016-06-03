@@ -88,13 +88,13 @@ public class Decision implements GameStrategy {
                 if (timerTicksCount == 0) {
                     LabelPointsToAdd.addAction(Actions.moveTo(interactor.labelPoints.getX(),
                             interactor.labelPoints.getY(Align.center), MOVE_ANIMATION_TIME));
+
+                    timerTicksCount++;
                 }
                 else if (timerTicksCount == 1) {
                     LabelPointsToAdd.addAction(Actions.alpha(0));
                     updatePointsAnimation(pointsToAdd);
                 }
-
-                timerTicksCount++;
             }
         };
     }
@@ -106,7 +106,7 @@ public class Decision implements GameStrategy {
         numberToDisplay = Integer.parseInt(interactor.labelPoints.getText().toString());
         timerTask = addPointsTask(pointsAdded);
 
-        Timer.schedule(timerTask, 0, TIMER_TICK, Math.abs(pointsAdded) - 1);
+        Timer.schedule(timerTask, 0, TIMER_TICK, Math.abs(pointsAdded));
     }
 
 
@@ -119,12 +119,13 @@ public class Decision implements GameStrategy {
         return new Timer.Task() {
             @Override
             public void run () {
-                numberToDisplay += increment;
-                interactor.labelPoints.setText(Integer.toString(numberToDisplay));
-
                 if (timerTicksCount == Math.abs(pointsAdded)) {
                     interactor.labelPoints.setColor(interactor.labelPointsStyle.fontColor);
                     finished = true;
+                }
+                else {
+                    numberToDisplay += increment;
+                    interactor.labelPoints.setText(Integer.toString(numberToDisplay));
                 }
 
                 timerTicksCount++;

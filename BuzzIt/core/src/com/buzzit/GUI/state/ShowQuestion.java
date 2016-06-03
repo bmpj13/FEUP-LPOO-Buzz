@@ -3,9 +3,7 @@ package com.buzzit.GUI.state;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
 import com.buzzit.GUI.Interactor;
-import com.buzzit.Logic.Question;
-
-import java.util.ArrayList;
+import com.buzzit.logic.Question;
 
 
 public class ShowQuestion implements GameStrategy {
@@ -74,7 +72,7 @@ public class ShowQuestion implements GameStrategy {
     @Override
     public void start() {
         interactor.disableButtons();
-        interactor.hideElements();
+        interactor.hideElementsExceptPoints();
         Timer.schedule(timerTask, delay, delta, 3);
     }
 

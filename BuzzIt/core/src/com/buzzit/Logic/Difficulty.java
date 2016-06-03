@@ -1,4 +1,4 @@
-package com.buzzit.Logic;
+package com.buzzit.logic;
 
 /**
  * Created by wnfuk_000 on 01/06/2016.

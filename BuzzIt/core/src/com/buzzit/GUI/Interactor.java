@@ -112,7 +112,7 @@ public class Interactor {
         btnOptionD.setChecked(false);
     }
 
-    public void hideElements() {
+    public void hideElementsExceptPoints() {
         btnOptionA.addAction(Actions.alpha(0));
         btnOptionB.addAction(Actions.alpha(0));
         btnOptionC.addAction(Actions.alpha(0));
@@ -121,7 +121,6 @@ public class Interactor {
         labelCategory.addAction(Actions.alpha(0));
         labelQuestion.addAction(Actions.alpha(0));
         labelStatus.addAction(Actions.alpha(0));
-        labelPoints.addAction(Actions.alpha(0));
     }
 
     public void nextQuestion(float delay, final float duration) {
@@ -136,7 +135,6 @@ public class Interactor {
                 labelCategory.addAction(Actions.fadeOut(duration));
                 labelQuestion.addAction(Actions.fadeOut(duration));
                 labelStatus.addAction(Actions.fadeOut(duration));
-                labelPoints.addAction(Actions.fadeOut(duration));
             }
         }, delay);
     }
