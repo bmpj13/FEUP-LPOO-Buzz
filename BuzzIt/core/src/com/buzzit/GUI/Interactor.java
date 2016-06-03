@@ -15,12 +15,7 @@ import java.util.Random;
 
 public class Interactor {
 
-    public final int LABEL_POINTS_FSCALE = 8;          // Font scale
-    public final int LABEL_CATEGORY_FSCALE = 3;        // Font scale
-    public final int LABEL_QUESTION_FSCALE = 3;        // Font scale
-    public final int LABEL_STATUS_FSCALE = 10;         // Font scale
-    public final int BUTTON_SCALE_X = 3;
-    public final int BUTTON_SCALE_Y = 3;
+    public final int LABEL_SCALE = 3;         // Font scale
     public final Color RightColor = Color.GREEN;
     public final Color WrongColor = Color.RED;
 
@@ -47,16 +42,14 @@ public class Interactor {
 
         // Creating elements
         labelPoints = new Label("0", labelPointsStyle);
-        labelPoints.setFontScale(LABEL_POINTS_FSCALE);
         labelPoints.setAlignment(Align.center);
+        labelPoints.setFontScale(LABEL_SCALE);
 
         labelCategory = new Label("Categoria: Amizade", skin, "question_background");
-        labelCategory.setFontScale(LABEL_CATEGORY_FSCALE);
         labelCategory.setAlignment(Align.center);
 
         labelQuestion = new Label("", skin, "question_background");
         labelQuestion.setWrap(true);
-        labelQuestion.setFontScale(LABEL_QUESTION_FSCALE);
         labelQuestion.setAlignment(Align.center);
 
 
@@ -68,32 +61,28 @@ public class Interactor {
         uncheckedColor = generateColor();
         textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
         btnOptionA = new OptionButton("A", textButtonStyle, uncheckedColor, checkedColor);
-        btnOptionA.getLabel().setFontScale(BUTTON_SCALE_X, BUTTON_SCALE_Y);
 
 
         // Button B
         uncheckedColor = generateColor();
         textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
         btnOptionB = new OptionButton("B", textButtonStyle, uncheckedColor, checkedColor);
-        btnOptionB.getLabel().setFontScale(BUTTON_SCALE_X, BUTTON_SCALE_Y);
 
 
         // Button C
         uncheckedColor = generateColor();
         textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
         btnOptionC = new OptionButton("C", textButtonStyle, uncheckedColor, checkedColor);
-        btnOptionC.getLabel().setFontScale(BUTTON_SCALE_X, BUTTON_SCALE_Y);
 
         // Button D
         uncheckedColor = generateColor();
         textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
         btnOptionD = new OptionButton("D", textButtonStyle, uncheckedColor, checkedColor);
-        btnOptionD.getLabel().setFontScale(BUTTON_SCALE_X, BUTTON_SCALE_Y);
 
 
         labelStatus = new Label("", skin);
         labelStatus.setWrap(true);
-        labelStatus.setFontScale(LABEL_STATUS_FSCALE);
+        labelStatus.setFontScale(LABEL_SCALE);
         labelStatus.setAlignment(Align.center);
     }
 

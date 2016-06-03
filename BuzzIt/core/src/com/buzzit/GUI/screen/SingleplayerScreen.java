@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -28,6 +29,7 @@ public class SingleplayerScreen extends SuperScreen {
     /* Disposable elements */
     private Skin skin;
     private BitmapFont txtFont;
+    private FreeTypeFontGenerator generator;
     private Pixmap pixmap;
     private Texture btnBackgroundTexture;
     private Texture questionBackgroundTexture;
@@ -130,7 +132,13 @@ public class SingleplayerScreen extends SuperScreen {
         skin = new Skin();
 
         // Creating fonts
-        txtFont = new BitmapFont();
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 50;
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 3;
+
+        txtFont = generator.generateFont(parameter);
         txtFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         skin.add("default", txtFont);
 
@@ -242,6 +250,7 @@ public class SingleplayerScreen extends SuperScreen {
         pixmap.dispose();
         btnBackgroundTexture.dispose();
         questionBackgroundTexture.dispose();
+        generator.dispose();
     }
 
 

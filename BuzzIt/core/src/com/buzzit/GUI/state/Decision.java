@@ -32,7 +32,6 @@ public class Decision implements GameStrategy {
         finished = false;
 
         LabelPointsToAdd = new Label (Integer.toString(pointsToAdd), interactor.skin);
-        LabelPointsToAdd.setFontScale(interactor.LABEL_POINTS_FSCALE);
         LabelPointsToAdd.setPosition(interactor.labelQuestion.getX(),
                 interactor.labelPoints.getY(Align.center));
 

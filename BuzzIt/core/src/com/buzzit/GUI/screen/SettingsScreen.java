@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -24,6 +25,7 @@ public class SettingsScreen extends SuperScreen {
 
     private Skin skin;
     private BitmapFont font;
+    private FreeTypeFontGenerator generator;
     private Pixmap cursorPixmap;
     private Pixmap whitePixmap;
     private Texture cursorTexture;
@@ -114,9 +116,12 @@ public class SettingsScreen extends SuperScreen {
     private void createSkin() {
         skin = new Skin();
 
-        font = new BitmapFont();
-        font.getData().setScale(4,4);
-        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/good_times.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 100;
+
+        font = generator.generateFont(parameter);
         skin.add("default", font);
 
         cursorPixmap = new Pixmap((int) font.getSpaceWidth()/2, (int) font.getCapHeight(), Pixmap.Format.RGBA8888);
@@ -224,5 +229,6 @@ public class SettingsScreen extends SuperScreen {
         checkedBoxTexture.dispose();
         uncheckedBoxTexture.dispose();
         categoriesBackgroundTexture.dispose();
+        generator.dispose();
     }
 }
