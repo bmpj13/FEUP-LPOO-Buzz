@@ -177,8 +177,8 @@ public class SingleplayerScreen extends SuperScreen {
         super.show();
         Gdx.input.setInputProcessor(stage);
 
-        match = new Match(Integer.parseInt(SettingsScreen.numQuestionsTextField.getText().toString()),
-                SettingsScreen.getCategories(), Difficulty.EASY);
+        match = new Match(SettingsScreen.getNumQuestions(),
+                    SettingsScreen.getCategories(), Difficulty.EASY);
         strat = new ShowQuestion(interactor, 0, 0.8f, 0.8f, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         strat.start();
     }

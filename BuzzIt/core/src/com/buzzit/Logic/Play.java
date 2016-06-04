@@ -58,7 +58,7 @@ public class Play {
 				int arrayIndex = Category.getIndex(category);
 
 				String correct = new String();
-				ArrayList<String> wrong = new ArrayList<String>();
+				ArrayList<String> wrong = new ArrayList<>();
 				for(int z =0; z < answers; z++){
 					String key = prop.getProperty("answer"+i+"."+z);
 					if(z == 0){
@@ -117,12 +117,13 @@ public class Play {
 		ArrayList<Question> q = new ArrayList<>();
 
 		ArrayList<Question> allFromCategories = getQuestionsFromCategory(categoriesChosen);
+		Gdx.app.log("UEUEUEUEUEUEUEUEUEUE AllCategoriesSize", Integer.toString(allFromCategories.size()));
 
 		//get randomized question indices from each category
 		ArrayList<Integer> questionsScrambled = scramble(allFromCategories.size());
 
 		for(int i=0; i< totalQuestions; i++) {
-
+			Gdx.app.log("UEUEUUUEEUEUEUUUU", Integer.toString(questionsScrambled.get(i)));
 			q.add(allFromCategories.get(questionsScrambled.get(i)));
 
 		}

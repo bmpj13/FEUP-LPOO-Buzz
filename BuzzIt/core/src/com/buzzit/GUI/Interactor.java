@@ -45,7 +45,7 @@ public class Interactor {
         labelPoints.setAlignment(Align.center);
         labelPoints.setFontScale(LABEL_SCALE);
 
-        labelCategory = new Label("Categoria: Amizade", skin, "question_background");
+        labelCategory = new Label("Categoria:", skin, "question_background");
         labelCategory.setAlignment(Align.center);
 
         labelQuestion = new Label("", skin, "question_background");

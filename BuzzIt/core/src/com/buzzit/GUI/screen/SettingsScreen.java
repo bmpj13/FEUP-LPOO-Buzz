@@ -41,8 +41,9 @@ public class SettingsScreen extends SuperScreen {
     private Texture uncheckedBoxTexture;
     private Texture categoriesBackgroundTexture;
     static private ArrayList<CheckBox> checkBoxes;
-    static public TextField nameTextField;
-    static public TextField numQuestionsTextField;
+    static private TextField nameTextField;
+    static private TextField numQuestionsTextField;
+    static private ArrayList<Label> checkBoxLabels;
 
     SettingsScreen(Game g, ScreenState.ScreenType pType) {
         create();
@@ -76,20 +77,23 @@ public class SettingsScreen extends SuperScreen {
         final int bigPad = Gdx.graphics.getHeight()/12;
 
         /* Categories wanted */
+        checkBoxLabels = new ArrayList<>();
         checkBoxes = new ArrayList<>();
         Label categoriesLabel = new Label("Categories", skin);
-        Label categoryNameLabel = new Label("Sports", skin, "categoryName");
+        Label categoryNameLabel = new Label("SPORTS", skin, "categoryName");
         CheckBox checkBox1 = new CheckBox("", skin);
         checkBoxes.add(checkBox1);
+        checkBoxLabels.add(categoriesLabel);
 
         Table categoriesTable = new Table();
         categoriesTable.add(categoryNameLabel).pad(smallPad, smallPad, 0, 0);
         categoriesTable.add(checkBox1).pad(smallPad, smallPad, smallPad/2, smallPad);
         categoriesTable.row();
 
-        categoryNameLabel = new Label("Music", skin, "categoryName");
+        categoryNameLabel = new Label("MUSIC", skin, "categoryName");
         CheckBox checkBox2 = new CheckBox("", skin);
         checkBoxes.add(checkBox2);
+        checkBoxLabels.add(categoryNameLabel);
 
         categoriesTable.add(categoryNameLabel).pad(0, smallPad, smallPad, 0);;
         categoriesTable.add(checkBox2).pad(0, smallPad, smallPad, smallPad);
@@ -266,12 +270,27 @@ public class SettingsScreen extends SuperScreen {
 
     public static ArrayList<String> getCategories(){
         ArrayList<String> c = new ArrayList<>();
-        for(CheckBox box: checkBoxes){
-            if(box.isChecked()){
-                c.add(box.getText().toString());
+        Gdx.app.log("getCategories", "before loop");
+        for(int i = 0; i < checkBoxes.size(); i++){
+            if(checkBoxes.get(i).isChecked()){
+                c.add(checkBoxLabels.get(i).getText().toString());
             }
         }
+        if(c.get(0).toString().equals("")){
+            Gdx.app.log("UEUEUEUEUEUEUEUEUE", "empty");
+        }
+
+        Gdx.app.log("arraysize to return", Integer.toString(c.size()));
+        Gdx.app.log("arrayCategory", c.get(0).toString());
         return c;
+    }
+
+    public static int getNumQuestions(){
+        return Integer.parseInt(numQuestionsTextField.getText().toString());
+    }
+
+    public static String getName(){
+        return nameTextField.getText().toString();
     }
 
 }
