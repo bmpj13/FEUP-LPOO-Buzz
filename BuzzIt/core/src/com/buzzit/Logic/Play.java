@@ -55,7 +55,8 @@ public class Play {
 				String question = prop.getProperty("question"+i);
 				int answers = Integer.parseInt(prop.getProperty("numanswers" + i));
 				String category = prop.getProperty("category" + i);
-				int arrayIndex = Category.getIndex(category);
+				Category cat = Category.getCategory(category);
+				int arrayIndex = Category.getIndex(cat);
 
 				String correct = new String();
 				ArrayList<String> wrong = new ArrayList<>();
@@ -69,7 +70,7 @@ public class Play {
 					}
 				}
 
-				Question q = new Question(question, wrong, correct, difficulty, category);
+				Question q = new Question(question, wrong, correct, difficulty, cat);
 				questionsByCategory.get(arrayIndex).add(q);
 			}
 
@@ -103,29 +104,28 @@ public class Play {
 		return indices;
 	}
 
-	private ArrayList<Question> getQuestionsFromCategory(ArrayList<String> categoriesChosen){
+	private ArrayList<Question> getQuestionsFromCategory(ArrayList<Category> categoriesChosen){
 
 		ArrayList<Question> q = new ArrayList<>();
-		for(String cat:categoriesChosen){
-			int indice = Category.getIndex(cat);
-			q.addAll(questionsByCategory.get(indice));
+		for(Category cat:categoriesChosen){
+			int index = Category.getIndex(cat);
+			q.addAll(questionsByCategory.get(index));
 		}
 		return q;
 	}
 
-	public ArrayList<Question> play(int totalQuestions, ArrayList<String> categoriesChosen, Difficulty difficulty){
+	public ArrayList<Question> play(int totalQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty){
 		ArrayList<Question> q = new ArrayList<>();
 
+		//gets all questions from selected categories
 		ArrayList<Question> allFromCategories = getQuestionsFromCategory(categoriesChosen);
-		Gdx.app.log("UEUEUEUEUEUEUEUEUEUE AllCategoriesSize", Integer.toString(allFromCategories.size()));
 
 		//get randomized question indices from each category
 		ArrayList<Integer> questionsScrambled = scramble(allFromCategories.size());
 
+		//put random question from selected categories into arrayList
 		for(int i=0; i< totalQuestions; i++) {
-			Gdx.app.log("UEUEUUUEEUEUEUUUU", Integer.toString(questionsScrambled.get(i)));
 			q.add(allFromCategories.get(questionsScrambled.get(i)));
-
 		}
 		return q;
 	}

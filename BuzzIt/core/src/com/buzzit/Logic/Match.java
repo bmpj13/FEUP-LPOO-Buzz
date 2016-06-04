@@ -9,7 +9,7 @@ public class Match {
     private int questionIndex;
     private Player player;
 
-    public Match(int numQuestions, ArrayList<String> categoriesChosen, Difficulty difficulty){
+    public Match(int numQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty){
         this.questions = Play.getInstance().play(numQuestions,categoriesChosen, difficulty);
         this.questionIndex = 0;
         player = new Player("UEUEUEUEUEUEUEUEUEUEUEUEUEUE");

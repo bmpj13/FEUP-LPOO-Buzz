@@ -4,49 +4,49 @@ package com.buzzit.Logic;
  * Created by wnfuk_000 on 04/06/2016.
  */
 public enum Category {
-    SPORTS("SPORTS"),
-    HISTORY("HISTORY"),
-    SCIENCE("SCIENCE"),
-    MUSIC("MUSIC");
+    SPORTS("SPORTS", 0),
+    HISTORY("HISTORY", 1),
+    SCIENCE("SCIENCE", 2),
+    MUSIC("MUSIC", 3);
 
     String category;
+    int index;
 
-    private Category(String category){
+    private Category(String category, int index){
         this.category = category;
+        this.index = index;
     }
 
-    static public int getIndex(String category){
-        int indice = 0;
-        switch(category){
-            case "SPORTS":
-                indice = 0;
-                break;
-            case "HISTORY":
-                indice = 1;
-                break;
-            case "SCIENCE":
-                indice = 2;
-                break;
-            case "MUSIC":
-                indice = 3;
-                break;
-        }
-        return indice;
+    static public int getIndex(Category category){
+        return category.index;
     }
 
-    static public String[] allCategories(){
-        String[] t = new String[Category.values().length];
+    static public Category[] allCategories(){
+        Category[] t = new Category[Category.values().length];
         int i=0;
         for (Category cat: Category.values()) {
-            t[i] = cat.getCategory();
+            t[i] = cat;
             i++;
         }
         return t;
     }
     
-    public String getCategory(){
+    public String getName(){
         return category;
     }
 
-    
+    static public Category getCategory(String cat){
+        switch(cat){
+            case "SPORTS":
+                return SPORTS;
+            case "HISTORY":
+                return HISTORY;
+            case "SCIENCE":
+                return SCIENCE;
+            case "MUSIC":
+                return MUSIC;
+            default:
+                return null;
+        }
+    }
 }

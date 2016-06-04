@@ -10,11 +10,11 @@ public class Question {
     private String question;
     private ArrayList<String> wrong;
     private String correct;
-    private String category;
+    private Category category;
     private Difficulty difficulty;
 
     public Question(String question, ArrayList<String> wrong, String correct,
-                    Difficulty difficulty, String category){
+                    Difficulty difficulty, Category category){
         this.question = question;
         this.wrong = wrong;
         this.correct = correct;
@@ -65,11 +65,11 @@ public class Question {
         this.difficulty = difficulty;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

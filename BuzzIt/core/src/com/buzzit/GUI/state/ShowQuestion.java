@@ -83,7 +83,7 @@ public class ShowQuestion implements GameStrategy {
         interactor.btnOptionB.setText(options[1]);
         interactor.btnOptionC.setText(options[2]);
         interactor.btnOptionD.setText(options[3]);
-        interactor.labelCategory.setText(question.getCategory());
+        interactor.labelCategory.setText(question.getCategory().getName());
     }
 
     @Override

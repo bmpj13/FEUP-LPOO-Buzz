@@ -43,7 +43,6 @@ public class SettingsScreen extends SuperScreen {
     static private ArrayList<CheckBox> checkBoxes;
     static private TextField nameTextField;
     static private TextField numQuestionsTextField;
-    static private ArrayList<Label> checkBoxLabels;
 
     SettingsScreen(Game g, ScreenState.ScreenType pType) {
         create();
@@ -77,30 +76,28 @@ public class SettingsScreen extends SuperScreen {
         final int bigPad = Gdx.graphics.getHeight()/12;
 
         /* Categories wanted */
-        checkBoxLabels = new ArrayList<>();
         checkBoxes = new ArrayList<>();
         Label categoriesLabel = new Label("Categories", skin);
-        Label categoryNameLabel = new Label("SPORTS", skin, "categoryName");
-        CheckBox checkBox1 = new CheckBox("", skin);
+
+        CheckBox checkBox1 = new CheckBox(Category.SPORTS.getName(), skin);
         checkBoxes.add(checkBox1);
-        checkBoxLabels.add(categoriesLabel);
 
         Table categoriesTable = new Table();
-        categoriesTable.add(categoryNameLabel).pad(smallPad, smallPad, 0, 0);
-        categoriesTable.add(checkBox1).pad(smallPad, smallPad, smallPad/2, smallPad);
+        categoriesTable.align(Align.left);
+        categoriesTable.add(checkBox1).pad(smallPad, smallPad, smallPad/2, smallPad).align(Align.left);
         categoriesTable.row();
 
-        categoryNameLabel = new Label("MUSIC", skin, "categoryName");
-        CheckBox checkBox2 = new CheckBox("", skin);
+        CheckBox checkBox2 = new CheckBox(Category.MUSIC.getName(), skin);
         checkBoxes.add(checkBox2);
-        checkBoxLabels.add(categoryNameLabel);
-
-        categoriesTable.add(categoryNameLabel).pad(0, smallPad, smallPad, 0);;
-        categoriesTable.add(checkBox2).pad(0, smallPad, smallPad, smallPad);
+        categoriesTable.add(checkBox2).pad(0, smallPad, smallPad, smallPad).align(Align.left);
 
         categoriesBackgroundTexture = new Texture(Gdx.files.internal("settings/categories_background.png"));
         NinePatch patch = new NinePatch(categoriesBackgroundTexture, 3, 3, 3, 3);
         categoriesTable.setBackground(new NinePatchDrawable(patch));
+
+        for(CheckBox box:checkBoxes){
+            box.getLabelCell().padLeft(20);
+        }
 
 
         /* Difficulty */
@@ -268,20 +265,12 @@ public class SettingsScreen extends SuperScreen {
         generator.dispose();
     }
 
-    public static ArrayList<String> getCategories(){
-        ArrayList<String> c = new ArrayList<>();
-        Gdx.app.log("getCategories", "before loop");
-        for(int i = 0; i < checkBoxes.size(); i++){
-            if(checkBoxes.get(i).isChecked()){
-                c.add(checkBoxLabels.get(i).getText().toString());
-            }
+    public static ArrayList<Category> getCategories(){
+        ArrayList<Category> c = new ArrayList<>();
+        for(CheckBox box: checkBoxes){
+            if(box.isChecked())
+                c.add(Category.getCategory(box.getText().toString()));
         }
-        if(c.get(0).toString().equals("")){
-            Gdx.app.log("UEUEUEUEUEUEUEUEUE", "empty");
-        }
-
-        Gdx.app.log("arraysize to return", Integer.toString(c.size()));
-        Gdx.app.log("arrayCategory", c.get(0).toString());
         return c;
     }
 
