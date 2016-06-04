@@ -13,6 +13,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -63,7 +66,6 @@ public class SettingsScreen extends SuperScreen {
         numQuestionsTextField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
 
 
-
         final int smallPad = Gdx.graphics.getHeight()/60;
         final int bigPad = Gdx.graphics.getHeight()/12;
 
@@ -87,26 +89,28 @@ public class SettingsScreen extends SuperScreen {
         categoriesTable.setBackground(new NinePatchDrawable(patch));
 
 
+        /* Difficulty */
+        Label difficultyLabel = new Label("Difficulty", skin);
+        String[] s = new String[] {"William Homo", "Joao Giro"};
+        SelectBox<String> difficultySelectBox = new SelectBox<String>(skin);
+        difficultySelectBox.setItems(s);
 
         // Main table
         Table table = new Table();
 
-        table.add(nameLabel).padBottom(smallPad);
-        table.row();
+        table.add(nameLabel).padBottom(smallPad).row();
 
-        table.add(nameTextField).width(Gdx.graphics.getWidth()/2).padBottom(bigPad);
-        table.row();
+        table.add(nameTextField).width(Gdx.graphics.getWidth()/2).padBottom(bigPad).row();
 
-        table.add(numQuestionsLabel).padBottom(smallPad);
-        table.row();
+        table.add(numQuestionsLabel).padBottom(smallPad).row();
+        table.add(numQuestionsTextField).padBottom(bigPad).row();
 
-        table.add(numQuestionsTextField).padBottom(bigPad);
-        table.row();
+        table.add(categoriesLabel).padBottom(smallPad).row();
+        table.add(categoriesTable).padBottom(bigPad).row();
 
-        table.add(categoriesLabel).padBottom(smallPad);
-        table.row();
+        table.add(difficultyLabel).padBottom(smallPad).row();
+        table.add(difficultySelectBox).row();
 
-        table.add(categoriesTable);
         table.setFillParent(true);
 
         stage = new Stage();
@@ -119,7 +123,7 @@ public class SettingsScreen extends SuperScreen {
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/good_times.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 100;
+        parameter.size = 50;
 
         font = generator.generateFont(parameter);
         skin.add("default", font);
@@ -165,6 +169,24 @@ public class SettingsScreen extends SuperScreen {
         checkBoxStyle.checkboxOff = new SpriteDrawable(new Sprite(uncheckedBoxTexture));
         checkBoxStyle.font = skin.getFont("default");
         skin.add("default", checkBoxStyle);
+
+
+        // Selectbox styles
+        List.ListStyle listStyle = new List.ListStyle();
+        listStyle.font = skin.getFont("default");
+        listStyle.fontColorUnselected = Color.CORAL;
+        listStyle.fontColorSelected = Color.BLUE;
+        listStyle.selection = skin.newDrawable("whiteBackground");
+
+        ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
+
+        SelectBox.SelectBoxStyle selectBoxStyle = new SelectBox.SelectBoxStyle();
+        selectBoxStyle.font = skin.getFont("default");
+        selectBoxStyle.fontColor = Color.CORAL;
+        selectBoxStyle.listStyle = listStyle;
+        selectBoxStyle.scrollStyle = scrollPaneStyle;
+        selectBoxStyle.background = skin.newDrawable("whiteBackground");
+        skin.add("default", selectBoxStyle);
     }
 
     /**

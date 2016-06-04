@@ -20,7 +20,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.buzzit.GUI.OptionButton;
 import com.buzzit.GUI.state.*;
 import com.buzzit.GUI.Interactor;
+import com.buzzit.logic.Category;
+import com.buzzit.logic.Difficulty;
 import com.buzzit.logic.Match;
+
+import java.util.ArrayList;
 
 
 public class SingleplayerScreen extends SuperScreen {
@@ -175,7 +179,7 @@ public class SingleplayerScreen extends SuperScreen {
         super.show();
         Gdx.input.setInputProcessor(stage);
 
-        match = new Match(3);
+        match = new Match(3, new ArrayList<Category>(), Difficulty.EASY);
         strat = new ShowQuestion(interactor, 0, 0.8f, 0.8f, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         strat.start();
     }
