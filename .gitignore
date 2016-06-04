@@ -64,3 +64,5 @@ local.properties
 # Code Recommenders
 .recommenders/
 
+BuzzIt/core/src/com/buzzit/logic/Match.java
+*.java
