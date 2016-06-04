@@ -6,10 +6,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -18,12 +23,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.buzzit.GUI.AnimatedActor;
 
 public class MenuScreen extends SuperScreen {
-    Stage stage;
-    Texture playTexture;
-    Texture settingsTexture;
-    Texture highscoreTexture;
+    private Stage stage;
+    private Texture playTexture;
+    private Texture settingsTexture;
+    private Texture highscoreTexture;
+    private SpriteBatch batch;
+    private TextureAtlas titleAtlas;
+    private Animation titleAnimation;
+
 
     public MenuScreen(Game g, ScreenState.ScreenType pType) {
         create();
@@ -35,9 +45,18 @@ public class MenuScreen extends SuperScreen {
     public void create() {
         super.create();
 
+        batch = new SpriteBatch();
+
+        /*** Title ***/
+        titleAtlas = new TextureAtlas(Gdx.files.internal("packs/title.pack"));
+        titleAnimation = new Animation(1f/2f, titleAtlas.getRegions());
+        AnimatedActor titleActor = new AnimatedActor(batch, titleAnimation);
+
+
         /*** Creating buttons ***/
         playTexture = new Texture(Gdx.files.internal("menu/play.png"));
         ImageButton btnSingleplayer = new ImageButton(new SpriteDrawable(new Sprite(playTexture)));
+        btnSingleplayer.getImage().setScaling(Scaling.fit);
 
         settingsTexture = new Texture(Gdx.files.internal("menu/settings.png"));
         ImageButton btnSettings = new ImageButton(new SpriteDrawable(new Sprite((settingsTexture))));
@@ -47,7 +66,10 @@ public class MenuScreen extends SuperScreen {
 
         /*** Creating stage ***/
         Table buttonsTable = new Table();
-        buttonsTable.add(btnSingleplayer).padBottom(100);
+        buttonsTable.add(titleActor).padBottom(100).center();
+        buttonsTable.row();
+
+        buttonsTable.add(btnSingleplayer).width(400).height(400).padBottom(100);
         buttonsTable.row();
 
         buttonsTable.add(btnSettings).padBottom(100);
@@ -56,7 +78,6 @@ public class MenuScreen extends SuperScreen {
         buttonsTable.add(btnHighscore);
         buttonsTable.row();
         buttonsTable.setFillParent(true);
-
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -136,5 +157,7 @@ public class MenuScreen extends SuperScreen {
         super.dispose();
         playTexture.dispose();
         stage.dispose();
+        batch.dispose();
+        titleAtlas.dispose();
     }
 }

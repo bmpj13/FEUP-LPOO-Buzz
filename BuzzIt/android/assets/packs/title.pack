@@ -1,0 +1,59 @@
+
+title.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+buzzit2
+  rotate: false
+  xy: 1, 821
+  size: 642, 178
+  orig: 642, 178
+  offset: 0, 0
+  index: -1
+buzzit5
+  rotate: false
+  xy: 1, 622
+  size: 596, 197
+  orig: 596, 197
+  offset: 0, 0
+  index: -1
+buzzit6
+  rotate: false
+  xy: 1, 423
+  size: 609, 197
+  orig: 609, 197
+  offset: 0, 0
+  index: -1
+buzzit4
+  rotate: false
+  xy: 1, 219
+  size: 610, 202
+  orig: 610, 202
+  offset: 0, 0
+  index: -1
+buzzit3
+  rotate: false
+  xy: 1, 1
+  size: 581, 216
+  orig: 581, 216
+  offset: 0, 0
+  index: -1
+
+title2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+buzzit1
+  rotate: false
+  xy: 1, 237
+  size: 695, 305
+  orig: 695, 305
+  offset: 0, 0
+  index: -1
+buzzit7
+  rotate: false
+  xy: 1, 1
+  size: 592, 234
+  orig: 592, 234
+  offset: 0, 0
+  index: -1
