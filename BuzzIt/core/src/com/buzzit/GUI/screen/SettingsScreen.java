@@ -22,6 +22,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.buzzit.Logic.Category;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class SettingsScreen extends SuperScreen {
     private Stage stage;
@@ -36,7 +40,9 @@ public class SettingsScreen extends SuperScreen {
     private Texture checkedBoxTexture;
     private Texture uncheckedBoxTexture;
     private Texture categoriesBackgroundTexture;
-
+    static private ArrayList<CheckBox> checkBoxes;
+    static public TextField nameTextField;
+    static public TextField numQuestionsTextField;
 
     SettingsScreen(Game g, ScreenState.ScreenType pType) {
         create();
@@ -52,14 +58,14 @@ public class SettingsScreen extends SuperScreen {
 
         /* User name */
         Label nameLabel = new Label("Nickname", skin);
-        TextField nameTextField = new TextField("player", skin);
+        nameTextField = new TextField("player", skin);
         nameTextField.setBlinkTime(1f);
         nameTextField.setAlignment(Align.center);
         nameTextField.setMaxLength(20);
 
         /* Number of questions per game */
         Label numQuestionsLabel = new Label("Number of Questions", skin);
-        TextField numQuestionsTextField = new TextField("10", skin);
+        numQuestionsTextField = new TextField("10", skin);
         numQuestionsTextField.setBlinkTime(1f);
         numQuestionsTextField.setAlignment(Align.center);
         numQuestionsTextField.setMaxLength(2);
@@ -70,9 +76,11 @@ public class SettingsScreen extends SuperScreen {
         final int bigPad = Gdx.graphics.getHeight()/12;
 
         /* Categories wanted */
+        checkBoxes = new ArrayList<>();
         Label categoriesLabel = new Label("Categories", skin);
         Label categoryNameLabel = new Label("Sports", skin, "categoryName");
         CheckBox checkBox1 = new CheckBox("", skin);
+        checkBoxes.add(checkBox1);
 
         Table categoriesTable = new Table();
         categoriesTable.add(categoryNameLabel).pad(smallPad, smallPad, 0, 0);
@@ -81,6 +89,8 @@ public class SettingsScreen extends SuperScreen {
 
         categoryNameLabel = new Label("Music", skin, "categoryName");
         CheckBox checkBox2 = new CheckBox("", skin);
+        checkBoxes.add(checkBox2);
+
         categoriesTable.add(categoryNameLabel).pad(0, smallPad, smallPad, 0);;
         categoriesTable.add(checkBox2).pad(0, smallPad, smallPad, smallPad);
 
@@ -253,4 +263,15 @@ public class SettingsScreen extends SuperScreen {
         categoriesBackgroundTexture.dispose();
         generator.dispose();
     }
+
+    public static ArrayList<String> getCategories(){
+        ArrayList<String> c = new ArrayList<>();
+        for(CheckBox box: checkBoxes){
+            if(box.isChecked()){
+                c.add(box.getText().toString());
+            }
+        }
+        return c;
+    }
+
 }

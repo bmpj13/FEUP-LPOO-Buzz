@@ -1,4 +1,4 @@
-package com.buzzit.logic;
+package com.buzzit.Logic;
 
 import com.badlogic.gdx.Gdx;
 
@@ -14,8 +14,8 @@ import java.util.Random;
  */
 public class Play {
 
-	static private ArrayList<Question> questions;
-	//ArrayList<ArrayList<Question>> questionsByDifficulties;
+
+	static private ArrayList<ArrayList<Question>> questionsByCategory;
 
 	private static Play ourInstance = new Play();
 
@@ -24,7 +24,12 @@ public class Play {
 	}
 
 	private Play(){
-		questions = new ArrayList<Question>();
+
+		questionsByCategory = new ArrayList<>();
+		for(Category cat:Category.values()){
+			ArrayList<Question> questions = new ArrayList<>();
+			questionsByCategory.add(questions);
+		}
 		getFile(Difficulty.MEDIUM);
 	}
 
@@ -49,6 +54,9 @@ public class Play {
 			for(int i = 0; i < t; i++){
 				String question = prop.getProperty("question"+i);
 				int answers = Integer.parseInt(prop.getProperty("numanswers" + i));
+				String category = prop.getProperty("category" + i);
+				int arrayIndex = Category.getIndex(category);
+
 				String correct = new String();
 				ArrayList<String> wrong = new ArrayList<String>();
 				for(int z =0; z < answers; z++){
@@ -61,8 +69,8 @@ public class Play {
 					}
 				}
 
-				Question q = new Question(question, wrong, correct, difficulty);
-				questions.add(q);
+				Question q = new Question(question, wrong, correct, difficulty, category);
+				questionsByCategory.get(arrayIndex).add(q);
 			}
 
 		} catch (IOException ex) {
@@ -95,18 +103,29 @@ public class Play {
 		return indices;
 	}
 
+	private ArrayList<Question> getQuestionsFromCategory(ArrayList<String> categoriesChosen){
 
-	public ArrayList<Question> play(int numQuestions){
-		ArrayList<Question> q = new ArrayList<Question>();
-		ArrayList<Integer> indices = scramble(questions.size());
-		Gdx.app.log("UEUEUEUEUEUEUEUE - QUESTIONS SIZE",  new Integer(questions.size()).toString());
-		for(int i = 0; i < numQuestions; i++){
-			q.add(questions.get(indices.get(i)));
+		ArrayList<Question> q = new ArrayList<>();
+		for(String cat:categoriesChosen){
+			int indice = Category.getIndex(cat);
+			q.addAll(questionsByCategory.get(indice));
 		}
-		for(int i=0; i< indices.size(); i++){
-			Gdx.app.log("UEUEUEUEUEUEUEUE - INDICES", indices.get(i).toString());
+		return q;
+	}
+
+	public ArrayList<Question> play(int totalQuestions, ArrayList<String> categoriesChosen, Difficulty difficulty){
+		ArrayList<Question> q = new ArrayList<>();
+
+		ArrayList<Question> allFromCategories = getQuestionsFromCategory(categoriesChosen);
+
+		//get randomized question indices from each category
+		ArrayList<Integer> questionsScrambled = scramble(allFromCategories.size());
+
+		for(int i=0; i< totalQuestions; i++) {
+
+			q.add(allFromCategories.get(questionsScrambled.get(i)));
+
 		}
-		//match = new Match(q, 1, 1);
 		return q;
 	}
 

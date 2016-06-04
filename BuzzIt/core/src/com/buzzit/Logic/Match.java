@@ -1,4 +1,4 @@
-package com.buzzit.logic;
+package com.buzzit.Logic;
 
 import java.util.ArrayList;
 
@@ -9,8 +9,8 @@ public class Match {
     private int questionIndex;
     private Player player;
 
-    public Match(int rounds){
-        this.questions = Play.getInstance().play(rounds);
+    public Match(int rounds, ArrayList<String> categoriesChosen, Difficulty difficulty){
+        this.questions = Play.getInstance().play(rounds,categoriesChosen, difficulty);
         this.questionIndex = 0;
         player = new Player("UEUEUEUEUEUEUEUEUEUEUEUEUEUE");
     }

@@ -3,7 +3,7 @@ package com.buzzit.GUI.state;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
 import com.buzzit.GUI.Interactor;
-import com.buzzit.logic.Question;
+import com.buzzit.Logic.Question;
 
 
 public class ShowQuestion implements GameStrategy {

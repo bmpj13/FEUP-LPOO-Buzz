@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,9 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.buzzit.GUI.OptionButton;
 import com.buzzit.GUI.state.*;
 import com.buzzit.GUI.Interactor;
-import com.buzzit.logic.Category;
-import com.buzzit.logic.Difficulty;
-import com.buzzit.logic.Match;
+import com.buzzit.Logic.Category;
+import com.buzzit.Logic.Difficulty;
+import com.buzzit.Logic.Match;
 
 import java.util.ArrayList;
 
@@ -179,7 +177,8 @@ public class SingleplayerScreen extends SuperScreen {
         super.show();
         Gdx.input.setInputProcessor(stage);
 
-        match = new Match(3, new ArrayList<Category>(), Difficulty.EASY);
+        match = new Match(Integer.parseInt(SettingsScreen.numQuestionsTextField.getText().toString()),
+                SettingsScreen.getCategories(), Difficulty.EASY);
         strat = new ShowQuestion(interactor, 0, 0.8f, 0.8f, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         strat.start();
     }

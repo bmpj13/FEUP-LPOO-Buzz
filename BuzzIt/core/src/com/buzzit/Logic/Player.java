@@ -1,4 +1,4 @@
-package com.buzzit.logic;
+package com.buzzit.Logic;
 
 
 public class Player {

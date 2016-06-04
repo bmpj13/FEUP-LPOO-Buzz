@@ -1,4 +1,4 @@
-package com.buzzit.logic;
+package com.buzzit.Logic;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -13,11 +13,13 @@ public class Question {
     private String category;
     private Difficulty difficulty;
 
-    public Question(String question, ArrayList<String> wrong, String correct, Difficulty difficulty){
+    public Question(String question, ArrayList<String> wrong, String correct,
+                    Difficulty difficulty, String category){
         this.question = question;
         this.wrong = wrong;
         this.correct = correct;
         this.difficulty = difficulty;
+        this.category = category;
     }
 
 
