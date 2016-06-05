@@ -59,10 +59,7 @@ public class ShowQuestion implements GameStrategy {
                     for(OptionButton button: interactor.btnOptions){
                         button.addAction(Actions.fadeIn(duration));
                     }
-//                    interactor.btnOptionA.addAction(Actions.fadeIn(duration));
-//                    interactor.btnOptionB.addAction(Actions.fadeIn(duration));
-//                    interactor.btnOptionC.addAction(Actions.fadeIn(duration));
-//                    interactor.btnOptionD.addAction(Actions.fadeIn(duration));
+
                     interactor.labelStatus.addAction(Actions.fadeIn(duration));
                 }
                 else if (timerTicksCount == 3)
@@ -89,10 +86,6 @@ public class ShowQuestion implements GameStrategy {
             button.setText(options[i]);
             i++;
         }
-//        interactor.btnOptionA.setText(options[0]);
-//        interactor.btnOptionB.setText(options[1]);
-//        interactor.btnOptionC.setText(options[2]);
-//        interactor.btnOptionD.setText(options[3]);
         interactor.labelCategory.setText(question.getCategory().getName());
     }
 

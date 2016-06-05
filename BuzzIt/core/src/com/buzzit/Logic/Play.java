@@ -15,6 +15,7 @@ public class Play {
 
 
 	static private ArrayList<ArrayList<Question>> questionsByCategory;
+	
 
 	private static Play ourInstance = new Play();
 
@@ -24,9 +25,9 @@ public class Play {
 
 	private Play() {
 
-		questionsByCategory = new ArrayList<>();
+		questionsByCategory = new ArrayList<ArrayList<Question>>();
 		for(Category cat:Category.values()){
-			ArrayList<Question> questions = new ArrayList<>();
+			ArrayList<Question> questions = new ArrayList<Question>();
 			questionsByCategory.add(questions);
 		}
 
@@ -40,8 +41,7 @@ public class Play {
 
 		try {
 			String filepath = "assets/data/a.properties";
-			FileHandle file = Gdx.files.internal(filepath);
-			input = file.read();
+			input = getClass().getClassLoader().getResourceAsStream(filepath);
 
 			if (input == null) throw new IllegalArgumentException(filepath);
 
@@ -58,7 +58,7 @@ public class Play {
 				int arrayIndex = cat.getIndex();
 
 				String correct = new String();
-				ArrayList<String> wrong = new ArrayList<>();
+				ArrayList<String> wrong = new ArrayList<String>();
 				for(int z =0; z < answers; z++){
 					String key = prop.getProperty("answer"+i+"."+z);
 					if(z == 0){
@@ -108,7 +108,7 @@ public class Play {
 
 	private ArrayList<Question> getQuestionsFromCategory(ArrayList<Category> categoriesChosen){
 
-		ArrayList<Question> q = new ArrayList<>();
+		ArrayList<Question> q = new ArrayList<Question>();
 		for(Category cat:categoriesChosen){
 			int index = cat.getIndex();
 			q.addAll(questionsByCategory.get(index));
@@ -117,7 +117,7 @@ public class Play {
 	}
 
 	public ArrayList<Question> play(int totalQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty){
-		ArrayList<Question> q = new ArrayList<>();
+		ArrayList<Question> q = new ArrayList<Question>();
 
 		// gets all questions from selected categories
 		ArrayList<Question> allFromCategories = getQuestionsFromCategory(categoriesChosen);

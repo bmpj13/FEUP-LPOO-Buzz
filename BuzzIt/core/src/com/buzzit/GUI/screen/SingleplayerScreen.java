@@ -78,20 +78,8 @@ public class SingleplayerScreen extends SuperScreen {
             table.row();
         }
 
-//        table.add(interactor.btnOptionA).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
-//        table.row();
-//
-//        table.add(interactor.btnOptionB).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
-//        table.row();
-//
-//        table.add(interactor.btnOptionC).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
-//        table.row();
-//
-//        table.add(interactor.btnOptionD).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
-//        table.row();
-//
-//        table.add(interactor.labelStatus);
-//        table.row();
+        table.add(interactor.labelStatus);
+        table.row();
 
         table.setFillParent(true);
 
@@ -110,37 +98,6 @@ public class SingleplayerScreen extends SuperScreen {
                 }
             });
         }
-//        interactor.btnOptionA.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                super.clicked(event, x, y);
-//                handleButton(interactor.btnOptionA);
-//            }
-//        });
-//
-//        interactor.btnOptionB.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                super.clicked(event, x, y);
-//                handleButton(interactor.btnOptionB);
-//            }
-//        });
-//
-//        interactor.btnOptionC.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                super.clicked(event, x, y);
-//                handleButton(interactor.btnOptionC);
-//            }
-//        });
-//
-//        interactor.btnOptionD.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                super.clicked(event, x, y);
-//                handleButton(interactor.btnOptionD);
-//            }
-//        });
     }
 
 
@@ -208,9 +165,11 @@ public class SingleplayerScreen extends SuperScreen {
         super.render(delta);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (strat.finished())
-            switchStrategy();
-
+        if (strat.finished()) {
+            if (match.getQuestionIndex() == match.getTotalQuestions())
+                ScreenState.getInstance().changeState(ScreenState.ScreenType.MENU);
+            else switchStrategy();
+        }
         strat.render();
 
         stage.act();
@@ -282,6 +241,7 @@ public class SingleplayerScreen extends SuperScreen {
         if (match.isCorrect(button.getContent()))     strat = new Answered(interactor, button, points, true);
         else                                          strat = new Answered(interactor, button, -points, false);
         match.nextQuestion();
+
         strat.start();
     }
 }

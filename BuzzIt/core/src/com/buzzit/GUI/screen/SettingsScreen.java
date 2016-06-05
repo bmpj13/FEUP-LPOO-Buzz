@@ -76,7 +76,7 @@ public class SettingsScreen extends SuperScreen {
         final int bigPad = Gdx.graphics.getHeight()/12;
 
         /* Categories wanted */
-        checkBoxes = new ArrayList<>();
+        checkBoxes = new ArrayList<CheckBox>();
         Label categoriesLabel = new Label("Categories", skin);
 
 
@@ -101,7 +101,7 @@ public class SettingsScreen extends SuperScreen {
         /* Difficulty */
         Label difficultyLabel = new Label("Difficulty", skin);
         //String[] s = new String[] {"William Homo", "Joao Giro"};
-        SelectBox<Difficulty> difficultySelectBox = new SelectBox<>(skin);
+        SelectBox<Difficulty> difficultySelectBox = new SelectBox<Difficulty>(skin);
         difficultySelectBox.setItems(Difficulty.values());
 
         // Main table
@@ -264,7 +264,7 @@ public class SettingsScreen extends SuperScreen {
     }
 
     public static ArrayList<Category> getCategories(){
-        ArrayList<Category> c = new ArrayList<>();
+        ArrayList<Category> c = new ArrayList<Category>();
         for(CheckBox box: checkBoxes){
             if(box.isChecked())
                 c.add(Category.getCategory(box.getText().toString()));

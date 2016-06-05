@@ -7,11 +7,13 @@ public class Match {
 
     private ArrayList<Question> questions;
     private int questionIndex;
+    private int totalQuestions;
     private Player player;
 
     public Match(int numQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty) {
         this.questions = Play.getInstance().play(numQuestions, categoriesChosen, difficulty);
         this.questionIndex = 0;
+        this.totalQuestions = numQuestions;
         player = new Player("UEUEUEUEUEUEUEUEUEUEUEUEUEUE");
     }
 
@@ -36,5 +38,13 @@ public class Match {
 
     public ArrayList<Question> getQuestions() {
         return questions;
+    }
+
+    public int getTotalQuestions(){
+        return totalQuestions;
+    }
+
+    public int getQuestionIndex(){
+        return questionIndex;
     }
 }
