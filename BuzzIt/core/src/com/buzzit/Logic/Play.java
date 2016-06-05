@@ -34,11 +34,12 @@ public class Play {
 		for(Category cat:Category.values()){
 			ArrayList<Question> q = new ArrayList<>();
 			questions[Difficulty.EASY.getIndex()][cat.getIndex()] = q;
+
 			q = new ArrayList<>();
 			questions[Difficulty.MEDIUM.getIndex()][cat.getIndex()] = q;
+
 			q = new ArrayList<>();
 			questions[Difficulty.HARD.getIndex()][cat.getIndex()] = q;
-
 		}
 
 //		easyThread = new Thread(){
@@ -68,6 +69,7 @@ public class Play {
 //			ex.printStackTrace();
 //			Gdx.app.log("EXCEPTION","Interrupted Exception");
 //		}
+
 		getFile(Difficulty.EASY, questions[Difficulty.EASY.getIndex()], easyPath);
 		getFile(Difficulty.MEDIUM, questions[Difficulty.MEDIUM.getIndex()], mediumPath);
 		getFile(Difficulty.HARD, questions[Difficulty.HARD.getIndex()], hardPath);

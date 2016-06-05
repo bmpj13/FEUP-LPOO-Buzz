@@ -61,9 +61,6 @@ public class MenuScreen implements Screen {
         highscoreTexture = new Texture(Gdx.files.internal("menu/highscore.png"));
         ImageButton btnHighscore = new ImageButton(new SpriteDrawable(new SpriteDrawable( new Sprite(highscoreTexture))));
 
-        ImageButton btnMultiplayer = new ImageButton(new SpriteDrawable(new Sprite(playTexture)));
-        btnMultiplayer.getImage().setScaling(Scaling.fit);
-
         /*** Creating stage ***/
         Table buttonsTable = new Table();
         buttonsTable.add(titleImage).padBottom(100);
@@ -76,9 +73,6 @@ public class MenuScreen implements Screen {
         buttonsTable.row();
 
         buttonsTable.add(btnHighscore);
-        buttonsTable.row();
-
-        buttonsTable.add(btnMultiplayer).width(300).height(300).padBottom(100);
         buttonsTable.row();
         buttonsTable.setFillParent(true);
 
@@ -100,15 +94,6 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 ScreenState.getInstance().changeState(ScreenState.ScreenType.SETTINGS);
-            }
-        });
-
-        btnMultiplayer.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                ScreenState.getInstance().changeState(ScreenState.ScreenType.MULTIPLAYER1);
-
             }
         });
 
