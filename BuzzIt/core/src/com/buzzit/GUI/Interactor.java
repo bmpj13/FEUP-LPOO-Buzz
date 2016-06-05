@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 
 import java.util.Random;
@@ -19,11 +20,14 @@ public class Interactor {
     public final Color RightColor = Color.GREEN;
     public final Color WrongColor = Color.RED;
 
+    private final String[] optionChars = {"A", "B", "C", "D"};
+
     public Skin skin;
+    public OptionButton[] btnOptions;
     public OptionButton btnOptionA;
-    public OptionButton btnOptionB;
-    public OptionButton btnOptionC;
-    public OptionButton btnOptionD;
+//    public OptionButton btnOptionB;
+//    public OptionButton btnOptionC;
+//    public OptionButton btnOptionD;
     public Label labelPoints;
     public Label labelCategory;
     public Label labelQuestion;
@@ -57,27 +61,34 @@ public class Interactor {
         Color uncheckedColor;
         Color checkedColor = Color.GRAY;
 
+        btnOptions = new OptionButton[4];
+
+        for(int i = 0; i < 4; i++){
+            uncheckedColor = generateColor();
+            textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
+            btnOptions[i] = new OptionButton(optionChars[i], textButtonStyle, uncheckedColor, checkedColor);
+        }
         // Button A
-        uncheckedColor = generateColor();
-        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
-        btnOptionA = new OptionButton("A", textButtonStyle, uncheckedColor, checkedColor);
-
-
-        // Button B
-        uncheckedColor = generateColor();
-        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
-        btnOptionB = new OptionButton("B", textButtonStyle, uncheckedColor, checkedColor);
-
-
-        // Button C
-        uncheckedColor = generateColor();
-        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
-        btnOptionC = new OptionButton("C", textButtonStyle, uncheckedColor, checkedColor);
-
-        // Button D
-        uncheckedColor = generateColor();
-        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
-        btnOptionD = new OptionButton("D", textButtonStyle, uncheckedColor, checkedColor);
+//        uncheckedColor = generateColor();
+//        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
+//        btnOptionA = new OptionButton("A", textButtonStyle, uncheckedColor, checkedColor);
+//
+//
+//        // Button B
+//        uncheckedColor = generateColor();
+//        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
+//        btnOptionB = new OptionButton("B", textButtonStyle, uncheckedColor, checkedColor);
+//
+//
+//        // Button C
+//        uncheckedColor = generateColor();
+//        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
+//        btnOptionC = new OptionButton("C", textButtonStyle, uncheckedColor, checkedColor);
+//
+//        // Button D
+//        uncheckedColor = generateColor();
+//        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
+//        btnOptionD = new OptionButton("D", textButtonStyle, uncheckedColor, checkedColor);
 
 
         labelStatus = new Label("", skin);
@@ -88,31 +99,44 @@ public class Interactor {
 
 
     public void enableButtons() {
-        btnOptionA.setTouchable(Touchable.enabled);
-        btnOptionB.setTouchable(Touchable.enabled);
-        btnOptionC.setTouchable(Touchable.enabled);
-        btnOptionD.setTouchable(Touchable.enabled);
+        for(OptionButton button: btnOptions){
+            button.setTouchable(Touchable.enabled);
+        }
+
+//        btnOptionA.setTouchable(Touchable.enabled);
+//        btnOptionB.setTouchable(Touchable.enabled);
+//        btnOptionC.setTouchable(Touchable.enabled);
+//        btnOptionD.setTouchable(Touchable.enabled);
     }
 
     public void disableButtons() {
-        btnOptionA.setTouchable(Touchable.disabled);
-        btnOptionB.setTouchable(Touchable.disabled);
-        btnOptionC.setTouchable(Touchable.disabled);
-        btnOptionD.setTouchable(Touchable.disabled);
+        for(OptionButton button: btnOptions){
+            button.setTouchable(Touchable.disabled);
+        }
+//        btnOptionA.setTouchable(Touchable.disabled);
+//        btnOptionB.setTouchable(Touchable.disabled);
+//        btnOptionC.setTouchable(Touchable.disabled);
+//        btnOptionD.setTouchable(Touchable.disabled);
     }
 
     public void uncheckButtons() {
-        btnOptionA.setChecked(false);
-        btnOptionB.setChecked(false);
-        btnOptionC.setChecked(false);
-        btnOptionD.setChecked(false);
+        for(OptionButton button: btnOptions){
+            button.setChecked(false);
+        }
+//        btnOptionA.setChecked(false);
+//        btnOptionB.setChecked(false);
+//        btnOptionC.setChecked(false);
+//        btnOptionD.setChecked(false);
     }
 
     public void hideElementsExceptPoints() {
-        btnOptionA.addAction(Actions.alpha(0));
-        btnOptionB.addAction(Actions.alpha(0));
-        btnOptionC.addAction(Actions.alpha(0));
-        btnOptionD.addAction(Actions.alpha(0));
+        for(OptionButton button: btnOptions){
+            button.addAction(Actions.alpha(0));
+        }
+//        btnOptionA.addAction(Actions.alpha(0));
+//        btnOptionB.addAction(Actions.alpha(0));
+//        btnOptionC.addAction(Actions.alpha(0));
+//        btnOptionD.addAction(Actions.alpha(0));
 
         labelCategory.addAction(Actions.alpha(0));
         labelQuestion.addAction(Actions.alpha(0));
@@ -124,10 +148,13 @@ public class Interactor {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                btnOptionA.addAction(Actions.fadeOut(duration));
-                btnOptionB.addAction(Actions.fadeOut(duration));
-                btnOptionC.addAction(Actions.fadeOut(duration));
-                btnOptionD.addAction(Actions.fadeOut(duration));
+                for(OptionButton button: btnOptions){
+                    button.addAction(Actions.fadeOut(duration));
+                }
+//                btnOptionA.addAction(Actions.fadeOut(duration));
+//                btnOptionB.addAction(Actions.fadeOut(duration));
+//                btnOptionC.addAction(Actions.fadeOut(duration));
+//                btnOptionD.addAction(Actions.fadeOut(duration));
                 labelCategory.addAction(Actions.fadeOut(duration));
                 labelQuestion.addAction(Actions.fadeOut(duration));
                 labelStatus.addAction(Actions.fadeOut(duration));

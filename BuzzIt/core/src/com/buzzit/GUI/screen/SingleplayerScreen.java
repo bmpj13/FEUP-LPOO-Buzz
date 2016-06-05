@@ -72,20 +72,26 @@ public class SingleplayerScreen extends SuperScreen {
         table.add(interactor.labelQuestion).minWidth((int) (Gdx.graphics.getWidth()/1.3)).minHeight(100).padBottom(150);
         table.row();
 
-        table.add(interactor.btnOptionA).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
-        table.row();
 
-        table.add(interactor.btnOptionB).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
-        table.row();
+        for(OptionButton button: interactor.btnOptions){
+            table.add(button).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
+            table.row();
+        }
 
-        table.add(interactor.btnOptionC).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
-        table.row();
-
-        table.add(interactor.btnOptionD).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
-        table.row();
-
-        table.add(interactor.labelStatus);
-        table.row();
+//        table.add(interactor.btnOptionA).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
+//        table.row();
+//
+//        table.add(interactor.btnOptionB).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
+//        table.row();
+//
+//        table.add(interactor.btnOptionC).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
+//        table.row();
+//
+//        table.add(interactor.btnOptionD).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
+//        table.row();
+//
+//        table.add(interactor.labelStatus);
+//        table.row();
 
         table.setFillParent(true);
 
@@ -95,37 +101,46 @@ public class SingleplayerScreen extends SuperScreen {
 
 
         /*** Listeners ***/
-        interactor.btnOptionA.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                handleButton(interactor.btnOptionA);
-            }
-        });
-
-        interactor.btnOptionB.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                handleButton(interactor.btnOptionB);
-            }
-        });
-
-        interactor.btnOptionC.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                handleButton(interactor.btnOptionC);
-            }
-        });
-
-        interactor.btnOptionD.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                handleButton(interactor.btnOptionD);
-            }
-        });
+        for(final OptionButton button: interactor.btnOptions){
+            button.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    handleButton(button);
+                }
+            });
+        }
+//        interactor.btnOptionA.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                super.clicked(event, x, y);
+//                handleButton(interactor.btnOptionA);
+//            }
+//        });
+//
+//        interactor.btnOptionB.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                super.clicked(event, x, y);
+//                handleButton(interactor.btnOptionB);
+//            }
+//        });
+//
+//        interactor.btnOptionC.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                super.clicked(event, x, y);
+//                handleButton(interactor.btnOptionC);
+//            }
+//        });
+//
+//        interactor.btnOptionD.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                super.clicked(event, x, y);
+//                handleButton(interactor.btnOptionD);
+//            }
+//        });
     }
 
 
@@ -204,6 +219,7 @@ public class SingleplayerScreen extends SuperScreen {
 
     private void switchStrategy() {
 
+        
         if (strat instanceof ShowQuestion)
             strat = new WaitingAnswer(interactor, SECONDS_TO_ANSWER);
         else if (strat instanceof WaitingAnswer) {

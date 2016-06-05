@@ -3,6 +3,7 @@ package com.buzzit.GUI.state;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
 import com.buzzit.GUI.Interactor;
+import com.buzzit.GUI.OptionButton;
 import com.buzzit.Logic.Question;
 
 
@@ -55,10 +56,13 @@ public class ShowQuestion implements GameStrategy {
                     interactor.labelQuestion.addAction(Actions.fadeIn(duration));
                 }
                 else if (timerTicksCount == 2) {
-                    interactor.btnOptionA.addAction(Actions.fadeIn(duration));
-                    interactor.btnOptionB.addAction(Actions.fadeIn(duration));
-                    interactor.btnOptionC.addAction(Actions.fadeIn(duration));
-                    interactor.btnOptionD.addAction(Actions.fadeIn(duration));
+                    for(OptionButton button: interactor.btnOptions){
+                        button.addAction(Actions.fadeIn(duration));
+                    }
+//                    interactor.btnOptionA.addAction(Actions.fadeIn(duration));
+//                    interactor.btnOptionB.addAction(Actions.fadeIn(duration));
+//                    interactor.btnOptionC.addAction(Actions.fadeIn(duration));
+//                    interactor.btnOptionD.addAction(Actions.fadeIn(duration));
                     interactor.labelStatus.addAction(Actions.fadeIn(duration));
                 }
                 else if (timerTicksCount == 3)
@@ -79,10 +83,16 @@ public class ShowQuestion implements GameStrategy {
     public void setText(){
         String[] options = question.generateOptions(4);
         interactor.labelQuestion.setText(question.getQuestion());
-        interactor.btnOptionA.setText(options[0]);
-        interactor.btnOptionB.setText(options[1]);
-        interactor.btnOptionC.setText(options[2]);
-        interactor.btnOptionD.setText(options[3]);
+
+        int i=0;
+        for(OptionButton button: interactor.btnOptions){
+            button.setText(options[i]);
+            i++;
+        }
+//        interactor.btnOptionA.setText(options[0]);
+//        interactor.btnOptionB.setText(options[1]);
+//        interactor.btnOptionC.setText(options[2]);
+//        interactor.btnOptionD.setText(options[3]);
         interactor.labelCategory.setText(question.getCategory().getName());
     }
 

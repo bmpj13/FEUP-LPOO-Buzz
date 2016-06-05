@@ -23,9 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.buzzit.Logic.Category;
+import com.buzzit.Logic.Difficulty;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class SettingsScreen extends SuperScreen {
     private Stage stage;
@@ -79,32 +79,30 @@ public class SettingsScreen extends SuperScreen {
         checkBoxes = new ArrayList<>();
         Label categoriesLabel = new Label("Categories", skin);
 
-        CheckBox checkBox1 = new CheckBox(Category.SPORTS.getName(), skin);
-        checkBoxes.add(checkBox1);
 
-        Table categoriesTable = new Table();
-        categoriesTable.align(Align.left);
-        categoriesTable.add(checkBox1).pad(smallPad, smallPad, smallPad/2, smallPad).align(Align.left);
-        categoriesTable.row();
-
-        CheckBox checkBox2 = new CheckBox(Category.MUSIC.getName(), skin);
-        checkBoxes.add(checkBox2);
-        categoriesTable.add(checkBox2).pad(0, smallPad, smallPad, smallPad).align(Align.left);
-
+        Table categoriesTable = new Table(skin);
         categoriesBackgroundTexture = new Texture(Gdx.files.internal("settings/categories_background.png"));
         NinePatch patch = new NinePatch(categoriesBackgroundTexture, 3, 3, 3, 3);
         categoriesTable.setBackground(new NinePatchDrawable(patch));
 
-        for(CheckBox box:checkBoxes){
-            box.getLabelCell().padLeft(20);
+        for(Category cat: Category.values()){
+            CheckBox checkBox = new CheckBox(cat.getName(), skin);
+            checkBox.getLabelCell().padLeft(smallPad);
+            checkBoxes.add(checkBox);
+            categoriesTable.add(checkBox).pad(smallPad, smallPad, smallPad/2, smallPad).align(Align.left).padBottom(10);
+            categoriesTable.row();
         }
+        categoriesTable.padBottom(smallPad);
 
+        ScrollPane.ScrollPaneStyle paneStyle = new ScrollPane.ScrollPaneStyle();
+        ScrollPane scrollPane = new ScrollPane(categoriesTable, paneStyle);
+        scrollPane.layout();
 
         /* Difficulty */
         Label difficultyLabel = new Label("Difficulty", skin);
-        String[] s = new String[] {"William Homo", "Joao Giro"};
-        SelectBox<String> difficultySelectBox = new SelectBox<String>(skin);
-        difficultySelectBox.setItems(s);
+        //String[] s = new String[] {"William Homo", "Joao Giro"};
+        SelectBox<Difficulty> difficultySelectBox = new SelectBox<>(skin);
+        difficultySelectBox.setItems(Difficulty.values());
 
         // Main table
         Table table = new Table();
@@ -117,7 +115,7 @@ public class SettingsScreen extends SuperScreen {
         table.add(numQuestionsTextField).padBottom(bigPad).row();
 
         table.add(categoriesLabel).padBottom(smallPad).row();
-        table.add(categoriesTable).padBottom(bigPad).row();
+        table.add(scrollPane).height(600).padBottom(bigPad).row();
 
         table.add(difficultyLabel).padBottom(smallPad).row();
         table.add(difficultySelectBox).row();
