@@ -2,55 +2,50 @@ package com.buzzit.GUI.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
-import com.buzzit.GUI.AnimatedActor;
+import com.buzzit.GUI.AnimatedDrawable;
 
-public class MenuScreen extends SuperScreen {
+public class MenuScreen implements Screen {
+    private ScreenState.ScreenType parentType;
+
+    /* Disposables */
     private Stage stage;
+    private Texture titleTexture;
     private Texture playTexture;
-    private Texture settingsTexture;
     private Texture highscoreTexture;
     private SpriteBatch batch;
-    private TextureAtlas titleAtlas;
-    private Animation titleAnimation;
+    private TextureAtlas settingsAtlas;
 
 
-    public MenuScreen(Game g, ScreenState.ScreenType pType) {
+    public MenuScreen(ScreenState.ScreenType pType) {
         create();
-        game = g;
         parentType = pType;
     }
 
 
     public void create() {
-        super.create();
+        Gdx.input.setCatchBackKey(true);
 
         batch = new SpriteBatch();
 
         /*** Title ***/
-        titleAtlas = new TextureAtlas(Gdx.files.internal("packs/title.pack"));
-        titleAnimation = new Animation(1f/2f, titleAtlas.getRegions());
-        AnimatedActor titleActor = new AnimatedActor(batch, titleAnimation);
+        titleTexture = new Texture(Gdx.files.internal("menu/title.png"));
+        Image titleImage = new Image(titleTexture);
 
 
         /*** Creating buttons ***/
@@ -58,15 +53,17 @@ public class MenuScreen extends SuperScreen {
         ImageButton btnSingleplayer = new ImageButton(new SpriteDrawable(new Sprite(playTexture)));
         btnSingleplayer.getImage().setScaling(Scaling.fit);
 
-        settingsTexture = new Texture(Gdx.files.internal("menu/settings.png"));
-        ImageButton btnSettings = new ImageButton(new SpriteDrawable(new Sprite((settingsTexture))));
+        settingsAtlas = new TextureAtlas(Gdx.files.internal("packs/settings/settings.pack"));
+        Animation settingsAnimation = new Animation(1f/30f, settingsAtlas.getRegions());
+        AnimatedDrawable animatedDrawable = new AnimatedDrawable(settingsAnimation);
+        ImageButton btnSettings = new ImageButton(animatedDrawable, animatedDrawable);
 
         highscoreTexture = new Texture(Gdx.files.internal("menu/highscore.png"));
         ImageButton btnHighscore = new ImageButton(new SpriteDrawable(new SpriteDrawable( new Sprite(highscoreTexture))));
 
         /*** Creating stage ***/
         Table buttonsTable = new Table();
-        buttonsTable.add(titleActor).padBottom(100).center();
+        buttonsTable.add(titleImage).padBottom(100);
         buttonsTable.row();
 
         buttonsTable.add(btnSingleplayer).width(400).height(400).padBottom(100);
@@ -80,7 +77,6 @@ public class MenuScreen extends SuperScreen {
         buttonsTable.setFillParent(true);
 
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
         stage.addActor(buttonsTable);
 
 
@@ -90,7 +86,6 @@ public class MenuScreen extends SuperScreen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 ScreenState.getInstance().changeState(ScreenState.ScreenType.SINGLEPLAYER);
-
             }
         });
 
@@ -101,6 +96,8 @@ public class MenuScreen extends SuperScreen {
                 ScreenState.getInstance().changeState(ScreenState.ScreenType.SETTINGS);
             }
         });
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     /**
@@ -108,7 +105,6 @@ public class MenuScreen extends SuperScreen {
      */
     @Override
     public void show() {
-        super.show();
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -119,8 +115,13 @@ public class MenuScreen extends SuperScreen {
      */
     @Override
     public void render(float delta) {
-        super.render(delta);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            if (parentType != null) {
+                ScreenState.getInstance().changeState(parentType);
+            }
+        }
 
         stage.act();
         stage.draw();
@@ -128,17 +129,14 @@ public class MenuScreen extends SuperScreen {
 
     @Override
     public void pause() {
-        super.pause();
     }
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
     }
 
     @Override
     public void resume() {
-        super.resume();
     }
 
     /**
@@ -146,7 +144,6 @@ public class MenuScreen extends SuperScreen {
      */
     @Override
     public void hide() {
-        super.hide();
     }
 
     /**
@@ -154,10 +151,11 @@ public class MenuScreen extends SuperScreen {
      */
     @Override
     public void dispose() {
-        super.dispose();
+        titleTexture.dispose();
         playTexture.dispose();
+        highscoreTexture.dispose();
         stage.dispose();
         batch.dispose();
-        titleAtlas.dispose();
+        settingsAtlas.dispose();
     }
 }

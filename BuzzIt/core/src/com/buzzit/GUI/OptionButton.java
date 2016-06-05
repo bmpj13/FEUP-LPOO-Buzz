@@ -44,6 +44,14 @@ public class OptionButton extends TextButton {
         return checkedColor;
     }
 
+    public void setUncheckedColor(Color uncheckedColor) {
+        this.uncheckedColor = uncheckedColor;
+    }
+
+    public void setCheckedColor(Color checkedColor) {
+        this.checkedColor = checkedColor;
+    }
+
     public TextButtonStyle getButtonStyle() {
         return textButtonStyle;
     }

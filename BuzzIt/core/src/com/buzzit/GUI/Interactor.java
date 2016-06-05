@@ -24,10 +24,6 @@ public class Interactor {
 
     public Skin skin;
     public OptionButton[] btnOptions;
-    public OptionButton btnOptionA;
-//    public OptionButton btnOptionB;
-//    public OptionButton btnOptionC;
-//    public OptionButton btnOptionD;
     public Label labelPoints;
     public Label labelCategory;
     public Label labelQuestion;
@@ -49,7 +45,7 @@ public class Interactor {
         labelPoints.setAlignment(Align.center);
         labelPoints.setFontScale(LABEL_SCALE);
 
-        labelCategory = new Label("Categoria:", skin, "question_background");
+        labelCategory = new Label("", skin, "question_background");
         labelCategory.setAlignment(Align.center);
 
         labelQuestion = new Label("", skin, "question_background");
@@ -63,32 +59,12 @@ public class Interactor {
 
         btnOptions = new OptionButton[4];
 
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < 4; i++) {
             uncheckedColor = generateColor();
             textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
             btnOptions[i] = new OptionButton(optionChars[i], textButtonStyle, uncheckedColor, checkedColor);
+            btnOptions[i].getLabel().setWrap(true);
         }
-        // Button A
-//        uncheckedColor = generateColor();
-//        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
-//        btnOptionA = new OptionButton("A", textButtonStyle, uncheckedColor, checkedColor);
-//
-//
-//        // Button B
-//        uncheckedColor = generateColor();
-//        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
-//        btnOptionB = new OptionButton("B", textButtonStyle, uncheckedColor, checkedColor);
-//
-//
-//        // Button C
-//        uncheckedColor = generateColor();
-//        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
-//        btnOptionC = new OptionButton("C", textButtonStyle, uncheckedColor, checkedColor);
-//
-//        // Button D
-//        uncheckedColor = generateColor();
-//        textButtonStyle = createTextButtonStyle(skin, uncheckedColor, checkedColor);
-//        btnOptionD = new OptionButton("D", textButtonStyle, uncheckedColor, checkedColor);
 
 
         labelStatus = new Label("", skin);
@@ -102,41 +78,24 @@ public class Interactor {
         for(OptionButton button: btnOptions){
             button.setTouchable(Touchable.enabled);
         }
-
-//        btnOptionA.setTouchable(Touchable.enabled);
-//        btnOptionB.setTouchable(Touchable.enabled);
-//        btnOptionC.setTouchable(Touchable.enabled);
-//        btnOptionD.setTouchable(Touchable.enabled);
     }
 
     public void disableButtons() {
         for(OptionButton button: btnOptions){
             button.setTouchable(Touchable.disabled);
         }
-//        btnOptionA.setTouchable(Touchable.disabled);
-//        btnOptionB.setTouchable(Touchable.disabled);
-//        btnOptionC.setTouchable(Touchable.disabled);
-//        btnOptionD.setTouchable(Touchable.disabled);
     }
 
     public void uncheckButtons() {
         for(OptionButton button: btnOptions){
             button.setChecked(false);
         }
-//        btnOptionA.setChecked(false);
-//        btnOptionB.setChecked(false);
-//        btnOptionC.setChecked(false);
-//        btnOptionD.setChecked(false);
     }
 
     public void hideElementsExceptPoints() {
         for(OptionButton button: btnOptions){
             button.addAction(Actions.alpha(0));
         }
-//        btnOptionA.addAction(Actions.alpha(0));
-//        btnOptionB.addAction(Actions.alpha(0));
-//        btnOptionC.addAction(Actions.alpha(0));
-//        btnOptionD.addAction(Actions.alpha(0));
 
         labelCategory.addAction(Actions.alpha(0));
         labelQuestion.addAction(Actions.alpha(0));
@@ -151,15 +110,31 @@ public class Interactor {
                 for(OptionButton button: btnOptions){
                     button.addAction(Actions.fadeOut(duration));
                 }
-//                btnOptionA.addAction(Actions.fadeOut(duration));
-//                btnOptionB.addAction(Actions.fadeOut(duration));
-//                btnOptionC.addAction(Actions.fadeOut(duration));
-//                btnOptionD.addAction(Actions.fadeOut(duration));
+
                 labelCategory.addAction(Actions.fadeOut(duration));
                 labelQuestion.addAction(Actions.fadeOut(duration));
                 labelStatus.addAction(Actions.fadeOut(duration));
             }
         }, delay);
+    }
+
+    public void reset() {
+        labelPoints.setText(Integer.toString(0));
+        labelCategory.setText("");
+        labelQuestion.setText("");
+        labelStatus.setText("");
+
+        for (OptionButton button : btnOptions) {
+            button.setText("");
+        }
+    }
+
+    public void newButtonColors() {
+        for (OptionButton button : btnOptions) {
+            Color color = generateColor();
+            button.getButtonStyle().up = skin.newDrawable("btn_background", color);
+            button.setCheckedColor(color);
+        }
     }
 
     private Color generateColor() {

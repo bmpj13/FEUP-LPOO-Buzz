@@ -2,6 +2,8 @@ package com.buzzit.GUI.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -27,9 +29,11 @@ import com.buzzit.Logic.Difficulty;
 
 import java.util.ArrayList;
 
-public class SettingsScreen extends SuperScreen {
-    private Stage stage;
+public class SettingsScreen implements Screen {
+    ScreenState.ScreenType parentType;
 
+    /* Disposables */
+    private Stage stage;
     private Skin skin;
     private BitmapFont font;
     private FreeTypeFontGenerator generator;
@@ -40,23 +44,25 @@ public class SettingsScreen extends SuperScreen {
     private Texture checkedBoxTexture;
     private Texture uncheckedBoxTexture;
     private Texture categoriesBackgroundTexture;
+
+    /* Variables acessed by gameplay */
     static private ArrayList<CheckBox> checkBoxes;
     static private TextField nameTextField;
     static private TextField numQuestionsTextField;
+    static private SelectBox<Difficulty> difficultySelectBox;
 
-    SettingsScreen(Game g, ScreenState.ScreenType pType) {
+    SettingsScreen(ScreenState.ScreenType pType) {
         create();
-        this.game = g;
         this.parentType = pType;
     }
 
-    @Override
+
     protected void create() {
-        super.create();
+        Gdx.input.setCatchBackKey(true);
 
         createSkin();
 
-        /* User name */
+        /* User's nickname */
         Label nameLabel = new Label("Nickname", skin);
         nameTextField = new TextField("player", skin);
         nameTextField.setBlinkTime(1f);
@@ -85,10 +91,12 @@ public class SettingsScreen extends SuperScreen {
         NinePatch patch = new NinePatch(categoriesBackgroundTexture, 3, 3, 3, 3);
         categoriesTable.setBackground(new NinePatchDrawable(patch));
 
-        for(Category cat: Category.values()){
+        for (Category cat: Category.values()){
             CheckBox checkBox = new CheckBox(cat.getName(), skin);
             checkBox.getLabelCell().padLeft(smallPad);
+            checkBox.setChecked(true);
             checkBoxes.add(checkBox);
+
             categoriesTable.add(checkBox).pad(smallPad, smallPad, smallPad/2, smallPad).align(Align.left).padBottom(10);
             categoriesTable.row();
         }
@@ -100,8 +108,7 @@ public class SettingsScreen extends SuperScreen {
 
         /* Difficulty */
         Label difficultyLabel = new Label("Difficulty", skin);
-        //String[] s = new String[] {"William Homo", "Joao Giro"};
-        SelectBox<Difficulty> difficultySelectBox = new SelectBox<Difficulty>(skin);
+        difficultySelectBox = new SelectBox<Difficulty>(skin);
         difficultySelectBox.setItems(Difficulty.values());
 
         // Main table
@@ -128,7 +135,6 @@ public class SettingsScreen extends SuperScreen {
 
     private void createSkin() {
         skin = new Skin();
-
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/good_times.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -186,6 +192,7 @@ public class SettingsScreen extends SuperScreen {
         listStyle.fontColorUnselected = Color.CORAL;
         listStyle.fontColorSelected = Color.BLUE;
         listStyle.selection = skin.newDrawable("whiteBackground");
+        listStyle.background = skin.newDrawable("whiteBackground");
 
         ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
 
@@ -203,7 +210,6 @@ public class SettingsScreen extends SuperScreen {
      */
     @Override
     public void show() {
-        super.show();
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -214,8 +220,13 @@ public class SettingsScreen extends SuperScreen {
      */
     @Override
     public void render(float delta) {
-        super.render(delta);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            if (parentType != null) {
+                ScreenState.getInstance().changeState(parentType);
+            }
+        }
 
         stage.act();
         stage.draw();
@@ -223,17 +234,14 @@ public class SettingsScreen extends SuperScreen {
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
     }
 
     @Override
     public void pause() {
-        super.pause();
     }
 
     @Override
     public void resume() {
-        super.resume();
     }
 
     /**
@@ -241,7 +249,6 @@ public class SettingsScreen extends SuperScreen {
      */
     @Override
     public void hide() {
-        super.hide();
     }
 
     /**
@@ -249,7 +256,6 @@ public class SettingsScreen extends SuperScreen {
      */
     @Override
     public void dispose() {
-        super.dispose();
         skin.dispose();
         font.dispose();
         stage.dispose();

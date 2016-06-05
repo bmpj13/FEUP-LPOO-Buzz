@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="junit-4.13-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.13-SNAPSHOT/d95e6b69ab2cd7451bce4ecf352f3d000a727310/junit-4.13-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.13-SNAPSHOT/d3701586f8623f017abb7470c5f209fedf1672ff/junit-4.13-SNAPSHOT-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.13-SNAPSHOT/d3701586f8623f017abb7470c5f209fedf1672ff/junit-4.13-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -2,6 +2,8 @@ package com.buzzit.GUI.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -15,17 +17,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 import com.buzzit.GUI.OptionButton;
 import com.buzzit.GUI.state.*;
 import com.buzzit.GUI.Interactor;
-import com.buzzit.Logic.Category;
-import com.buzzit.Logic.Difficulty;
-import com.buzzit.Logic.Match;
+import com.buzzit.Logic.*;
+import de.tomgrill.gdxdialogs.core.GDXDialogs;
+import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
+import de.tomgrill.gdxdialogs.core.dialogs.GDXButtonDialog;
+import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
 
-import java.util.ArrayList;
 
+public class SingleplayerScreen implements Screen {
 
-public class SingleplayerScreen extends SuperScreen {
+    private ScreenState.ScreenType parentType;
     private GameStrategy strat = null;
 
     /* Disposable elements */
@@ -41,20 +46,27 @@ public class SingleplayerScreen extends SuperScreen {
     private Interactor interactor;
 
     /* Constants */
+    private enum GameState { RUNNING, WAITING };
     private final int SECONDS_TO_ANSWER = 10;
     private final float TIME_BETWEEN_QUESTIONS = 1f;
 
+    /* Dialogs */
+    private GDXDialogs dialogs;
+    private GDXButtonDialog finishedDialog;
+    private GDXButtonDialog backDialog;
+
+
+    /* Variables */
     private Match match;
+    private GameState gameState;
 
-    public SingleplayerScreen(Game g, ScreenState.ScreenType pType) {
+    public SingleplayerScreen(ScreenState.ScreenType pType) {
         create();
-        game = g;
         parentType = pType;
-
     }
 
     public void create() {
-        super.create();
+        Gdx.input.setCatchBackKey(true);
 
         createSkin();
         interactor = new Interactor(skin);
@@ -63,7 +75,7 @@ public class SingleplayerScreen extends SuperScreen {
         Table table = new Table();
 
         table.add(interactor.labelPoints).minWidth((int) (Gdx.graphics.getWidth() * 0.1))
-                .padLeft((int) (Gdx.graphics.getWidth() * 0.8)).padBottom(80);
+                .padLeft((int) (Gdx.graphics.getWidth() * 0.7)).padBottom(80);
         table.row();
 
         table.add(interactor.labelCategory).minWidth(Gdx.graphics.getWidth()/2).minHeight(100).padBottom(50);
@@ -74,7 +86,7 @@ public class SingleplayerScreen extends SuperScreen {
 
 
         for(OptionButton button: interactor.btnOptions){
-            table.add(button).minWidth(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
+            table.add(button).width(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
             table.row();
         }
 
@@ -98,6 +110,37 @@ public class SingleplayerScreen extends SuperScreen {
                 }
             });
         }
+
+
+        /*** Dialogs ***/
+        dialogs = GDXDialogsSystem.install();
+
+        finishedDialog = dialogs.newDialog(GDXButtonDialog.class);
+        finishedDialog.setTitle("Good Game!");
+        finishedDialog.addButton("OK");
+        finishedDialog.setClickListener(new ButtonClickListener() {
+            @Override
+            public void click(int button) {
+                goBack();
+            }
+        });
+
+
+        backDialog = dialogs.newDialog(GDXButtonDialog.class);
+        backDialog.setTitle("Go to menu?");
+        backDialog.setMessage("Your amazing run will be lost!");
+        backDialog.addButton("Yes");
+        backDialog.addButton("No");
+        backDialog.setClickListener(new ButtonClickListener() {
+            @Override
+            public void click(int button) {
+
+                if (button == 0)            // "Yes" button
+                    goBack();
+                else if (button == 1)       // "No" button
+                    run();
+            }
+        });
     }
 
 
@@ -110,7 +153,7 @@ public class SingleplayerScreen extends SuperScreen {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 50;
         parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 3;
+        parameter.borderWidth = 2;
 
         txtFont = generator.generateFont(parameter);
         txtFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -146,12 +189,12 @@ public class SingleplayerScreen extends SuperScreen {
      */
     @Override
     public void show() {
-        super.show();
         Gdx.input.setInputProcessor(stage);
 
-        match = new Match(SettingsScreen.getNumQuestions(),
-                    SettingsScreen.getCategories(), Difficulty.EASY);
-        strat = new ShowQuestion(interactor, 0, 0.8f, 0.8f, SECONDS_TO_ANSWER, match.getCurrentQuestion());
+        match = new Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), Difficulty.EASY);
+        strat = new ShowQuestion(interactor, 0, SECONDS_TO_ANSWER, match.getCurrentQuestion());
+
+        run();
         strat.start();
     }
 
@@ -162,15 +205,25 @@ public class SingleplayerScreen extends SuperScreen {
      */
     @Override
     public void render(float delta) {
-        super.render(delta);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (strat.finished()) {
-            if (match.getQuestionIndex() == match.getTotalQuestions())
-                ScreenState.getInstance().changeState(ScreenState.ScreenType.MENU);
-            else switchStrategy();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            if (parentType != null) {
+                stop();
+                backDialog.build().show();
+            }
         }
-        strat.render();
+
+        if (gameState == GameState.RUNNING) {
+            if (strat.finished()) {
+                if (match.getQuestionIndex() == match.getTotalQuestions())
+                    endGame();
+                else
+                    switchStrategy();
+            }
+
+            strat.render();
+        }
 
         stage.act();
         stage.draw();
@@ -178,7 +231,7 @@ public class SingleplayerScreen extends SuperScreen {
 
     private void switchStrategy() {
 
-        
+
         if (strat instanceof ShowQuestion)
             strat = new WaitingAnswer(interactor, SECONDS_TO_ANSWER);
         else if (strat instanceof WaitingAnswer) {
@@ -187,24 +240,22 @@ public class SingleplayerScreen extends SuperScreen {
         }
         else if (strat instanceof Decision) {
             interactor.nextQuestion(TIME_BETWEEN_QUESTIONS/2, TIME_BETWEEN_QUESTIONS/2 - 0.3f);
-            strat = new ShowQuestion(interactor, TIME_BETWEEN_QUESTIONS, 0.8f, 0.8f, SECONDS_TO_ANSWER, match.getCurrentQuestion());
+            strat = new ShowQuestion(interactor, TIME_BETWEEN_QUESTIONS, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         }
+
         strat.start();
     }
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
     }
 
     @Override
     public void pause() {
-        super.pause();
     }
 
     @Override
     public void resume() {
-        super.resume();
     }
 
     /**
@@ -212,7 +263,7 @@ public class SingleplayerScreen extends SuperScreen {
      */
     @Override
     public void hide() {
-        super.hide();
+        interactor.reset();
     }
 
     /**
@@ -220,8 +271,6 @@ public class SingleplayerScreen extends SuperScreen {
      */
     @Override
     public void dispose() {
-        super.dispose();
-
         stage.dispose();
         skin.dispose();
         txtFont.dispose();
@@ -233,15 +282,46 @@ public class SingleplayerScreen extends SuperScreen {
 
 
 
-    void handleButton(OptionButton button) {
+    private void handleButton(OptionButton button) {
         strat.finish();
 
         int points = match.getCurrentQuestion().getDifficulty().getPoints();
 
-        if (match.isCorrect(button.getContent()))     strat = new Answered(interactor, button, points, true);
-        else                                          strat = new Answered(interactor, button, -points, false);
-        match.nextQuestion();
+        if (match.isCorrect(button.getContent())) {
+            match.getPlayer().addPoints(points);
+            strat = new Answered(interactor, button, points, true);
+        }
+        else {
+            match.getPlayer().addPoints(-points);
+            strat = new Answered(interactor, button, -points, false);
+        }
 
+        match.nextQuestion();
         strat.start();
+    }
+
+
+    private void endGame() {
+        stop();
+        finishedDialog.setMessage("Hey, " + match.getPlayer().getName() + "! " +
+                "You got " + match.getPlayer().getPoints() + "points.");
+        finishedDialog.build().show();
+    }
+
+    private void goBack() {
+        Timer.instance().clear();
+        strat.finish();
+        interactor.reset();
+        ScreenState.getInstance().changeState(parentType);
+    }
+
+    private void run() {
+        Timer.instance().start();
+        gameState = gameState.RUNNING;
+    }
+
+    private void stop() {
+        Timer.instance().stop();
+        gameState = gameState.WAITING;
     }
 }

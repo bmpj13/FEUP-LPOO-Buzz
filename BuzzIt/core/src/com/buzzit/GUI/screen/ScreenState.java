@@ -1,6 +1,7 @@
 package com.buzzit.GUI.screen;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 
 public class ScreenState {
     private static Game game;
@@ -17,9 +18,9 @@ public class ScreenState {
 
 
     private ScreenState() {
-        menu = new MenuScreen(game, null);
-        singlePlayer = new SingleplayerScreen(game, ScreenType.MENU);
-        settingsScreen = new SettingsScreen(game, ScreenType.MENU);
+        menu = new MenuScreen(null);
+        singlePlayer = new SingleplayerScreen(ScreenType.MENU);
+        settingsScreen = new SettingsScreen(ScreenType.MENU);
     }
 
     public void setGame(Game g) {

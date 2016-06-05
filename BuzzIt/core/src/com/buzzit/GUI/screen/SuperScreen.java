@@ -33,7 +33,6 @@ public class SuperScreen implements Screen {
     public void render(float delta) {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-
             if (parentType != null) {
                 ScreenState.getInstance().changeState(parentType);
             }

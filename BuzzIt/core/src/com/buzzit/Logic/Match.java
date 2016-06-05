@@ -20,14 +20,10 @@ public class Match {
     public boolean isCorrect(String answer) {
         Question questions = this.questions.get(questionIndex);
 
-        if (questions.getCorrect().equals(answer)){
-            player.addPoints(questions.getDifficulty().getPoints());
+        if (questions.getCorrect().equals(answer))
             return true;
-        }
-        else {
-            player.addPoints(-questions.getDifficulty().getPoints());
+        else
             return false;
-        }
     }
 
     public Question getCurrentQuestion(){return questions.get(questionIndex);}
@@ -47,4 +43,6 @@ public class Match {
     public int getQuestionIndex(){
         return questionIndex;
     }
+
+    public Player getPlayer() { return player; }
 }
