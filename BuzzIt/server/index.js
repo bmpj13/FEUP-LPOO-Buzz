@@ -1,8 +1,10 @@
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+
 var clients = 0;
 var players = [];
+
 var question;
 var answerOptions;
 
@@ -31,7 +33,15 @@ io.on('connection' , function(socket){
 
     socket.on('playerIsReady', function(data){
         data.id = socket.id;
+        socket.broadcast.emit('playerIsReady', data);
 
+        console.log("player " + data.id + " is " + data.isReady + " ready")
+
+        for(var i=0; i<players.length; i++){
+            if(players[i].id == data.id){
+                players[i].isReady = data.isReady;
+            }
+        }
     });
 
 	socket.on('disconnect', function(){
@@ -52,6 +62,7 @@ function player(name, id){
     this.id = id;
     this.name = name;
     this.points = 0;
+    this.isReady = false;
 }
 
 function question(questionString){
