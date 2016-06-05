@@ -1,7 +1,9 @@
 package com.buzzit.Logic;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -9,9 +11,6 @@ import java.util.Properties;
 import java.util.Random;
 
 
-/**
- * Created by wnfuk_000 on 20/04/2016.
- */
 public class Play {
 
 
@@ -23,29 +22,29 @@ public class Play {
 		return ourInstance;
 	}
 
-	private Play(){
+	private Play() {
 
 		questionsByCategory = new ArrayList<>();
 		for(Category cat:Category.values()){
 			ArrayList<Question> questions = new ArrayList<>();
 			questionsByCategory.add(questions);
 		}
+
 		getFile(Difficulty.MEDIUM);
 	}
 
 
 	public void getFile(Difficulty difficulty){
-		Gdx.app.log("ACTION","getting file");
 		Properties prop = new Properties();
 		InputStream input = null;
 
 		try {
-			String filename = "a.properties";
-			input = getClass().getClassLoader().getResourceAsStream("assets/data/" + filename);
-			if(input==null){
-				Gdx.app.log("ERROR","Sorry, unable to find " + filename);
-				return;
-			}
+			String filepath = "assets/data/a.properties";
+			FileHandle file = Gdx.files.internal(filepath);
+			input = file.read();
+
+			if (input == null) throw new IllegalArgumentException(filepath);
+
 			//load a properties file from class path, inside static method
 			prop.load(input);
 
@@ -56,7 +55,7 @@ public class Play {
 				int answers = Integer.parseInt(prop.getProperty("numanswers" + i));
 				String category = prop.getProperty("category" + i);
 				Category cat = Category.getCategory(category);
-				int arrayIndex = Category.getIndex(cat);
+				int arrayIndex = cat.getIndex();
 
 				String correct = new String();
 				ArrayList<String> wrong = new ArrayList<>();
@@ -91,9 +90,11 @@ public class Play {
 	static public ArrayList<Integer> scramble(int numIndices){
 		Random rand = new Random();
 		ArrayList<Integer> indices = new ArrayList<Integer>();
-		for(int t = 0; t < numIndices; t++){
+
+		for (int t = 0; t < numIndices; t++) {
 			indices.add(t);
 		}
+
 		int j, temp;
 		for (int i = indices.size()-1; i > 0; i--){
 			j = rand.nextInt(i+1);
@@ -101,6 +102,7 @@ public class Play {
 			indices.set(j, indices.get(i));
 			indices.set(i, temp);
 		}
+
 		return indices;
 	}
 
@@ -108,7 +110,7 @@ public class Play {
 
 		ArrayList<Question> q = new ArrayList<>();
 		for(Category cat:categoriesChosen){
-			int index = Category.getIndex(cat);
+			int index = cat.getIndex();
 			q.addAll(questionsByCategory.get(index));
 		}
 		return q;
@@ -117,13 +119,13 @@ public class Play {
 	public ArrayList<Question> play(int totalQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty){
 		ArrayList<Question> q = new ArrayList<>();
 
-		//gets all questions from selected categories
+		// gets all questions from selected categories
 		ArrayList<Question> allFromCategories = getQuestionsFromCategory(categoriesChosen);
 
-		//get randomized question indices from each category
+		// get randomized question indices from each category
 		ArrayList<Integer> questionsScrambled = scramble(allFromCategories.size());
 
-		//put random question from selected categories into arrayList
+		// put random question from selected categories into arrayList
 		for(int i=0; i< totalQuestions; i++) {
 			q.add(allFromCategories.get(questionsScrambled.get(i)));
 		}

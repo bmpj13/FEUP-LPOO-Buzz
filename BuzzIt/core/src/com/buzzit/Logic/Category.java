@@ -1,34 +1,22 @@
 package com.buzzit.Logic;
 
-/**
- * Created by wnfuk_000 on 04/06/2016.
- */
+
 public enum Category {
     SPORTS("SPORTS", 0),
     HISTORY("HISTORY", 1),
     SCIENCE("SCIENCE", 2),
     MUSIC("MUSIC", 3);
 
-    String category;
-    int index;
+    private String category;
+    private int index;
 
-    private Category(String category, int index){
+    Category(String category, int index){
         this.category = category;
         this.index = index;
     }
 
-    static public int getIndex(Category category){
-        return category.index;
-    }
-
-    static public Category[] allCategories(){
-        Category[] t = new Category[Category.values().length];
-        int i=0;
-        for (Category cat: Category.values()) {
-            t[i] = cat;
-            i++;
-        }
-        return t;
+    public int getIndex(){
+        return index;
     }
     
     public String getName(){

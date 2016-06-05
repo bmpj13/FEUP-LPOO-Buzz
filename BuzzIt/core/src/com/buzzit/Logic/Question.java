@@ -3,9 +3,7 @@ package com.buzzit.Logic;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by wnfuk_000 on 20/04/2016.
- */
+
 public class Question {
     private String question;
     private ArrayList<String> wrong;
@@ -23,30 +21,27 @@ public class Question {
     }
 
 
-    @SuppressWarnings("unchecked")
     public String[] generateOptions(int num) {
-
-        if (num > wrong.size() + 1)
-            throw new IllegalArgumentException("Not enough answers");
+        if  (num > wrong.size() + 1) throw new IllegalArgumentException("Not enough options");
 
         Random rand = new Random();
         String[] options = new String[num];
 
-        ArrayList<Integer> indices = Play.scramble(wrong.size());
-        int perin = rand.nextInt(num);
+        ArrayList<Integer> indexes = Play.scramble(wrong.size());
 
+        int correctAnswerIndex = rand.nextInt(num);
+        options[correctAnswerIndex] = correct;
+
+        int wrongIndex = 0;
         for (int i = 0; i < num ; i++) {
-            if (i == perin)
-                options[i] = correct;
-            else
-            {
-                options[i] = wrong.get(indices.get(i));
+            if (i != correctAnswerIndex) {
+                options[i] = wrong.get(wrongIndex);
+                wrongIndex++;
             }
         }
 
         return options;
     }
-
 
 
     public String getCorrect() {

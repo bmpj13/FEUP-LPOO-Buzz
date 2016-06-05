@@ -9,20 +9,21 @@ public class Match {
     private int questionIndex;
     private Player player;
 
-    public Match(int numQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty){
-        this.questions = Play.getInstance().play(numQuestions,categoriesChosen, difficulty);
+    public Match(int numQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty) {
+        this.questions = Play.getInstance().play(numQuestions, categoriesChosen, difficulty);
         this.questionIndex = 0;
         player = new Player("UEUEUEUEUEUEUEUEUEUEUEUEUEUE");
     }
 
-    public boolean isCorrect(String answer){
-        Question ques = questions.get(questionIndex);
-        if(ques.getCorrect().equals(answer)){
-            player.addPoints(ques.getDifficulty().getPoints());
+    public boolean isCorrect(String answer) {
+        Question questions = this.questions.get(questionIndex);
+
+        if (questions.getCorrect().equals(answer)){
+            player.addPoints(questions.getDifficulty().getPoints());
             return true;
         }
-        else{
-            player.addPoints(-ques.getDifficulty().getPoints());
+        else {
+            player.addPoints(-questions.getDifficulty().getPoints());
             return false;
         }
     }
@@ -31,5 +32,9 @@ public class Match {
 
     public void nextQuestion(){
         questionIndex++;
+    }
+
+    public ArrayList<Question> getQuestions() {
+        return questions;
     }
 }
