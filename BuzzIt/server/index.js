@@ -30,16 +30,8 @@ io.on('connection' , function(socket){
     socket.on('playerIsReady', function(data){
         data.id = socket.id;
 
-        for(var i=0; i<players.length; i++){
-            if(players[i].id == data.id){
-                players[i].isReady = data.isReady;
-            }
-        }
-
-        io.sockets.emit('playerIsReady', data);
+        //io.sockets.emit('playerIsReady', data);
         socket.broadcast.emit('playerIsReady', data);
-
-        console.log("player " + data.id + " is " + data.isReady + " ready")
     });
 
 	socket.on('disconnect', function(){
@@ -51,6 +43,13 @@ io.on('connection' , function(socket){
 		        players.splice(i, 1);
 		    }
 		}
+	});
+
+	socket.on('gameStart', function(){
+		console.log("Starting Game");
+
+		//io.sockets.emit('gameStart', "gameStart")
+		socket.broadcast.emit('gameStart', "gameStart")
 	});
 
 	players.push(new player("playerName"), socket.id);
