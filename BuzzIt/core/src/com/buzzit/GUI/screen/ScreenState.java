@@ -7,7 +7,7 @@ public class ScreenState {
     private static MenuScreen menu;
     private static SingleplayerScreen singlePlayer;
     private static SettingsScreen settings;
-    //private static HighscoreScreen highScore;
+    private static HighscoreScreen highScore;
 
     private static Multiplayer1stScreen multiPlayer1;
     private static Multiplayer2ndScreen multiPlayer2;
@@ -25,7 +25,7 @@ public class ScreenState {
         menu = new MenuScreen(null);
         singlePlayer = new SingleplayerScreen(ScreenType.MENU);
         settings = new SettingsScreen(ScreenType.MENU);
-        //highScore = new HighscoreScreen(ScreenType.MENU);
+        highScore = new HighscoreScreen(ScreenType.MENU);
         multiPlayer1 = new Multiplayer1stScreen(ScreenType.MENU);
         multiPlayer2 = new Multiplayer2ndScreen(ScreenType.MENU);
         multiPlayerSettingsScreen = new MultiplayerSettingsScreen(ScreenType.MENU);
@@ -50,10 +50,9 @@ public class ScreenState {
                 game.setScreen(settings);
                 break;
 
-            /*
             case HIGHSCORE:
                 game.setScreen(highScore);
-                break;*/
+                break;
 
             case MULTIPLAYER1:
                 game.setScreen(multiPlayer1);
@@ -79,6 +78,6 @@ public class ScreenState {
         multiPlayer1.dispose();
         multiPlayer2.dispose();
         multiPlayerSettingsScreen.dispose();
-        //highScore.dispose();
+        highScore.dispose();
     }
 }
