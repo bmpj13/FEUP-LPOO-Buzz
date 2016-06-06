@@ -47,7 +47,7 @@ public class SingleplayerScreen implements Screen {
     private Interactor interactor;
 
     /* Constants */
-    private enum GameState { RUNNING, WAITING };
+    private enum GameState { RUNNING, WAITING }
     private final int SECONDS_TO_ANSWER = 10;
     private final float TIME_BETWEEN_QUESTIONS = 1f;
 
@@ -205,7 +205,7 @@ public class SingleplayerScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         player = new Player(SettingsScreen.getName());
-        match = new Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), Difficulty.EASY, player);
+        match = new Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), SettingsScreen.getDifficulty(), player);
         strat = new ShowQuestion(interactor, 0, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         interactor.hideElementsExceptPoints();
 

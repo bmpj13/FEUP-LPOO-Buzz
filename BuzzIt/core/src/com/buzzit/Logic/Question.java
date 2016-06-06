@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Question {
 
-    private final int numOptions = 4;
+    final int numOptions = 4;
     private String question;
     private ArrayList<String> wrong;
     private String correct;

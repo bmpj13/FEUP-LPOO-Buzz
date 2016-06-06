@@ -318,6 +318,13 @@ public class SettingsScreen implements Screen {
         return nameTextField.getText();
     }
 
+    /**
+     * Gets difficulty selected
+     * @return Difficulty enum
+     */
+    public static Difficulty getDifficulty(){
+        return difficultySelectBox.getSelected();
+    }
 
     @Override
     protected void finalize() throws Throwable {

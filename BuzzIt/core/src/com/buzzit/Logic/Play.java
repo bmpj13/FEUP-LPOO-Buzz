@@ -3,7 +3,6 @@ package com.buzzit.Logic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,9 +17,9 @@ public class Play {
 	static private ArrayList<Player> highScores;
 	static private ArrayList<Question>[][] questions;
 
-	private final String easyPath = "data/easy.properties";
-	private final String mediumPath = "data/medium.properties";
-	private final String hardPath = "data/hard.properties";
+	final String easyPath = "data/easy.properties";
+	final String mediumPath = "data/medium.properties";
+	final String hardPath = "data/hard.properties";
 	private final String highScoresPath = "data/highscores.properties";
 
 
@@ -91,7 +90,7 @@ public class Play {
 				int categoryIndex = category.getIndex();
 
 				String correct = new String();
-				ArrayList<String> wrong = new ArrayList<String>();
+				ArrayList<String> wrong = new ArrayList<>();
 				for(int j = 0; j < answers; j++) {
 					String key = prop.getProperty("answer" + i + "." + j);
 					if (j == 0) {
@@ -218,7 +217,7 @@ public class Play {
 		if (isHighScore(player)) {
 
 			highScores.add(player);
-			Collections.sort(highScores);
+			Collections.sort(highScores, Collections.reverseOrder());
 
 			if (highScores.size() > MAX_NUMBER_HIGHSCORE_ENTRIES)
 				highScores.remove(highScores.size() - 1);
@@ -236,7 +235,7 @@ public class Play {
 	 */
 	static public ArrayList<Integer> scramble(int numIndices){
 		Random rand = new Random();
-		ArrayList<Integer> indices = new ArrayList<Integer>();
+		ArrayList<Integer> indices = new ArrayList<>();
 
 		for (int t = 0; t < numIndices; t++) {
 			indices.add(t);
@@ -257,11 +256,11 @@ public class Play {
 	 * Gets all questions from the categories chosen and the difficulty
 	 * @param categoriesChosen ArrayList containing categories the user chose
 	 * @param difficulty Enum of chosen difficulty
-	 * @return
+	 * @return Return all questions from given categories
 	 */
 	private ArrayList<Question> getQuestionsFromCategory(ArrayList<Category> categoriesChosen, Difficulty difficulty){
 
-		ArrayList<Question> q = new ArrayList<Question>();
+		ArrayList<Question> q = new ArrayList<>();
 		for(Category cat:categoriesChosen){
 			q.addAll(Play.questions[difficulty.getIndex()][cat.getIndex()]);
 		}
