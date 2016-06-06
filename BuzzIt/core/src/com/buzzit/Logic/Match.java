@@ -33,15 +33,11 @@ public class Match {
      */
     public boolean isCorrect(String answer) {
         Question question = this.questions.get(questionIndex);
-        Gdx.app.log("points", Integer.toString(player.getPoints()));
-        if (question.getCorrect().equals(answer)) {
-            Gdx.app.log("question", " got yes");
+
+        if (question.getCorrect().equals(answer))
             return true;
-        }
-        else {
-            Gdx.app.log("question", " got no");
+        else
             return false;
-        }
     }
 
     /**

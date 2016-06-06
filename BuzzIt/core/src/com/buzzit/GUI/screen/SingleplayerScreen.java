@@ -38,7 +38,7 @@ public class SingleplayerScreen implements Screen {
     private BitmapFont txtFont;
     private BitmapFont numbersFont;
     private FreeTypeFontGenerator generator;
-    private Pixmap pixmap;
+    private Pixmap btnPixmap;
     private Texture btnBackgroundTexture;
     private Texture questionBackgroundTexture;
     private Stage stage;
@@ -58,7 +58,6 @@ public class SingleplayerScreen implements Screen {
 
 
     /* Variables */
-    private Player player;
     private Match match;
     private GameState gameState;
 
@@ -168,10 +167,10 @@ public class SingleplayerScreen implements Screen {
         skin.add("numbers", numbersFont);
 
         // Creating textures
-        pixmap = new Pixmap(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/10, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        btnBackgroundTexture = new Texture(pixmap);
+        btnPixmap = new Pixmap(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/10, Pixmap.Format.RGBA8888);
+        btnPixmap.setColor(Color.WHITE);
+        btnPixmap.fill();
+        btnBackgroundTexture = new Texture(btnPixmap);
         skin.add("btn_background", btnBackgroundTexture);
 
         questionBackgroundTexture = new Texture(Gdx.files.internal("play/questionBackground.PNG"));
@@ -204,7 +203,7 @@ public class SingleplayerScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        player = new Player(SettingsScreen.getName());
+        Player player = new Player(SettingsScreen.getName());
         match = new Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), SettingsScreen.getDifficulty(), player);
         strat = new ShowQuestion(interactor, 0, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         interactor.hideElementsExceptPoints();
@@ -291,7 +290,7 @@ public class SingleplayerScreen implements Screen {
         skin.dispose();
         txtFont.dispose();
         numbersFont.dispose();
-        pixmap.dispose();
+        btnPixmap.dispose();
         btnBackgroundTexture.dispose();
         questionBackgroundTexture.dispose();
         generator.dispose();
@@ -305,11 +304,11 @@ public class SingleplayerScreen implements Screen {
         int points = match.getCurrentQuestion().getDifficulty().getPoints();
 
         if (match.isCorrect(button.getContent())) {
-            player.addPoints(points);
+            match.getPlayer().addPoints(points);
             strat = new Answered(interactor, button, points, true);
         }
         else {
-            player.addPoints(-points);
+            match.getPlayer().addPoints(-points);
             strat = new Answered(interactor, button, -points, false);
         }
 
@@ -320,7 +319,7 @@ public class SingleplayerScreen implements Screen {
 
     private void endGame() {
         stop();
-        finishedDialog.setMessage("Hey, " + player.getName() + " !\n" +
+        finishedDialog.setMessage("Hey, " + match.getPlayer().getName() + " !\n" +
                 "You got " + match.getPlayer().getPoints() + " points.");
         finishedDialog.build().show();
     }

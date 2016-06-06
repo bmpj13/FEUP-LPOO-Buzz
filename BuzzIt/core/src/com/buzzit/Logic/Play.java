@@ -258,7 +258,7 @@ public class Play {
 	 * @param difficulty Enum of chosen difficulty
 	 * @return Return all questions from given categories
 	 */
-	private ArrayList<Question> getQuestionsFromCategory(ArrayList<Category> categoriesChosen, Difficulty difficulty){
+	private static ArrayList<Question> getQuestionsFromCategory(ArrayList<Category> categoriesChosen, Difficulty difficulty){
 
 		ArrayList<Question> q = new ArrayList<>();
 		for(Category cat:categoriesChosen){
@@ -290,4 +290,12 @@ public class Play {
 		return q;
 	}
 
+
+	public ArrayList<Player> getHighScores() {
+		return highScores;
+	}
+
+	public static boolean playable(int numQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty) {
+		return numQuestions <= getQuestionsFromCategory(categoriesChosen, difficulty).size();
+	}
 }
