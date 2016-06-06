@@ -70,7 +70,7 @@ public class ShowQuestion implements GameStrategy {
     }
 
     public void updateText() {
-        String[] options = question.generateOptions(4);
+        String[] options = question.generateOptions();
         interactor.labelQuestion.setText(question.getQuestion());
         interactor.labelCategory.setText(question.getCategory().getName());
 

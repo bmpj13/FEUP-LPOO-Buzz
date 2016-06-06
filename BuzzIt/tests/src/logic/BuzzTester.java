@@ -60,7 +60,7 @@ public class BuzzTester {
     @Test
     public void testOptionsUnrepeated() {
         Question question = getDefaultQuestion();
-        String[] options = question.generateOptions(4);
+        String[] options = question.generateOptions();
 
         for (int i = 0; i < options.length; i++) {
             for (int j = i + 1; j < options.length; j++) {
@@ -74,12 +74,12 @@ public class BuzzTester {
     public void testOptionsRandomized() {
         // Generate options enough times, to verify that not a option is not always in the same index
         Question question = getDefaultQuestion();
-        String[] options = question.generateOptions(4);
+        String[] options = question.generateOptions();
         String testString = options[0];
         boolean different = false;
 
         for (int i = 0; i < 300; i++) {
-            options = question.generateOptions(4);
+            options = question.generateOptions();
 
             if (testString != options[0]) {
                 different = true;
@@ -88,13 +88,6 @@ public class BuzzTester {
         }
 
         assertTrue(different);
-    }
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testOutOfBoundsGeneration() {
-        Question question = getDefaultQuestion();
-        question.generateOptions(5);
     }
 
 

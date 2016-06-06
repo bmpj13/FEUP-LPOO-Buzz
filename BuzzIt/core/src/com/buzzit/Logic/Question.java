@@ -44,9 +44,11 @@ public class Question {
         int correctAnswerIndex = rand.nextInt(numOptions);
         options[correctAnswerIndex] = correct;
 
+        int wrongIndex = 0;
         for (int i = 0; i < numOptions ; i++) {
             if (i != correctAnswerIndex) {
-                options[i] = wrong.get(indexes.get(i));
+                options[i] = wrong.get(indexes.get(wrongIndex));
+                wrongIndex++;
             }
         }
 
