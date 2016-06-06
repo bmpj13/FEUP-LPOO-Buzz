@@ -29,9 +29,14 @@ io.on('connection' , function(socket){
 
     socket.on('playerIsReady', function(data){
         data.id = socket.id;
-
-        //io.sockets.emit('playerIsReady', data);
         socket.broadcast.emit('playerIsReady', data);
+
+        for(var i = 0; i < players.length; i++){
+            if(players[i].id == data.id){
+                players[i].name = data.playerName;
+                console.log("Player name: " + players[i].name);
+            }
+        }
     });
 
 	socket.on('disconnect', function(){
@@ -48,7 +53,6 @@ io.on('connection' , function(socket){
 	socket.on('gameStart', function(){
 		console.log("Starting Game");
 
-		//io.sockets.emit('gameStart', "gameStart")
 		socket.broadcast.emit('gameStart', "gameStart")
 	});
 
