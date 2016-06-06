@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
@@ -143,6 +144,10 @@ public class Play {
 		}
 	}
 
+
+	/**
+	 * Reads highScores from file
+	 */
 	public void getHighScores(){
 		Properties prop = new Properties();
 		InputStream input = null;
@@ -179,6 +184,73 @@ public class Play {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Saves highScores onto file
+	 */
+	public void saveHighScores(){
+		Properties prop = new Properties();
+		OutputStream output = null;
+
+		try {
+			FileHandle file = Gdx.files.internal(highScoresPath);
+			output = file.write(true);
+
+			if (output == null) throw new IllegalArgumentException(highScoresPath);
+
+			prop.setProperty("numPlayers", Integer.toString(highScores.size()));
+			for(int i = 0; i < highScores.size(); i++){
+				prop.setProperty("name"+i,highScores.get(i).getName());
+				prop.setProperty("points"+i, Integer.toString(highScores.get(i).getPoints()));
+			}
+			prop.store(output, "HighScores for BuzzIt");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			Gdx.app.log("EXCEPTION","IO Exception");
+		} finally{
+			if(output!=null){
+				try {
+					output.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Compares the points of this match to the previous bests
+	 * @param player Player to compare points
+	 * @return Returns index of position if that score has fewer points; -1 if it's not better than any preiou score
+     */
+	static public int isHighScore(Player player){
+		for(int i = 0; i < highScores.size(); i++){
+			if(player.getPoints() > highScores.get(i).getPoints())
+				return i;
+		}
+		return -1;
+	}
+
+	/**
+	 * Updates ArrayList highScores if it is a new highscore
+	 * @param player Player to add to ArrayList
+	 * @return Returns true if it set a new highScore; false if not
+     */
+	static public boolean newHighSCore(Player player){
+		int index = isHighScore(player);
+		if(index < 0)
+			if(highScores.size() == 10)
+				return false;
+			else{
+				highScores.add(player);
+				return true;
+			}
+
+		highScores.add(index, player);
+		if(highScores.size() > 10)
+			highScores.remove(highScores.size()-1);
+		return true;
 	}
 
 	/**
