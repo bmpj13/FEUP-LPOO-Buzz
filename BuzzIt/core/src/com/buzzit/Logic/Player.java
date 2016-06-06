@@ -47,6 +47,14 @@ public class Player implements Comparable {
         return name;
     }
 
+    /**
+     * Sets name of player
+     * @param name Player's new name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
     @Override
     public int compareTo(Object object) {

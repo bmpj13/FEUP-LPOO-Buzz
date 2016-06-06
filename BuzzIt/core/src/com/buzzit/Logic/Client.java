@@ -16,7 +16,6 @@ public class Client {
     private final float UPDATE_TIME = 1/60f;
     float timer;
 
-
     private Server server = null;
     private Player player;
     private String socketID;
@@ -51,8 +50,9 @@ public class Client {
         if(timer >= UPDATE_TIME){
             JSONObject data = new JSONObject();
             try{
-                //Gdx.app.log("CLIENT", "sending that player " + this.socketID + " is " + this.isReady());
+                //Gdx.app.log("CLIENT", "Player name: " + this.player.getName());
                 data.put("isReady", this.isReady);
+                data.put("playerName", this.player.getName());
                 socket.emit("playerIsReady", data);
             } catch(JSONException e){
                 Gdx.app.log("SOCKET.IO", "Error sending updated data");
@@ -90,5 +90,9 @@ public class Client {
 
     public void setIsPlaying(boolean playing) {
         this.playing = playing;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

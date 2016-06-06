@@ -33,10 +33,11 @@ public class Server {
         Multiplayer1stScreen.getSocket().on("newPlayer", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
+                numPlayers++;
                 JSONObject data = (JSONObject) args[0];
                 try {
                     String playerId = data.getString("id");
-                    addClient(new Client(new Player("new player"), playerId));
+                    addClient(new Client(new Player(SettingsScreen.getName()), playerId));
                     Gdx.app.log("SERVER", "New Player Connect: " + playerId);
                 } catch (JSONException e) {
                     Gdx.app.log("SERVER", "Error getting new PlayerID");
@@ -45,6 +46,7 @@ public class Server {
         }).on("playerDisconnected", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
+                numPlayers--;
                 JSONObject data = (JSONObject) args[0];
                 try {
                     id = data.getString("id");
@@ -57,6 +59,7 @@ public class Server {
         }).on("playerOne", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
+                numPlayers++;
                 JSONObject data = (JSONObject) args[0];
                 try {
                     String playerId = data.getString("id");
@@ -77,6 +80,7 @@ public class Server {
                     try {
                         String playerID = data.getString("id");
                         boolean isReady = data.getBoolean("isReady");
+                        String name = data.optString("name");
 
                         //Gdx.app.log("SERVER", "Player " + playerID + " asks to be " + isReady);
 
@@ -86,6 +90,7 @@ public class Server {
                                 //Gdx.app.log("SERVER", "can it change? " + playerID.equals(entry.getKey()));
                                 if (playerID.equals(entry.getKey())) {
                                     entry.getValue().setReady(isReady);
+                                    entry.getValue().getPlayer().setName(name);
                                 }
                             }
                             tryStart();
@@ -119,6 +124,11 @@ public class Server {
     }
 
     public boolean canStart(){
+        if(numPlayers < 1) {
+            Gdx.app.log("SERVER", "Not enough players!");
+            return false;
+        }
+
         for(HashMap.Entry<String, Client> entry : clients.entrySet()){
             if(!entry.getValue().isReady()) {
                 Gdx.app.log("SERVER", "Both **NOT** ready!");
@@ -138,6 +148,8 @@ public class Server {
         } catch(JSONException e){
             Gdx.app.log("SOCKET.IO", "Error sending updated data");
         }
+
+        //match = new Match(MultiplayerSettingsScreen.getNumQuestions(), MultiplayerSettingsScreen.getCategories(), Difficulty.EASY, adminClient.getPlayer());
     }
 
     public void addClient(Client client){
