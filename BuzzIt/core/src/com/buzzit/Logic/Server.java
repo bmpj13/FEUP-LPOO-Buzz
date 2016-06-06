@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.socket.emitter.Emitter;
 
@@ -85,7 +86,7 @@ public class Server {
                         //Gdx.app.log("SERVER", "Player " + playerID + " asks to be " + isReady);
 
                         if (clients.size() > 1) {
-                            for (HashMap.Entry<String, Client> entry : clients.entrySet()) {
+                            for (Map.Entry<String, Client> entry : clients.entrySet()) {
                                 //Gdx.app.log("SERVER", "Player " + entry.getKey() + " is ready? " + entry.getValue().isReady());
                                 //Gdx.app.log("SERVER", "can it change? " + playerID.equals(entry.getKey()));
                                 if (playerID.equals(entry.getKey())) {
@@ -112,7 +113,7 @@ public class Server {
         if(canStart()){
             isPlaying = true;
 
-            for(HashMap.Entry<String, Client> entry : clients.entrySet()){
+            for(Map.Entry<String, Client> entry : clients.entrySet()){
                 entry.getValue().setReady(false);
             }
 
@@ -129,7 +130,7 @@ public class Server {
             return false;
         }
 
-        for(HashMap.Entry<String, Client> entry : clients.entrySet()){
+        for(Map.Entry<String, Client> entry : clients.entrySet()){
             if(!entry.getValue().isReady()) {
                 Gdx.app.log("SERVER", "Both **NOT** ready!");
                 return false;
@@ -155,7 +156,7 @@ public class Server {
     public void addClient(Client client){
         Gdx.app.log("Server", "Adding Client...");
         clients.put(client.getSocketID(), client);
-        for(HashMap.Entry<String, Client> entry : clients.entrySet()){
+        for(Map.Entry<String, Client> entry : clients.entrySet()){
             Gdx.app.log("Player is on:", entry.getValue().getSocketID());
         }
     }
