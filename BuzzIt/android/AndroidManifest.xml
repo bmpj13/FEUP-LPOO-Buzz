@@ -5,11 +5,10 @@
     android:versionName="1.0" >
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="23" />
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/questionmark"
         android:label="@string/app_name"
         android:theme="@style/GdxTheme" >
         <activity

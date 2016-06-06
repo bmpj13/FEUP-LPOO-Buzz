@@ -12,7 +12,7 @@ import com.buzzit.GUI.Interactor;
 public class Decision implements GameStrategy {
     protected Interactor interactor;
     private Stage stage;
-    private Label LabelPointsToAdd;
+    private Label labelPointsToAdd;
     private int timerTicksCount;
     private int pointsToAdd;
     private boolean started;
@@ -28,16 +28,16 @@ public class Decision implements GameStrategy {
         timerTicksCount = 0;
 
         this.pointsToAdd = pointsToAdd;
+
         started = false;
         finished = false;
 
-        LabelPointsToAdd = new Label (Integer.toString(pointsToAdd), interactor.skin);
-        LabelPointsToAdd.setFontScale(interactor.LABEL_SCALE);
-        LabelPointsToAdd.setPosition(interactor.labelQuestion.getX(),
-                interactor.labelPoints.getY(Align.center));
+        labelPointsToAdd = new Label (Integer.toString(pointsToAdd), interactor.skin, "numbers");
+        labelPointsToAdd.setPosition(interactor.labelQuestion.getX(), interactor.labelPoints.getY());
+
 
         stage = new Stage();
-        stage.addActor(LabelPointsToAdd);
+        stage.addActor(labelPointsToAdd);
 
         timerTask = pointAnimationTask();
     }
@@ -47,8 +47,8 @@ public class Decision implements GameStrategy {
     public void start() {
         started = true;
 
-        LabelPointsToAdd.addAction(Actions.alpha(0));
-        LabelPointsToAdd.addAction(Actions.fadeIn(DELAY));
+        labelPointsToAdd.addAction(Actions.alpha(0));
+        labelPointsToAdd.addAction(Actions.fadeIn(DELAY));
 
         Timer.schedule(timerTask, DELAY, MOVE_ANIMATION_TIME, 2);
     }
@@ -86,13 +86,13 @@ public class Decision implements GameStrategy {
             public void run() {
 
                 if (timerTicksCount == 0) {
-                    LabelPointsToAdd.addAction(Actions.moveTo(interactor.labelPoints.getX(),
-                            interactor.labelPoints.getY(Align.center), MOVE_ANIMATION_TIME));
+                    labelPointsToAdd.addAction(Actions.moveTo(interactor.labelPoints.getX(),
+                            interactor.labelPoints.getY(), MOVE_ANIMATION_TIME));
 
                     timerTicksCount++;
                 }
                 else if (timerTicksCount == 1) {
-                    LabelPointsToAdd.addAction(Actions.alpha(0));
+                    labelPointsToAdd.addAction(Actions.alpha(0));
                     updatePointsAnimation(pointsToAdd);
                 }
             }
@@ -113,8 +113,8 @@ public class Decision implements GameStrategy {
     private Timer.Task addPointsTask(final int pointsAdded) {
         final int increment = pointsAdded / Math.abs(pointsAdded);          // Works with positive or negative add of points
 
-        if (increment > 0)  interactor.labelPoints.setColor(Color.GREEN);
-        else                interactor.labelPoints.setColor(Color.RED);
+        if (increment > 0)  interactor.labelPoints.setColor(interactor.RightColor);
+        else                interactor.labelPoints.setColor(interactor.WrongColor);
 
         return new Timer.Task() {
             @Override

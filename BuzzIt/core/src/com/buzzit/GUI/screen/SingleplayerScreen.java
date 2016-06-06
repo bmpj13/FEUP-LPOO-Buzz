@@ -36,6 +36,7 @@ public class SingleplayerScreen implements Screen {
     /* Disposable elements */
     private Skin skin;
     private BitmapFont txtFont;
+    private BitmapFont numbersFont;
     private FreeTypeFontGenerator generator;
     private Pixmap pixmap;
     private Texture btnBackgroundTexture;
@@ -149,7 +150,7 @@ public class SingleplayerScreen implements Screen {
         skin = new Skin();
 
         // Creating fonts
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Sansation-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 50;
         parameter.borderColor = Color.BLACK;
@@ -158,6 +159,12 @@ public class SingleplayerScreen implements Screen {
         txtFont = generator.generateFont(parameter);
         txtFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         skin.add("default", txtFont);
+
+
+        numbersFont = new BitmapFont(Gdx.files.internal("fonts/sansation.fnt"));
+        numbersFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        numbersFont.getData().setScale(3,3);
+        skin.add("numbers", numbersFont);
 
         // Creating textures
         pixmap = new Pixmap(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/10, Pixmap.Format.RGBA8888);
@@ -181,6 +188,11 @@ public class SingleplayerScreen implements Screen {
         labelStyle.font = skin.getFont("default");
         labelStyle.fontColor = Color.WHITE;
         skin.add("default", labelStyle);
+
+        labelStyle = new Label.LabelStyle();
+        labelStyle.font = skin.getFont("numbers");
+        labelStyle.fontColor = Color.WHITE;
+        skin.add("numbers", labelStyle);
     }
 
 
@@ -193,6 +205,7 @@ public class SingleplayerScreen implements Screen {
 
         match = new Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), Difficulty.EASY);
         strat = new ShowQuestion(interactor, 0, SECONDS_TO_ANSWER, match.getCurrentQuestion());
+        interactor.hideElementsExceptPoints();
 
         run();
         strat.start();
@@ -239,7 +252,7 @@ public class SingleplayerScreen implements Screen {
             match.nextQuestion();
         }
         else if (strat instanceof Decision) {
-            interactor.nextQuestion(TIME_BETWEEN_QUESTIONS/2, TIME_BETWEEN_QUESTIONS/2 - 0.3f);
+            interactor.nextQuestion(TIME_BETWEEN_QUESTIONS/2, TIME_BETWEEN_QUESTIONS/3);
             strat = new ShowQuestion(interactor, TIME_BETWEEN_QUESTIONS, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         }
 
@@ -274,6 +287,7 @@ public class SingleplayerScreen implements Screen {
         stage.dispose();
         skin.dispose();
         txtFont.dispose();
+        numbersFont.dispose();
         pixmap.dispose();
         btnBackgroundTexture.dispose();
         questionBackgroundTexture.dispose();
@@ -304,7 +318,7 @@ public class SingleplayerScreen implements Screen {
     private void endGame() {
         stop();
         finishedDialog.setMessage("Hey, " + match.getPlayer().getName() + "! " +
-                "You got " + match.getPlayer().getPoints() + "points.");
+                "You got " + match.getPlayer().getPoints() + " points.");
         finishedDialog.build().show();
     }
 

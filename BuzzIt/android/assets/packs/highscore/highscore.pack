@@ -1,173 +1,152 @@
 
-settings.png
+highscore.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-gear
-  rotate: false
-  xy: 1, 781
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 1
-gear
-  rotate: false
-  xy: 1, 651
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-gear
-  rotate: false
-  xy: 131, 781
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 3
-gear
-  rotate: false
-  xy: 1, 521
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 4
-gear
-  rotate: false
-  xy: 131, 651
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 5
-gear
-  rotate: false
-  xy: 261, 781
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 6
-gear
-  rotate: false
-  xy: 1, 391
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 7
-gear
-  rotate: false
-  xy: 131, 521
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 8
-gear
-  rotate: false
-  xy: 261, 651
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 9
-gear
-  rotate: false
-  xy: 391, 781
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 10
-gear
+highscore
   rotate: false
   xy: 1, 261
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 11
-gear
-  rotate: false
-  xy: 131, 391
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 12
-gear
-  rotate: false
-  xy: 261, 521
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 13
-gear
-  rotate: false
-  xy: 391, 651
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 14
-gear
-  rotate: false
-  xy: 521, 781
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 15
-gear
+  index: 1
+highscore
   rotate: false
   xy: 1, 131
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 16
-gear
+  index: 2
+highscore
   rotate: false
   xy: 131, 261
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 17
-gear
-  rotate: false
-  xy: 261, 391
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 18
-gear
-  rotate: false
-  xy: 391, 521
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 19
-gear
-  rotate: false
-  xy: 521, 651
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 20
-gear
-  rotate: false
-  xy: 651, 781
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 21
-gear
+  index: 3
+highscore
   rotate: false
   xy: 1, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 22
-gear
+  index: 4
+highscore
   rotate: false
   xy: 131, 131
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 23
-gear
+  index: 5
+highscore
   rotate: false
   xy: 261, 261
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 24
+  index: 6
+highscore
+  rotate: false
+  xy: 131, 1
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 7
+highscore
+  rotate: false
+  xy: 261, 131
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 8
+highscore
+  rotate: false
+  xy: 391, 261
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 9
+highscore
+  rotate: false
+  xy: 261, 1
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 10
+highscore
+  rotate: false
+  xy: 391, 131
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 11
+highscore
+  rotate: false
+  xy: 521, 261
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 12
+highscore
+  rotate: false
+  xy: 391, 1
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 13
+highscore
+  rotate: false
+  xy: 521, 131
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 14
+highscore
+  rotate: false
+  xy: 651, 261
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 15
+highscore
+  rotate: false
+  xy: 521, 1
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 16
+highscore
+  rotate: false
+  xy: 651, 131
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 17
+highscore
+  rotate: false
+  xy: 781, 261
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 18
+highscore
+  rotate: false
+  xy: 651, 1
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 19
+highscore
+  rotate: false
+  xy: 781, 131
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 20
+highscore
+  rotate: false
+  xy: 781, 1
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 21

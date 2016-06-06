@@ -26,7 +26,7 @@ public class ShowQuestion implements GameStrategy {
         this.timerTicksCount = 0;
         this.interactor = interactor;
 
-        this.delay = 0;
+        this.delay = delay;
         this.delta = 0.8f;
         this.duration = 0.8f;
         this.finished = false;
@@ -37,7 +37,10 @@ public class ShowQuestion implements GameStrategy {
             @Override
             public void run() {
                 if (timerTicksCount == 0) {
-                    setText();
+                    interactor.hideElementsExceptPoints();
+                    interactor.newButtonColors();
+                    updateText();
+
                     interactor.labelStatus.setText(Integer.toString(secondsToAnswer));
                     interactor.labelCategory.addAction(Actions.fadeIn(duration));
                 }
@@ -63,12 +66,10 @@ public class ShowQuestion implements GameStrategy {
     public void start() {
         interactor.uncheckButtons();
         interactor.disableButtons();
-        interactor.hideElementsExceptPoints();
-        interactor.newButtonColors();
         Timer.schedule(timerTask, delay, delta, 3);
     }
 
-    public void setText() {
+    public void updateText() {
         String[] options = question.generateOptions(4);
         interactor.labelQuestion.setText(question.getQuestion());
         interactor.labelCategory.setText(question.getCategory().getName());

@@ -4,16 +4,21 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -25,11 +30,13 @@ public class MenuScreen implements Screen {
 
     /* Disposables */
     private Stage stage;
-    private Texture titleTexture;
-    private Texture playTexture;
-    private Texture highscoreTexture;
     private SpriteBatch batch;
+    private Texture backgroundTexture;
+    private Texture playTexture;
     private TextureAtlas settingsAtlas;
+    private TextureAtlas highscoreAtlas;
+    private FreeTypeFontGenerator generator;
+    private BitmapFont font;
 
 
     public MenuScreen(ScreenState.ScreenType pType) {
@@ -44,8 +51,16 @@ public class MenuScreen implements Screen {
         batch = new SpriteBatch();
 
         /*** Title ***/
-        titleTexture = new Texture(Gdx.files.internal("menu/title.png"));
-        Image titleImage = new Image(titleTexture);
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/good_times.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 150;
+        font = generator.generateFont(parameter);
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
+        labelStyle.fontColor = Color.RED;
+        Label titleImage = new Label("Buzz It", labelStyle);
+
 
 
         /*** Creating buttons ***/
@@ -54,12 +69,14 @@ public class MenuScreen implements Screen {
         btnSingleplayer.getImage().setScaling(Scaling.fit);
 
         settingsAtlas = new TextureAtlas(Gdx.files.internal("packs/settings/settings.pack"));
-        Animation settingsAnimation = new Animation(1f/30f, settingsAtlas.getRegions());
+        Animation settingsAnimation = new Animation(1f/20f, settingsAtlas.getRegions());
         AnimatedDrawable animatedDrawable = new AnimatedDrawable(settingsAnimation);
         ImageButton btnSettings = new ImageButton(animatedDrawable, animatedDrawable);
 
-        highscoreTexture = new Texture(Gdx.files.internal("menu/highscore.png"));
-        ImageButton btnHighscore = new ImageButton(new SpriteDrawable(new SpriteDrawable( new Sprite(highscoreTexture))));
+        highscoreAtlas = new TextureAtlas(Gdx.files.internal("packs/highscore/highscore.pack"));
+        Animation highscoreAnimation = new Animation(1f/20f, highscoreAtlas.getRegions());
+        animatedDrawable = new AnimatedDrawable(highscoreAnimation);
+        ImageButton btnHighscore = new ImageButton(animatedDrawable, animatedDrawable);
 
         /*** Creating stage ***/
         Table buttonsTable = new Table();
@@ -75,6 +92,9 @@ public class MenuScreen implements Screen {
         buttonsTable.add(btnHighscore);
         buttonsTable.row();
         buttonsTable.setFillParent(true);
+
+        backgroundTexture = new Texture(Gdx.files.internal("menu/background.jpg"));
+        buttonsTable.background(new SpriteDrawable(new Sprite(backgroundTexture)));
 
         stage = new Stage();
         stage.addActor(buttonsTable);
@@ -151,11 +171,12 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void dispose() {
-        titleTexture.dispose();
+        backgroundTexture.dispose();
         playTexture.dispose();
-        highscoreTexture.dispose();
         stage.dispose();
         batch.dispose();
         settingsAtlas.dispose();
+        highscoreAtlas.dispose();
+        font.dispose();
     }
 }

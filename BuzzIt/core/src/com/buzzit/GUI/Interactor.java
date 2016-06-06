@@ -16,7 +16,6 @@ import java.util.Random;
 
 public class Interactor {
 
-    public final int LABEL_SCALE = 3;         // Font scale
     public final Color RightColor = Color.GREEN;
     public final Color WrongColor = Color.RED;
 
@@ -37,13 +36,12 @@ public class Interactor {
 
         // Creating styles
         labelPointsStyle = new Label.LabelStyle();
-        labelPointsStyle.font = skin.getFont("default");
+        labelPointsStyle.font = skin.getFont("numbers");
         labelPointsStyle.fontColor = Color.WHITE;
 
         // Creating elements
         labelPoints = new Label("0", labelPointsStyle);
         labelPoints.setAlignment(Align.center);
-        labelPoints.setFontScale(LABEL_SCALE);
 
         labelCategory = new Label("", skin, "question_background");
         labelCategory.setAlignment(Align.center);
@@ -67,9 +65,8 @@ public class Interactor {
         }
 
 
-        labelStatus = new Label("", skin);
+        labelStatus = new Label("", skin, "numbers");
         labelStatus.setWrap(true);
-        labelStatus.setFontScale(LABEL_SCALE);
         labelStatus.setAlignment(Align.center);
     }
 
@@ -133,7 +130,7 @@ public class Interactor {
         for (OptionButton button : btnOptions) {
             Color color = generateColor();
             button.getButtonStyle().up = skin.newDrawable("btn_background", color);
-            button.setCheckedColor(color);
+            button.setUncheckedColor(color);
         }
     }
 
