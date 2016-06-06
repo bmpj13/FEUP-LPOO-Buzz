@@ -14,17 +14,18 @@ import java.util.Random;
 public class Play {
 
 
-	//static private ArrayList<ArrayList<Question>> questionsByCategory;
+	static private ArrayList<Player> highScores;
 	static private ArrayList<Question>[][] questions;
 
 	private final String easyPath = "data/easy.properties";
 	private final String mediumPath = "data/medium.properties";
 	private final String hardPath = "data/hard.properties";
+	private final String highScoresPath = "data/highscores.properties";
 
 	private Thread easyThread, mediumThread, hardThread;
 
 	/**
-	 * Constructor
+	 * Initialize instance
 	 */
 	private static Play ourInstance = new Play();
 
@@ -40,6 +41,7 @@ public class Play {
 	 * Initializes variables and gets information from files
 	 */
 	private Play() {
+		highScores = new ArrayList<>();
 		questions = new ArrayList[Difficulty.values().length][Category.values().length];
 		for(Category cat:Category.values()){
 			ArrayList<Question> q = new ArrayList<>();
@@ -125,6 +127,44 @@ public class Play {
 				}
 				Question q = new Question(question, wrong, correct, difficulty, cat);
 				questionsByCategory[categoryIndex].add(q);
+			}
+
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			Gdx.app.log("EXCEPTION","IO Exception");
+		} finally{
+			if(input!=null){
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public void getHighScores(){
+		Properties prop = new Properties();
+		InputStream input = null;
+
+		try {
+			FileHandle file = Gdx.files.internal(highScoresPath);
+			input = file.read();
+
+			if (input == null) throw new IllegalArgumentException(highScoresPath);
+
+			//load a properties file from class path, inside static method
+			prop.load(input);
+
+			//get the property value and store it
+			int t = Integer.parseInt(prop.getProperty("numPlayers"));
+			for(int i = 0; i < t; i++){
+				String name = prop.getProperty("name"+i);
+				int points = Integer.parseInt(prop.getProperty("points" + i));
+
+				Player player = new Player(name);
+				player.setPoints(points);
+				highScores.add(player);
 			}
 
 		} catch (IOException ex) {

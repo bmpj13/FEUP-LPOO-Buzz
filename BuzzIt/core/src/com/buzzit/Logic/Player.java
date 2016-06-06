@@ -23,6 +23,14 @@ public class Player {
     }
 
     /**
+     * Replaces points of player
+     * @param points New points
+     */
+    public void setPoints(int points){
+        this.points = points;
+    }
+
+    /**
      * Adds or decreases points for answering question
      * @param points Points to add
      */
