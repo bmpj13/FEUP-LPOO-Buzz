@@ -1,0 +1,7 @@
+1 - ir a https://nodejs.org/en/
+2 - instalar a versão Recommended For Most Users
+3 - correr o instalador
+4 - antes de conectar qualquer dispositivo ir à Terminal do AndroidStudio
+5 - introduzir os comandos: cd server
+	node index
+6 - se aparecer "Server is running..." foi feito com sucesso caso contrario, nada feito
