@@ -19,6 +19,7 @@ public class Client {
     private Player player;
     private String socketID;
     private boolean isReady = false;
+    private boolean isAdmin = false;
 
     public Client(Player player, String id){
         Gdx.app.log("Client", "Creating client...");
@@ -27,21 +28,13 @@ public class Client {
         Gdx.app.log("Client", "Client ID: "+ socketID);
     }
 
-    public Client(Server server, Player player, String id){
-        Gdx.app.log("Client", "Creating client...");
-        this.server = server;
-        this.player = player;
-        this.socketID = id;
-        Gdx.app.log("Client", "Client ID: "+ socketID);
-        //server.addClient(this);
-    }
-
     public void updateToServer(Socket socket, float dt){
         timer += dt;
         if(timer >= UPDATE_TIME){
             JSONObject data = new JSONObject();
             try{
-                data.put("isReady", this.isReady());
+                //Gdx.app.log("CLIENT", "sending that player " + this.socketID + " is " + this.isReady());
+                data.put("isReady", this.isReady);
                 socket.emit("playerIsReady", data);
             } catch(JSONException e){
                 Gdx.app.log("SOCKET.IO", "Error sending updated data");
@@ -63,5 +56,13 @@ public class Client {
 
     public void setReady(boolean ready) {
         isReady = ready;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }
