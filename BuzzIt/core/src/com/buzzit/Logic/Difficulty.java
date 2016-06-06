@@ -34,4 +34,19 @@ public enum Difficulty {
     public int getIndex(){
         return index;
     }
+
+
+    /**
+     *
+     * @param name name of the difficulty
+     * @return Difficulty object
+     */
+    public static Difficulty convert(String name) {
+        for (Difficulty difficulty : Difficulty.values()) {
+            if (difficulty.toString().equals(name))
+                return difficulty;
+        }
+
+        return null;
+    }
 }

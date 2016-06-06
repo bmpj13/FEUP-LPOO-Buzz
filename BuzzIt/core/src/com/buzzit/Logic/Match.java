@@ -15,12 +15,13 @@ public class Match {
      * @param numQuestions Number of questions for this match
      * @param categoriesChosen Categories that will be displayed
      * @param difficulty Difficulty of questions
+     * @param player Player on this match
      */
-    public Match(int numQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty) {
+    public Match(int numQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty, Player player) {
         this.questions = Play.getInstance().play(numQuestions, categoriesChosen, difficulty);
         this.questionIndex = 0;
         this.totalQuestions = numQuestions;
-        player = new Player("UEUEUEUEUEUEUEUEUEUEUEUEUEUE");
+        this.player = player;
     }
 
     /**

@@ -58,6 +58,7 @@ public class SingleplayerScreen implements Screen {
 
 
     /* Variables */
+    private Player player;
     private Match match;
     private GameState gameState;
 
@@ -203,7 +204,8 @@ public class SingleplayerScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        match = new Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), Difficulty.EASY);
+        player = new Player(SettingsScreen.getName());
+        match = new Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), Difficulty.EASY, player);
         strat = new ShowQuestion(interactor, 0, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         interactor.hideElementsExceptPoints();
 
@@ -302,11 +304,11 @@ public class SingleplayerScreen implements Screen {
         int points = match.getCurrentQuestion().getDifficulty().getPoints();
 
         if (match.isCorrect(button.getContent())) {
-            match.getPlayer().addPoints(points);
+            player.addPoints(points);
             strat = new Answered(interactor, button, points, true);
         }
         else {
-            match.getPlayer().addPoints(-points);
+            player.addPoints(-points);
             strat = new Answered(interactor, button, -points, false);
         }
 
@@ -317,7 +319,7 @@ public class SingleplayerScreen implements Screen {
 
     private void endGame() {
         stop();
-        finishedDialog.setMessage("Hey, " + match.getPlayer().getName() + "! " +
+        finishedDialog.setMessage("Hey, " + player.getName() + " !\n" +
                 "You got " + match.getPlayer().getPoints() + " points.");
         finishedDialog.build().show();
     }

@@ -1,5 +1,6 @@
 package com.buzzit.GUI;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -135,11 +136,14 @@ public class Interactor {
     }
 
     private Color generateColor() {
+        final float minLuminance = 0f;
+        final float maxLuminance = 0.65f;
         Random rand = new Random();
 
-        float r = rand.nextFloat();
-        float g = rand.nextFloat();
-        float b = rand.nextFloat();
+        float r = rand.nextFloat();                         // Generate red
+        float b = rand.nextFloat();                         // Generate blue
+        float Y = rand.nextFloat() * (maxLuminance - minLuminance) + minLuminance;  // Generate luminance in interval
+        float g = (Y - 0.299f*r - 0.114f*b) / 0.587f;       // Generate green, depending on luminance
 
         return new Color(r, g, b, 1);
     }

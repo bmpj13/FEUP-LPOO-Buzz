@@ -3,7 +3,9 @@ package com.buzzit.GUI.screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -62,16 +64,18 @@ public class SettingsScreen implements Screen {
 
         createSkin();
 
+        Preferences prefs = Gdx.app.getPreferences("settings");             // load saved preferences
+
         /* User's nickname */
         Label nameLabel = new Label("Nickname", skin);
-        nameTextField = new TextField("player", skin);
+        nameTextField = new TextField(prefs.getString("name", "player"), skin);
         nameTextField.setBlinkTime(1f);
         nameTextField.setAlignment(Align.center);
         nameTextField.setMaxLength(20);
 
         /* Number of questions per game */
         Label numQuestionsLabel = new Label("Number of Questions", skin);
-        numQuestionsTextField = new TextField("10", skin);
+        numQuestionsTextField = new TextField(prefs.getString("number_questions", "10"), skin);
         numQuestionsTextField.setBlinkTime(1f);
         numQuestionsTextField.setAlignment(Align.center);
         numQuestionsTextField.setMaxLength(2);
@@ -91,15 +95,18 @@ public class SettingsScreen implements Screen {
         NinePatch patch = new NinePatch(categoriesBackgroundTexture, 3, 3, 3, 3);
         categoriesTable.setBackground(new NinePatchDrawable(patch));
 
-        for (Category cat: Category.values()){
-            CheckBox checkBox = new CheckBox(cat.getName(), skin);
+
+        for (int i = 0; i < Category.values().length; i++) {
+            Category category = Category.values()[i];
+            CheckBox checkBox = new CheckBox(category.getName(), skin);
             checkBox.getLabelCell().padLeft(smallPad);
-            checkBox.setChecked(true);
+            checkBox.setChecked(prefs.getBoolean("checkbox" + i, true));
             checkBoxes.add(checkBox);
 
             categoriesTable.add(checkBox).pad(smallPad, smallPad, smallPad/2, smallPad).align(Align.left).padBottom(10);
             categoriesTable.row();
         }
+
         categoriesTable.padBottom(smallPad);
 
         ScrollPane.ScrollPaneStyle paneStyle = new ScrollPane.ScrollPaneStyle();
@@ -110,6 +117,8 @@ public class SettingsScreen implements Screen {
         Label difficultyLabel = new Label("Difficulty", skin);
         difficultySelectBox = new SelectBox<Difficulty>(skin);
         difficultySelectBox.setItems(Difficulty.values());
+        String selectedName = prefs.getString("difficulty", Difficulty.EASY.toString());
+        difficultySelectBox.setSelected(Difficulty.convert(selectedName));
 
         // Main table
         Table table = new Table();
@@ -238,6 +247,7 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void pause() {
+        saveSettings();
     }
 
     @Override
@@ -249,6 +259,7 @@ public class SettingsScreen implements Screen {
      */
     @Override
     public void hide() {
+        saveSettings();
     }
 
     /**
@@ -286,4 +297,22 @@ public class SettingsScreen implements Screen {
         return nameTextField.getText().toString();
     }
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+    }
+
+    private void saveSettings() {
+        Preferences prefs = Gdx.app.getPreferences("settings");
+        prefs.putString("name", nameTextField.getText());
+        prefs.putString("number_questions", numQuestionsTextField.getText());
+        prefs.putString("difficulty", difficultySelectBox.getSelected().toString());
+
+        for (int i = 0; i < checkBoxes.size(); i++) {
+            prefs.putBoolean("checkbox" + i, checkBoxes.get(i).isChecked());
+        }
+
+        prefs.flush();
+    }
 }
