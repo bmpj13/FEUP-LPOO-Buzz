@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -33,6 +31,7 @@ public class MenuScreen implements Screen {
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private Texture playTexture;
+    private Texture multiPlayTexture;
     private TextureAtlas settingsAtlas;
     private TextureAtlas highscoreAtlas;
     private FreeTypeFontGenerator generator;
@@ -68,6 +67,10 @@ public class MenuScreen implements Screen {
         ImageButton btnSingleplayer = new ImageButton(new SpriteDrawable(new Sprite(playTexture)));
         btnSingleplayer.getImage().setScaling(Scaling.fit);
 
+        multiPlayTexture = new Texture(Gdx.files.internal("menu/multiplayer.png"));
+        ImageButton btnMultiplayer = new ImageButton(new SpriteDrawable(new Sprite(multiPlayTexture)));
+        btnMultiplayer.getImage().setScaling(Scaling.fit);
+
         settingsAtlas = new TextureAtlas(Gdx.files.internal("packs/settings/settings.pack"));
         Animation settingsAnimation = new Animation(1f/20f, settingsAtlas.getRegions());
         AnimatedDrawable animatedDrawable = new AnimatedDrawable(settingsAnimation);
@@ -80,13 +83,16 @@ public class MenuScreen implements Screen {
 
         /*** Creating stage ***/
         Table buttonsTable = new Table();
-        buttonsTable.add(titleImage).padBottom(100);
+        buttonsTable.add(titleImage).padBottom(90);
         buttonsTable.row();
 
-        buttonsTable.add(btnSingleplayer).width(400).height(400).padBottom(100);
+        buttonsTable.add(btnSingleplayer).width(300).height(300).padBottom(90);
         buttonsTable.row();
 
-        buttonsTable.add(btnSettings).padBottom(100);
+        buttonsTable.add(btnMultiplayer).width(300).height(300).padBottom(90);
+        buttonsTable.row();
+
+        buttonsTable.add(btnSettings).padBottom(90);
         buttonsTable.row();
 
         buttonsTable.add(btnHighscore);
@@ -106,6 +112,14 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 ScreenState.getInstance().changeState(ScreenState.ScreenType.SINGLEPLAYER);
+            }
+        });
+
+        btnMultiplayer.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                ScreenState.getInstance().changeState(ScreenState.ScreenType.MULTIPLAYER1);
             }
         });
 
@@ -173,6 +187,7 @@ public class MenuScreen implements Screen {
     public void dispose() {
         backgroundTexture.dispose();
         playTexture.dispose();
+        multiPlayTexture.dispose();
         stage.dispose();
         batch.dispose();
         settingsAtlas.dispose();

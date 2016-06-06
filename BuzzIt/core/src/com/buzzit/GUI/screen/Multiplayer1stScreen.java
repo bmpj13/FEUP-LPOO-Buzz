@@ -2,6 +2,7 @@ package com.buzzit.GUI.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -224,6 +225,12 @@ public class Multiplayer1stScreen extends SuperScreen {
     public void render(float delta) {
         super.render(delta);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            if (parentType != null) {
+                ScreenState.getInstance().changeState(parentType);
+            }
+        }
 
         stage.act();
         stage.draw();
