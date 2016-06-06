@@ -8,13 +8,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.Random;
 
 
 public class Play {
-
-
+	static private int MAX_NUMBER_HIGHSCORE_ENTRIES = 10;
 	static private ArrayList<Player> highScores;
 	static private ArrayList<Question>[][] questions;
 
@@ -23,7 +23,6 @@ public class Play {
 	private final String hardPath = "data/hard.properties";
 	private final String highScoresPath = "data/highscores.properties";
 
-	private Thread easyThread, mediumThread, hardThread;
 
 	/**
 	 * Initialize instance
@@ -33,7 +32,7 @@ public class Play {
 	/**
 	 *
 	 * @return Play instance
-     */
+	 */
 	public static Play getInstance() {
 		return ourInstance;
 	}
@@ -44,57 +43,31 @@ public class Play {
 	private Play() {
 		highScores = new ArrayList<>();
 		questions = new ArrayList[Difficulty.values().length][Category.values().length];
-		for(Category cat:Category.values()){
+		for(Category category : Category.values()){
 			ArrayList<Question> q = new ArrayList<>();
-			questions[Difficulty.EASY.getIndex()][cat.getIndex()] = q;
+			questions[Difficulty.EASY.getIndex()][category.getIndex()] = q;
 
 			q = new ArrayList<>();
-			questions[Difficulty.MEDIUM.getIndex()][cat.getIndex()] = q;
+			questions[Difficulty.MEDIUM.getIndex()][category.getIndex()] = q;
 
 			q = new ArrayList<>();
-			questions[Difficulty.HARD.getIndex()][cat.getIndex()] = q;
+			questions[Difficulty.HARD.getIndex()][category.getIndex()] = q;
 		}
 
-//		easyThread = new Thread(){
-//			public void run(){
-//				getFile(Difficulty.EASY, Play.questions[Difficulty.EASY.getIndex()], easyPath);
-//			}
-//		};
-//		mediumThread = new Thread(){
-//			public void run(){
-//				getFile(Difficulty.MEDIUM, Play.questions[Difficulty.MEDIUM.getIndex()], mediumPath);
-//			}
-//		};
-//		hardThread = new Thread(){
-//			public void run(){
-//				getFile(Difficulty.HARD, Play.questions[Difficulty.HARD.getIndex()], hardPath);
-//			}
-//		};
-//		easyThread.start();
-//		mediumThread.start();
-//		hardThread.start();
-//
-//		try {
-//				easyThread.join(500);
-//				mediumThread.join(500);
-//				hardThread.join(500);
-//		} catch(InterruptedException ex){
-//			ex.printStackTrace();
-//			Gdx.app.log("EXCEPTION","Interrupted Exception");
-//		}
 
-		getFile(Difficulty.EASY, questions[Difficulty.EASY.getIndex()], easyPath);
-		getFile(Difficulty.MEDIUM, questions[Difficulty.MEDIUM.getIndex()], mediumPath);
-		getFile(Difficulty.HARD, questions[Difficulty.HARD.getIndex()], hardPath);
+		readFile(Difficulty.EASY, questions[Difficulty.EASY.getIndex()], easyPath);
+		readFile(Difficulty.MEDIUM, questions[Difficulty.MEDIUM.getIndex()], mediumPath);
+		readFile(Difficulty.HARD, questions[Difficulty.HARD.getIndex()], hardPath);
+		readHighScores();
 	}
 
 	/**
-	 * Gets questions from a .properties file
+	 * Gets questions from 'filepath' file
 	 * @param difficulty Difficulty of questions from the file
 	 * @param questionsByCategory BiDimensional Array to keep questions organized by category
 	 * @param filepath Path of file
-     */
-	public void getFile(Difficulty difficulty, ArrayList<Question>[] questionsByCategory, String filepath){
+	 */
+	public void readFile(Difficulty difficulty, ArrayList<Question>[] questionsByCategory, String filepath) {
 		Properties prop = new Properties();
 		InputStream input = null;
 
@@ -108,33 +81,34 @@ public class Play {
 			prop.load(input);
 
 			//get the property value and store it
-			int t = Integer.parseInt(prop.getProperty("numquestions"));
-			for(int i = 0; i < t; i++){
-				String question = prop.getProperty("question"+i);
+			int numQuestions = Integer.parseInt(prop.getProperty("numquestions"));
+			for(int i = 0; i < numQuestions; i++){
+
+				String question = prop.getProperty("question" + i);
 				int answers = Integer.parseInt(prop.getProperty("numanswers" + i));
-				String category = prop.getProperty("category" + i);
-				Category cat = Category.getCategory(category);
-				int categoryIndex = cat.getIndex();
+				String categoryName = prop.getProperty("category" + i);
+				Category category = Category.getCategory(categoryName);
+				int categoryIndex = category.getIndex();
 
 				String correct = new String();
 				ArrayList<String> wrong = new ArrayList<String>();
-				for(int z =0; z < answers; z++) {
-					String key = prop.getProperty("answer" + i + "." + z);
-					if (z == 0) {
+				for(int j = 0; j < answers; j++) {
+					String key = prop.getProperty("answer" + i + "." + j);
+					if (j == 0) {
 						correct = key;
 					} else {
 						wrong.add(key);
 					}
 				}
-				Question q = new Question(question, wrong, correct, difficulty, cat);
+
+				Question q = new Question(question, wrong, correct, difficulty, category);
 				questionsByCategory[categoryIndex].add(q);
 			}
 
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			Gdx.app.log("EXCEPTION","IO Exception");
-		} finally{
-			if(input!=null){
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (input!=null){
 				try {
 					input.close();
 				} catch (IOException e) {
@@ -148,7 +122,7 @@ public class Play {
 	/**
 	 * Reads highScores from file
 	 */
-	public void getHighScores(){
+	public void readHighScores() {
 		Properties prop = new Properties();
 		InputStream input = null;
 
@@ -162,10 +136,10 @@ public class Play {
 			prop.load(input);
 
 			//get the property value and store it
-			int t = Integer.parseInt(prop.getProperty("numPlayers"));
-			for(int i = 0; i < t; i++){
-				String name = prop.getProperty("name"+i);
-				int points = Integer.parseInt(prop.getProperty("points" + i));
+			int numberPlayers = Integer.parseInt(prop.getProperty("numPlayers"));
+			for(int i = 0; i < numberPlayers; i++) {
+				String name = prop.getProperty("name" + i);
+				int points =  Integer.parseInt(prop.getProperty("points" + i));
 
 				Player player = new Player(name);
 				player.setPoints(points);
@@ -201,13 +175,13 @@ public class Play {
 
 			prop.setProperty("numPlayers", Integer.toString(highScores.size()));
 			for(int i = 0; i < highScores.size(); i++){
-				prop.setProperty("name"+i,highScores.get(i).getName());
-				prop.setProperty("points"+i, Integer.toString(highScores.get(i).getPoints()));
+				prop.setProperty("name" + i,highScores.get(i).getName());
+				prop.setProperty("points" + i, Integer.toString(highScores.get(i).getPoints()));
 			}
+
 			prop.store(output, "HighScores for BuzzIt");
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			Gdx.app.log("EXCEPTION","IO Exception");
 		} finally{
 			if(output!=null){
 				try {
@@ -223,41 +197,43 @@ public class Play {
 	 * Compares the points of this match to the previous bests
 	 * @param player Player to compare points
 	 * @return Returns index of position if that score has fewer points; -1 if it's not better than any preiou score
-     */
-	static public int isHighScore(Player player){
-		for(int i = 0; i < highScores.size(); i++){
-			if(player.getPoints() > highScores.get(i).getPoints())
-				return i;
-		}
-		return -1;
+	 */
+	static public boolean isHighScore(Player player) {
+
+		if (highScores.size() < MAX_NUMBER_HIGHSCORE_ENTRIES)
+			return true;
+		if (player.getPoints() > highScores.get(highScores.size() - 1).getPoints())
+			return true;
+
+		return false;
 	}
 
 	/**
 	 * Updates ArrayList highScores if it is a new highscore
 	 * @param player Player to add to ArrayList
 	 * @return Returns true if it set a new highScore; false if not
-     */
-	static public boolean newHighSCore(Player player){
-		int index = isHighScore(player);
-		if(index < 0)
-			if(highScores.size() == 10)
-				return false;
-			else{
-				highScores.add(player);
-				return true;
-			}
+	 */
+	static public boolean addHighScore(Player player) {
 
-		highScores.add(index, player);
-		if(highScores.size() > 10)
-			highScores.remove(highScores.size()-1);
-		return true;
+		if (isHighScore(player)) {
+
+			highScores.add(player);
+			Collections.sort(highScores);
+
+			if (highScores.size() > MAX_NUMBER_HIGHSCORE_ENTRIES)
+				highScores.remove(highScores.size() - 1);
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
 	 * Randomizes order of numbers
 	 * @param numIndices max number to randomize
 	 * @return	ArrayList containing random order of numbers from 0 to numIndices
-     */
+	 */
 	static public ArrayList<Integer> scramble(int numIndices){
 		Random rand = new Random();
 		ArrayList<Integer> indices = new ArrayList<Integer>();
@@ -281,8 +257,8 @@ public class Play {
 	 * Gets all questions from the categories chosen and the difficulty
 	 * @param categoriesChosen ArrayList containing categories the user chose
 	 * @param difficulty Enum of chosen difficulty
-     * @return
-     */
+	 * @return
+	 */
 	private ArrayList<Question> getQuestionsFromCategory(ArrayList<Category> categoriesChosen, Difficulty difficulty){
 
 		ArrayList<Question> q = new ArrayList<Question>();
@@ -297,8 +273,8 @@ public class Play {
 	 * @param totalQuestions Number of questions to answer
 	 * @param categoriesChosen Categories of questions to be chosen
 	 * @param difficulty Difficulty of questions
-     * @return ArrayList of Question
-     */
+	 * @return ArrayList of Question
+	 */
 	public ArrayList<Question> play(int totalQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty){
 		ArrayList<Question> q = new ArrayList<>();
 

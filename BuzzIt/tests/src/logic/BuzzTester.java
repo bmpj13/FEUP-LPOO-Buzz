@@ -105,21 +105,22 @@ public class BuzzTester {
 
     @Test
     public void testMatchCategoriesChosen() {
+        Player player = new Player("player");
         ArrayList<Category> categoriesChosen = new ArrayList<Category>();
 
         // One category
         categoriesChosen.add(Category.HISTORY);
-        Match match = new Match(2, categoriesChosen, Difficulty.MEDIUM);
+        Match match = new Match(2, categoriesChosen, Difficulty.MEDIUM, player);
         assertTrue(questionInCategories(match, categoriesChosen));
 
         // Two categories
         categoriesChosen.add(Category.SPORTS);
-        match = new Match(4, categoriesChosen, Difficulty.MEDIUM);
+        match = new Match(4, categoriesChosen, Difficulty.MEDIUM, player);
         assertTrue(questionInCategories(match, categoriesChosen));
 
         // Three categories
         categoriesChosen.add(Category.MUSIC);
-        match = new Match(4, categoriesChosen, Difficulty.MEDIUM);
+        match = new Match(4, categoriesChosen, Difficulty.MEDIUM, player);
         assertTrue(questionInCategories(match, categoriesChosen));
     }
 
