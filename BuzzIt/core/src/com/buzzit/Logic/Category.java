@@ -10,19 +10,39 @@ public enum Category {
     private String category;
     private int index;
 
+    /**
+     * Constructor
+     * @param category string of category
+     * @param index position in array
+     */
     Category(String category, int index){
         this.category = category;
         this.index = index;
     }
 
+    /**
+     * Gets index position of array of size category.values().length
+     * @return array position
+     */
     public int getIndex(){
         return index;
     }
-    
+
+
+    /**
+     * Gets string value of enum
+     * @return string of category
+     */
     public String getName(){
         return category;
     }
 
+
+    /**
+     * Gets the corresponding enum from a string
+     * @param cat string of category
+     * @return Enum of category
+     */
     static public Category getCategory(String cat){
         switch(cat){
             case "SPORTS":

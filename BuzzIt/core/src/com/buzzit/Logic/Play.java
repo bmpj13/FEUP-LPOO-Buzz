@@ -23,12 +23,22 @@ public class Play {
 
 	private Thread easyThread, mediumThread, hardThread;
 
+	/**
+	 * Constructor
+	 */
 	private static Play ourInstance = new Play();
 
+	/**
+	 *
+	 * @return Play instance
+     */
 	public static Play getInstance() {
 		return ourInstance;
 	}
 
+	/**
+	 * Initializes variables and gets information from files
+	 */
 	private Play() {
 		questions = new ArrayList[Difficulty.values().length][Category.values().length];
 		for(Category cat:Category.values()){
@@ -75,7 +85,12 @@ public class Play {
 		getFile(Difficulty.HARD, questions[Difficulty.HARD.getIndex()], hardPath);
 	}
 
-
+	/**
+	 * Gets questions from a .properties file
+	 * @param difficulty Difficulty of questions from the file
+	 * @param questionsByCategory BiDimensional Array to keep questions organized by category
+	 * @param filepath Path of file
+     */
 	public void getFile(Difficulty difficulty, ArrayList<Question>[] questionsByCategory, String filepath){
 		Properties prop = new Properties();
 		InputStream input = null;
@@ -126,6 +141,11 @@ public class Play {
 		}
 	}
 
+	/**
+	 * Randomizes order of numbers
+	 * @param numIndices max number to randomize
+	 * @return	ArrayList containing random order of numbers from 0 to numIndices
+     */
 	static public ArrayList<Integer> scramble(int numIndices){
 		Random rand = new Random();
 		ArrayList<Integer> indices = new ArrayList<Integer>();
@@ -145,6 +165,12 @@ public class Play {
 		return indices;
 	}
 
+	/**
+	 * Gets all questions from the categories chosen and the difficulty
+	 * @param categoriesChosen ArrayList containing categories the user chose
+	 * @param difficulty Enum of chosen difficulty
+     * @return
+     */
 	private ArrayList<Question> getQuestionsFromCategory(ArrayList<Category> categoriesChosen, Difficulty difficulty){
 
 		ArrayList<Question> q = new ArrayList<Question>();
@@ -154,6 +180,13 @@ public class Play {
 		return q;
 	}
 
+	/**
+	 * Gets random questions given the parameters
+	 * @param totalQuestions Number of questions to answer
+	 * @param categoriesChosen Categories of questions to be chosen
+	 * @param difficulty Difficulty of questions
+     * @return ArrayList of Question
+     */
 	public ArrayList<Question> play(int totalQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty){
 		ArrayList<Question> q = new ArrayList<>();
 
