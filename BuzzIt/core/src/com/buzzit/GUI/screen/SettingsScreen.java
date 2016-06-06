@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -33,6 +32,9 @@ import java.util.ArrayList;
 
 public class SettingsScreen implements Screen {
     ScreenState.ScreenType parentType;
+
+    final int FINAL_MAX_SIZE = 20;
+    final int MAX_DIGIT_QUESTIONS = 2;
 
     /* Disposables */
     private Stage stage;
@@ -71,22 +73,23 @@ public class SettingsScreen implements Screen {
         nameTextField = new TextField(prefs.getString("name", "player"), skin);
         nameTextField.setBlinkTime(1f);
         nameTextField.setAlignment(Align.center);
-        nameTextField.setMaxLength(20);
+        nameTextField.setMaxLength(FINAL_MAX_SIZE);
 
         /* Number of questions per game */
         Label numQuestionsLabel = new Label("Number of Questions", skin);
         numQuestionsTextField = new TextField(prefs.getString("number_questions", "10"), skin);
         numQuestionsTextField.setBlinkTime(1f);
         numQuestionsTextField.setAlignment(Align.center);
-        numQuestionsTextField.setMaxLength(2);
+        numQuestionsTextField.setMaxLength(MAX_DIGIT_QUESTIONS);
         numQuestionsTextField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
 
+        //TODO falta limitar o numero
 
         final int smallPad = Gdx.graphics.getHeight()/60;
         final int bigPad = Gdx.graphics.getHeight()/12;
 
         /* Categories wanted */
-        checkBoxes = new ArrayList<CheckBox>();
+        checkBoxes = new ArrayList<>();
         Label categoriesLabel = new Label("Categories", skin);
 
 
@@ -115,7 +118,7 @@ public class SettingsScreen implements Screen {
 
         /* Difficulty */
         Label difficultyLabel = new Label("Difficulty", skin);
-        difficultySelectBox = new SelectBox<Difficulty>(skin);
+        difficultySelectBox = new SelectBox<>(skin);
         difficultySelectBox.setItems(Difficulty.values());
         String selectedName = prefs.getString("difficulty", Difficulty.EASY.toString());
         difficultySelectBox.setSelected(Difficulty.convert(selectedName));
@@ -131,7 +134,7 @@ public class SettingsScreen implements Screen {
         table.add(numQuestionsTextField).padBottom(bigPad).row();
 
         table.add(categoriesLabel).padBottom(smallPad).row();
-        table.add(scrollPane).height(600).padBottom(bigPad).row();
+        table.add(scrollPane).height(bigPad*4).padBottom(bigPad).row();
 
         table.add(difficultyLabel).padBottom(smallPad).row();
         table.add(difficultySelectBox).row();
@@ -147,7 +150,8 @@ public class SettingsScreen implements Screen {
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/good_times.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 50;
+        parameter.size = Gdx.graphics.getWidth()/25;
+
 
         font = generator.generateFont(parameter);
         skin.add("default", font);
@@ -280,21 +284,38 @@ public class SettingsScreen implements Screen {
         generator.dispose();
     }
 
+    /**
+     * Gets ArrayList containing all categories chosen
+     * @return ArrayList of Category enum
+     */
     public static ArrayList<Category> getCategories(){
-        ArrayList<Category> c = new ArrayList<Category>();
+        ArrayList<Category> c = new ArrayList<>();
         for(CheckBox box: checkBoxes){
             if(box.isChecked())
                 c.add(Category.getCategory(box.getText().toString()));
         }
+        if(c.isEmpty()){
+            for(Category cat: Category.values()){
+                c.add(cat);
+            }
+        }
         return c;
     }
 
+    /**
+     * Gets defined number of questions
+     * @return int from text field
+     */
     public static int getNumQuestions(){
-        return Integer.parseInt(numQuestionsTextField.getText().toString());
+        return Integer.parseInt(numQuestionsTextField.getText());
     }
 
+    /**
+     * Gets name of the player
+     * @return String name
+     */
     public static String getName(){
-        return nameTextField.getText().toString();
+        return nameTextField.getText();
     }
 
 
@@ -303,6 +324,9 @@ public class SettingsScreen implements Screen {
         super.finalize();
     }
 
+    /**
+     * Stores settings
+     */
     private void saveSettings() {
         Preferences prefs = Gdx.app.getPreferences("settings");
         prefs.putString("name", nameTextField.getText());
