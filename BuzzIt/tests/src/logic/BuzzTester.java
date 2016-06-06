@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 @RunWith(GdxTestRunner.class)
 public class BuzzTester {
@@ -16,7 +18,7 @@ public class BuzzTester {
     private final Difficulty defaultDifficulty = Difficulty.MEDIUM;
     private final Category defaultCategory = Category.HISTORY;
 
-
+    /***** Category.java *****/
     @Test
     public void testCategoryProperties() {
         assertEquals(0, Category.SPORTS.getIndex());
@@ -30,9 +32,17 @@ public class BuzzTester {
 
         assertEquals(3, Category.MUSIC.getIndex());
         assertEquals("MUSIC", Category.MUSIC.getName());
+
+
+        assertEquals(Category.SPORTS, Category.getCategory(Category.SPORTS.getName()));
+        assertEquals(Category.HISTORY, Category.getCategory(Category.HISTORY.getName()));
+        assertEquals(Category.SCIENCE, Category.getCategory(Category.SCIENCE.getName()));
+        assertEquals(Category.MUSIC, Category.getCategory(Category.MUSIC.getName()));
+        assertEquals(null, Category.getCategory("Not a category name"));
     }
 
 
+    /***** Difficulty.java *****/
     @Test
     public void testDifficultyProperties() {
         assertEquals(5, Difficulty.EASY.getPoints());
@@ -41,6 +51,15 @@ public class BuzzTester {
     }
 
 
+    @Test public void testConvert() {
+        assertEquals(Difficulty.EASY, Difficulty.convert(Difficulty.EASY.toString()));
+        assertEquals(Difficulty.MEDIUM, Difficulty.convert(Difficulty.MEDIUM.toString()));
+        assertEquals(Difficulty.HARD, Difficulty.convert(Difficulty.HARD.toString()));
+        assertEquals(null, Difficulty.convert("not convertible"));
+    }
+
+
+    /***** Question.java *****/
     @Test
     public void testQuestionProperties() {
         Question question = getDefaultQuestion();
@@ -91,8 +110,9 @@ public class BuzzTester {
     }
 
 
+    /***** Player.java *****/
     @Test
-    public void testPlayer() {
+    public void testPlayerProperties() {
         Player player = new Player("Gamer");
 
         assertEquals("Gamer", player.getName());
@@ -100,6 +120,64 @@ public class BuzzTester {
 
         player.addPoints(50);
         assertEquals(50, player.getPoints());
+    }
+
+    @Test
+    public void testPlayerCompare() {
+        Player[] players = new Player[3];
+        players[0] = new Player("Player1");
+        players[1] = new Player("Player2");
+        players[2] = new Player("Player3");
+
+        players[0].addPoints(10);
+        players[2].addPoints(20);
+
+        assertTrue(players[0].compareTo(players[1]) > 0);   // Player 0 has more points than 1
+        assertTrue(players[0].compareTo(players[2]) < 0);   // Player 0 has less points than 2
+
+        players[0].addPoints(10);
+        assertTrue(players[0].compareTo(players[2]) == 0);  // Player 0 the same points as 2
+    }
+
+    @Test
+    public void testPlayerSorting() {
+        Player[] players = new Player[3];
+        players[0] = new Player("Player1");
+        players[1] = new Player("Player2");
+        players[2] = new Player("Player3");
+
+        players[0].addPoints(10);
+        players[2].addPoints(20);
+
+        Player[] clone = players.clone();
+
+        Arrays.sort(clone, Collections.<Player>reverseOrder());
+
+        assertEquals(clone[0], players[2]);
+        assertEquals(clone[1], players[0]);
+        assertEquals(clone[2], players[1]);
+    }
+
+
+    /***** Match.java *****/
+    @Test public void testMatchProperties() {
+        Player player = new Player("player");
+        ArrayList<Category> categoriesChosen = new ArrayList<Category>();
+        categoriesChosen.add(Category.MUSIC); categoriesChosen.add(Category.SPORTS);
+        Match match = new Match(2, categoriesChosen, Difficulty.MEDIUM, player);
+        Question question1 = match.getCurrentQuestion();
+
+        assertEquals(2, match.getTotalQuestions());
+        assertEquals(player, match.getPlayer());
+        assertEquals(0, match.getQuestionIndex());
+        assertTrue(match.isCorrect(question1.getCorrect()));
+        assertFalse(match.isCorrect(question1.getWrong().get(0)));
+
+        match.nextQuestion();
+        assertEquals(1, match.getQuestionIndex());
+
+        Question question2 = match.getCurrentQuestion();
+        assertNotEquals(question1, question2);
     }
 
 
@@ -124,7 +202,30 @@ public class BuzzTester {
         assertTrue(questionInCategories(match, categoriesChosen));
     }
 
+    @Test
+    public void testDifferentQuestions() {
+        Player player = new Player("player");
+        ArrayList<Category> categoriesChosen = new ArrayList<Category>();
+        categoriesChosen.add(Category.MUSIC); categoriesChosen.add(Category.SPORTS);
+        Match match = new Match(4, categoriesChosen, Difficulty.MEDIUM, player);
+        ArrayList<Question> questions = match.getQuestions();
+        boolean different = false;
 
+        outer_loop:
+        for (int i = 0; i < questions.size(); i++) {
+            for (int j = i + 1; j < questions.size(); j++) {
+                if (questions.get(i) == questions.get(j)) {
+                    different = true;
+                    break outer_loop;
+                }
+            }
+        }
+
+        assertFalse(different);
+    }
+
+
+    /***** Play.java *****/
     @Test
     public void testScrambleBounds() {
         for (int i = 0; i < 100; i++) {
@@ -166,6 +267,10 @@ public class BuzzTester {
         return true;
     }
 
+
+
+
+    /* Other functions */
     private boolean questionInCategories(Match match, ArrayList<Category> categories) {
         ArrayList<Question> questions = match.getQuestions();
 

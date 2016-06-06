@@ -16,11 +16,11 @@ import java.util.Random;
 
 
 public class Interactor {
+    private final String[] optionChars = {"A", "B", "C", "D"};
+    private Random rand;
 
     public final Color RightColor = Color.GREEN;
     public final Color WrongColor = Color.RED;
-
-    private final String[] optionChars = {"A", "B", "C", "D"};
 
     public Skin skin;
     public OptionButton[] btnOptions;
@@ -33,6 +33,8 @@ public class Interactor {
 
 
     public Interactor (Skin skin) {
+        rand = new Random();
+
         this.skin = skin;
 
         // Creating styles
@@ -138,7 +140,6 @@ public class Interactor {
     private Color generateColor() {
         final float minLuminance = 0f;
         final float maxLuminance = 0.65f;
-        Random rand = new Random();
 
         float r = rand.nextFloat();                         // Generate red
         float b = rand.nextFloat();                         // Generate blue

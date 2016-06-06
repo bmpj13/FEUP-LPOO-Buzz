@@ -40,11 +40,11 @@ public enum Category {
 
     /**
      * Gets the corresponding enum from a string
-     * @param cat string of category
+     * @param categoryName string of category
      * @return Enum of category
      */
-    static public Category getCategory(String cat){
-        switch(cat){
+    static public Category getCategory(String categoryName){
+        switch(categoryName) {
             case "SPORTS":
                 return SPORTS;
             case "HISTORY":
