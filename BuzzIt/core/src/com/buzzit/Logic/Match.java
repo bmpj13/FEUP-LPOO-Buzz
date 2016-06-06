@@ -1,5 +1,7 @@
 package com.buzzit.Logic;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.ArrayList;
 
 
@@ -30,12 +32,16 @@ public class Match {
      * @return true if player's answer is the same as correct; false if not
      */
     public boolean isCorrect(String answer) {
-        Question questions = this.questions.get(questionIndex);
-
-        if (questions.getCorrect().equals(answer))
+        Question question = this.questions.get(questionIndex);
+        Gdx.app.log("points", Integer.toString(player.getPoints()));
+        if (question.getCorrect().equals(answer)) {
+            Gdx.app.log("question", " got yes");
             return true;
-        else
+        }
+        else {
+            Gdx.app.log("question", " got no");
             return false;
+        }
     }
 
     /**
@@ -49,6 +55,14 @@ public class Match {
      */
     public void nextQuestion(){
         questionIndex++;
+    }
+
+    /**
+     * Takes points in case the player doesn't answer in time
+     */
+    public void unanswered(){
+        Question question = questions.get(questionIndex);
+        player.addPoints(-question.getDifficulty().getPoints());
     }
 
     /**

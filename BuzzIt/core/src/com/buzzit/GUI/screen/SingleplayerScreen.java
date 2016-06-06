@@ -251,6 +251,7 @@ public class SingleplayerScreen implements Screen {
             strat = new WaitingAnswer(interactor, SECONDS_TO_ANSWER);
         else if (strat instanceof WaitingAnswer) {
             strat = new Unanswered(interactor, -match.getCurrentQuestion().getDifficulty().getPoints());
+            match.unanswered();
             match.nextQuestion();
         }
         else if (strat instanceof Decision) {
