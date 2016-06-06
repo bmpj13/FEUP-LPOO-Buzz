@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.buzzit.Logic.Client;
 
 public class Multiplayer2ndScreen extends SuperScreen {
     ScreenState.ScreenType parentType;
@@ -161,11 +162,27 @@ public class Multiplayer2ndScreen extends SuperScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        updateReady();
+
+        tryUpdateReady();
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
         stage.draw();
+    }
+
+    private void tryUpdateReady() {
+        if(isAdmin()){
+            //Gdx.app.log("MULTI2SCREEN: ", "is Admin & is " + getAdminClient().isPlaying() + "playing");
+            if(!getAdminClient().isPlaying()){
+                updateReady();
+            }
+        } else {
+            //Gdx.app.log("MULTI2SCREEN: ", "is NOT Admin & is " + getClient().isPlaying() + "playing");
+            if(!getClient().isPlaying()){
+                updateReady();
+            }
+        }
     }
 
     @Override
@@ -210,7 +227,7 @@ public class Multiplayer2ndScreen extends SuperScreen {
     }
 
     public static void updateReady() {
-        if(Multiplayer1stScreen.getClient().isAdmin()){
+        if(isAdmin()){
             if (readyCheckBox.isChecked()) {
                 Multiplayer1stScreen.getServer().setAdminReady(true);
             }else {
@@ -224,10 +241,23 @@ public class Multiplayer2ndScreen extends SuperScreen {
             }
         }
 
-        if(Multiplayer1stScreen.getClient().isAdmin()){
-            Multiplayer1stScreen.getServer().getAdminClient().updateToServer(Multiplayer1stScreen.getSocket(), Gdx.graphics.getDeltaTime());
+        if(isAdmin()){
+            getAdminClient().updateToServer(Multiplayer1stScreen.getSocket(), Gdx.graphics.getDeltaTime());
         } else {
-            Multiplayer1stScreen.getClient().updateToServer(Multiplayer1stScreen.getSocket(), Gdx.graphics.getDeltaTime());
+            getClient().updateToServer(Multiplayer1stScreen.getSocket(), Gdx.graphics.getDeltaTime());
         }
     }
+
+    private static boolean isAdmin() {
+        return Multiplayer1stScreen.getClient().isAdmin();
+    }
+
+    private static Client getAdminClient(){
+        return Multiplayer1stScreen.getServer().getAdminClient();
+    }
+
+    private static Client getClient(){
+        return Multiplayer1stScreen.getClient();
+    }
 }
+
