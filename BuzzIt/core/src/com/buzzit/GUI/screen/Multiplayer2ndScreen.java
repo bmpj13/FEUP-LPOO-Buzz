@@ -21,8 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 public class Multiplayer2ndScreen extends SuperScreen {
-    private Stage stage;
+    ScreenState.ScreenType parentType;
 
+    private Stage stage;
     private Skin skin;
     private BitmapFont font;
     private FreeTypeFontGenerator generator;
@@ -34,9 +35,8 @@ public class Multiplayer2ndScreen extends SuperScreen {
     private Texture uncheckedBoxTexture;
     static private CheckBox readyCheckBox;
 
-    Multiplayer2ndScreen(Game g, ScreenState.ScreenType pType) {
+    Multiplayer2ndScreen(ScreenState.ScreenType pType) {
         create();
-        this.game = g;
         this.parentType = pType;
     }
 
@@ -162,7 +162,6 @@ public class Multiplayer2ndScreen extends SuperScreen {
     public void render(float delta) {
         super.render(delta);
         updateReady();
-        Multiplayer1stScreen.getClient().updateToServer(Multiplayer1stScreen.getSocket(), Gdx.graphics.getDeltaTime());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
@@ -211,10 +210,24 @@ public class Multiplayer2ndScreen extends SuperScreen {
     }
 
     public static void updateReady() {
-        if (readyCheckBox.isChecked()) {
-            Multiplayer1stScreen.getClient().setReady(true);
-        }else {
-            Multiplayer1stScreen.getClient().setReady(false);
+        if(Multiplayer1stScreen.getClient().isAdmin()){
+            if (readyCheckBox.isChecked()) {
+                Multiplayer1stScreen.getServer().setAdminReady(true);
+            }else {
+                Multiplayer1stScreen.getServer().setAdminReady(false);
+            }
+        } else {
+            if (readyCheckBox.isChecked()) {
+                Multiplayer1stScreen.getClient().setReady(true);
+            }else {
+                Multiplayer1stScreen.getClient().setReady(false);
+            }
+        }
+
+        if(Multiplayer1stScreen.getClient().isAdmin()){
+            Multiplayer1stScreen.getServer().getAdminClient().updateToServer(Multiplayer1stScreen.getSocket(), Gdx.graphics.getDeltaTime());
+        } else {
+            Multiplayer1stScreen.getClient().updateToServer(Multiplayer1stScreen.getSocket(), Gdx.graphics.getDeltaTime());
         }
     }
 }

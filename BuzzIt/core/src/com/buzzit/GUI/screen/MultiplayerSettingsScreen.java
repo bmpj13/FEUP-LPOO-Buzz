@@ -2,6 +2,7 @@ package com.buzzit.GUI.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -26,41 +27,46 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.buzzit.Logic.Category;
+import com.buzzit.Logic.Difficulty;
 
 import java.util.ArrayList;
 
 public class MultiplayerSettingsScreen extends SuperScreen {
-    private Stage stage;
+    ScreenState.ScreenType parentType;
 
+    /* Disposables */
+    private Stage stage;
     private Skin skin;
     private BitmapFont font;
     private FreeTypeFontGenerator generator;
     private Pixmap cursorPixmap;
     private Pixmap whitePixmap;
-    private Texture playTexture;
     private Texture cursorTexture;
     private Texture whiteTexture;
     private Texture checkedBoxTexture;
     private Texture uncheckedBoxTexture;
     private Texture categoriesBackgroundTexture;
+    private Texture playTexture;
+
+    /* Variables acessed by gameplay */
     static private ArrayList<CheckBox> checkBoxes;
     static private TextField numQuestionsTextField;
-    static private ArrayList<Label> checkBoxLabels;
+    static private SelectBox<Difficulty> difficultySelectBox;
 
-    MultiplayerSettingsScreen(Game g, ScreenState.ScreenType pType) {
+    MultiplayerSettingsScreen(ScreenState.ScreenType pType) {
         create();
-        this.game = g;
         this.parentType = pType;
     }
 
     @Override
     protected void create() {
-        super.create();
+        Gdx.input.setCatchBackKey(true);
 
         createSkin();
 
-        /* User name */
-        Label ConnectionLabel = new Label("CONNECTED!!", skin);
+        /* Title */
+        Label ConnectionLabel = new Label("Game Options!!", skin);
 
         /* Number of questions per game */
         Label numQuestionsLabel = new Label("Number of Questions", skin);
@@ -75,37 +81,34 @@ public class MultiplayerSettingsScreen extends SuperScreen {
         final int bigPad = Gdx.graphics.getHeight()/12;
 
         /* Categories wanted */
-        checkBoxLabels = new ArrayList<>();
-        checkBoxes = new ArrayList<>();
+        checkBoxes = new ArrayList<CheckBox>();
         Label categoriesLabel = new Label("Categories", skin);
-        Label categoryNameLabel = new Label("SPORTS", skin, "categoryName");
-        CheckBox checkBox1 = new CheckBox("", skin);
-        checkBoxes.add(checkBox1);
-        checkBoxLabels.add(categoriesLabel);
 
-        Table categoriesTable = new Table();
-        categoriesTable.add(categoryNameLabel).pad(smallPad, smallPad, 0, 0);
-        categoriesTable.add(checkBox1).pad(smallPad, smallPad, smallPad/2, smallPad);
-        categoriesTable.row();
 
-        categoryNameLabel = new Label("MUSIC", skin, "categoryName");
-        CheckBox checkBox2 = new CheckBox("", skin);
-        checkBoxes.add(checkBox2);
-        checkBoxLabels.add(categoryNameLabel);
-
-        categoriesTable.add(categoryNameLabel).pad(0, smallPad, smallPad, 0);
-        categoriesTable.add(checkBox2).pad(0, smallPad, smallPad, smallPad);
-
+        Table categoriesTable = new Table(skin);
         categoriesBackgroundTexture = new Texture(Gdx.files.internal("settings/categories_background.png"));
         NinePatch patch = new NinePatch(categoriesBackgroundTexture, 3, 3, 3, 3);
         categoriesTable.setBackground(new NinePatchDrawable(patch));
 
+        for (Category cat: Category.values()){
+            CheckBox checkBox = new CheckBox(cat.getName(), skin);
+            checkBox.getLabelCell().padLeft(smallPad);
+            checkBox.setChecked(true);
+            checkBoxes.add(checkBox);
+
+            categoriesTable.add(checkBox).pad(smallPad, smallPad, smallPad/2, smallPad).align(Align.left).padBottom(10);
+            categoriesTable.row();
+        }
+        categoriesTable.padBottom(smallPad);
+
+        ScrollPane.ScrollPaneStyle paneStyle = new ScrollPane.ScrollPaneStyle();
+        ScrollPane scrollPane = new ScrollPane(categoriesTable, paneStyle);
+        scrollPane.layout();
 
         /* Difficulty */
         Label difficultyLabel = new Label("Difficulty", skin);
-        String[] s = new String[] {"William Homo", "Joao Giro"};
-        SelectBox<String> difficultySelectBox = new SelectBox<String>(skin);
-        difficultySelectBox.setItems(s);
+        difficultySelectBox = new SelectBox<Difficulty>(skin);
+        difficultySelectBox.setItems(Difficulty.values());
 
         /* next button */
         playTexture = new Texture(Gdx.files.internal("menu/play.png"));
@@ -121,7 +124,7 @@ public class MultiplayerSettingsScreen extends SuperScreen {
         table.add(numQuestionsTextField).padBottom(bigPad).row();
 
         table.add(categoriesLabel).padBottom(smallPad).row();
-        table.add(categoriesTable).padBottom(bigPad).row();
+        table.add(scrollPane).height(600).padBottom(bigPad).row();
 
         table.add(difficultyLabel).padBottom(smallPad).row();
         table.add(difficultySelectBox).row();
@@ -147,7 +150,6 @@ public class MultiplayerSettingsScreen extends SuperScreen {
 
     private void createSkin() {
         skin = new Skin();
-
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/good_times.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -205,6 +207,7 @@ public class MultiplayerSettingsScreen extends SuperScreen {
         listStyle.fontColorUnselected = Color.CORAL;
         listStyle.fontColorSelected = Color.BLUE;
         listStyle.selection = skin.newDrawable("whiteBackground");
+        listStyle.background = skin.newDrawable("whiteBackground");
 
         ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
 
@@ -233,8 +236,13 @@ public class MultiplayerSettingsScreen extends SuperScreen {
      */
     @Override
     public void render(float delta) {
-        super.render(delta);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            if (parentType != null) {
+                ScreenState.getInstance().changeState(parentType);
+            }
+        }
 
         stage.act();
         stage.draw();
@@ -268,10 +276,10 @@ public class MultiplayerSettingsScreen extends SuperScreen {
      */
     @Override
     public void dispose() {
-        super.dispose();
         skin.dispose();
         font.dispose();
         stage.dispose();
+        playTexture.dispose();
         cursorPixmap.dispose();
         cursorTexture.dispose();
         whitePixmap.dispose();
@@ -282,24 +290,17 @@ public class MultiplayerSettingsScreen extends SuperScreen {
         generator.dispose();
     }
 
-    public static ArrayList<String> getCategories(){
-        ArrayList<String> c = new ArrayList<>();
-        Gdx.app.log("getCategories", "before loop");
-        for(int i = 0; i < checkBoxes.size(); i++){
-            if(checkBoxes.get(i).isChecked()){
-                c.add(checkBoxLabels.get(i).getText().toString());
-            }
+    public static ArrayList<Category> getCategories(){
+        ArrayList<Category> c = new ArrayList<Category>();
+        for(CheckBox box: checkBoxes){
+            if(box.isChecked())
+                c.add(Category.getCategory(box.getText().toString()));
         }
-        if(c.get(0).toString().equals("")){
-            Gdx.app.log("UEUEUEUEUEUEUEUEUE", "empty");
-        }
-
-        Gdx.app.log("arraysize to return", Integer.toString(c.size()));
-        Gdx.app.log("arrayCategory", c.get(0).toString());
         return c;
     }
 
     public static int getNumQuestions(){
         return Integer.parseInt(numQuestionsTextField.getText().toString());
     }
+
 }

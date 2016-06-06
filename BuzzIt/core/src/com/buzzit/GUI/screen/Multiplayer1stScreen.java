@@ -32,14 +32,15 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class Multiplayer1stScreen extends SuperScreen {
-    private Stage stage;
+    ScreenState.ScreenType parentType;
 
     private static Socket socket;
-    private Player player;
+    private static Player player;
     private static Client client;
-    private Server server;
+    private static Server server;
     private String id;
 
+    private Stage stage;
     private Skin skin;
     private BitmapFont font;
     private FreeTypeFontGenerator generator;
@@ -50,14 +51,15 @@ public class Multiplayer1stScreen extends SuperScreen {
     private Texture connectTexture;
     static private TextField serverTextField;
 
-    Multiplayer1stScreen(Game g, ScreenState.ScreenType pType) {
+    Multiplayer1stScreen(ScreenState.ScreenType pType) {
         create();
-        this.game = g;
         this.parentType = pType;
     }
 
     @Override
     protected void create() {
+        Gdx.input.setCatchBackKey(true);
+
         super.create();
 
         createSkin();
@@ -132,7 +134,7 @@ public class Multiplayer1stScreen extends SuperScreen {
                     Gdx.app.log("SocketIO", "Error getting ID");
                 }
             }
-        }).on("isPlayer1", new Emitter.Listener() {
+        }).on("welcomingStep", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONObject data = (JSONObject) args[0];
@@ -141,10 +143,9 @@ public class Multiplayer1stScreen extends SuperScreen {
                     nPlayers = data.getString("n");
                     int i = Integer.parseInt(nPlayers);
                     Gdx.app.log("Number of Players", nPlayers);
-                    player = new Player(SettingsScreen.getName());
                     if(i == 1){
                         server = new Server();
-                        client = new Client(server, player, id);
+                        //client = new Client(server, player, id);
 
                         ScreenState.getInstance().changeState(ScreenState.ScreenType.MULTIPLAYERSETTINGS);
                     } else {
@@ -260,6 +261,7 @@ public class Multiplayer1stScreen extends SuperScreen {
         skin.dispose();
         font.dispose();
         stage.dispose();
+        connectTexture.dispose();
         cursorPixmap.dispose();
         cursorTexture.dispose();
         whitePixmap.dispose();
@@ -277,5 +279,13 @@ public class Multiplayer1stScreen extends SuperScreen {
 
     public static Client getClient() {
         return client;
+    }
+
+    public static void setClient(Client adminClient) {
+        client = adminClient;
+    }
+
+    public static Server getServer() {
+        return server;
     }
 }
