@@ -8,46 +8,44 @@ var players = [];
 var question;
 var answerOptions;
 
-server.listen(8080,function(){
+server.listen(8080, function(){
 	console.log("Server is now running...")
 });
 
 io.on('connection' , function(socket){
     clients = clients+1;
 
-    if(clients == 1){
-        server.close();
-    }
-
 	console.log("Player Connected!");
 
 	socket.emit('socketID',{ id: socket.id })
-	socket.emit('getPlayers', { id: socket.id })
-	socket.emit('isPlayer1', { n: clients });
 
-	socket.broadcast.emit('newPlayer', { id: socket.id });
+	socket.emit('welcomingStep', { n: clients });
 
-    if(clients == 1){
-        server.listen(8080);
+	if(clients == 1){
+        socket.emit('playerOne', { id: socket.id })
+    } else {
+	    socket.broadcast.emit('newPlayer', { id: socket.id });
     }
 
     socket.on('playerIsReady', function(data){
         data.id = socket.id;
-        socket.broadcast.emit('playerIsReady', data);
-
-        console.log("player " + data.id + " is " + data.isReady + " ready")
 
         for(var i=0; i<players.length; i++){
             if(players[i].id == data.id){
                 players[i].isReady = data.isReady;
             }
         }
+
+        io.sockets.emit('playerIsReady', data);
+        socket.broadcast.emit('playerIsReady', data);
+
+        console.log("player " + data.id + " is " + data.isReady + " ready")
     });
 
 	socket.on('disconnect', function(){
         clients = clients-1;
 		console.log("Player Disconnected");
-		socket.broadcast.emit('playerDisconnected', { id: socket.id });
+		io.sockets.emit('playerDisconnected', { id: socket.id });
 		for(var i=0; i<players.length; i++){
 		    if(players[i].id == socket.id){
 		        players.splice(i, 1);
