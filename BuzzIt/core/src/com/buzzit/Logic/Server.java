@@ -99,17 +99,22 @@ public class Server {
     }
 
     public void tryStart(){
-
+        /*
         for(HashMap.Entry<String, Client> entry : clients.entrySet()){
             Gdx.app.log("SERVER", "Player " + entry.getKey() + " is ready? " + entry.getValue().isReady());
         }
-
+        */
         if(canStart()){
+            isPlaying = true;
+
             for(HashMap.Entry<String, Client> entry : clients.entrySet()){
                 entry.getValue().setReady(false);
             }
+
             Gdx.app.log("SERVER", "Can Start the Game!! :D");
-            this.isPlaying = true;
+
+            adminClient.setIsPlaying(true);
+            startGame();
         }
     }
 
@@ -122,6 +127,17 @@ public class Server {
         }
         Gdx.app.log("SERVER", "Both ready!");
         return true;
+    }
+
+    private void startGame() {
+        JSONObject data = new JSONObject();
+        try{
+            Gdx.app.log("SERVER", "giving updateReady a rest");
+            data.put("playing", "playing");
+            Multiplayer1stScreen.getSocket().emit("gameStart", data);
+        } catch(JSONException e){
+            Gdx.app.log("SOCKET.IO", "Error sending updated data");
+        }
     }
 
     public void addClient(Client client){
