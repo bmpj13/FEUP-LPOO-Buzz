@@ -1,7 +1,5 @@
 package logic;
 
-import com.buzzit.Logic.*;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -15,54 +13,54 @@ import java.util.Collections;
 public class BuzzTester {
     private final String defaultQuestion = "Question?";
     private final String defaultCorrect  = "This is correct";
-    private final Difficulty defaultDifficulty = Difficulty.MEDIUM;
-    private final Category defaultCategory = Category.HISTORY;
+    private final com.buzzit.logic.Difficulty defaultDifficulty = com.buzzit.logic.Difficulty.MEDIUM;
+    private final com.buzzit.logic.Category defaultCategory = com.buzzit.logic.Category.HISTORY;
 
     /***** Category.java *****/
     @Test
     public void testCategoryProperties() {
-        assertEquals(0, Category.SPORTS.getIndex());
-        assertEquals("SPORTS", Category.SPORTS.getName());
+        assertEquals(0, com.buzzit.logic.Category.SPORTS.getIndex());
+        assertEquals("SPORTS", com.buzzit.logic.Category.SPORTS.getName());
 
-        assertEquals(1, Category.HISTORY.getIndex());
-        assertEquals("HISTORY", Category.HISTORY.getName());
+        assertEquals(1, com.buzzit.logic.Category.HISTORY.getIndex());
+        assertEquals("HISTORY", com.buzzit.logic.Category.HISTORY.getName());
 
-        assertEquals(2, Category.SCIENCE.getIndex());
-        assertEquals("SCIENCE", Category.SCIENCE.getName());
+        assertEquals(2, com.buzzit.logic.Category.SCIENCE.getIndex());
+        assertEquals("SCIENCE", com.buzzit.logic.Category.SCIENCE.getName());
 
-        assertEquals(3, Category.MUSIC.getIndex());
-        assertEquals("MUSIC", Category.MUSIC.getName());
+        assertEquals(3, com.buzzit.logic.Category.MUSIC.getIndex());
+        assertEquals("MUSIC", com.buzzit.logic.Category.MUSIC.getName());
 
 
-        assertEquals(Category.SPORTS, Category.getCategory(Category.SPORTS.getName()));
-        assertEquals(Category.HISTORY, Category.getCategory(Category.HISTORY.getName()));
-        assertEquals(Category.SCIENCE, Category.getCategory(Category.SCIENCE.getName()));
-        assertEquals(Category.MUSIC, Category.getCategory(Category.MUSIC.getName()));
-        assertEquals(null, Category.getCategory("Not a category name"));
+        assertEquals(com.buzzit.logic.Category.SPORTS, com.buzzit.logic.Category.getCategory(com.buzzit.logic.Category.SPORTS.getName()));
+        assertEquals(com.buzzit.logic.Category.HISTORY, com.buzzit.logic.Category.getCategory(com.buzzit.logic.Category.HISTORY.getName()));
+        assertEquals(com.buzzit.logic.Category.SCIENCE, com.buzzit.logic.Category.getCategory(com.buzzit.logic.Category.SCIENCE.getName()));
+        assertEquals(com.buzzit.logic.Category.MUSIC, com.buzzit.logic.Category.getCategory(com.buzzit.logic.Category.MUSIC.getName()));
+        assertEquals(null, com.buzzit.logic.Category.getCategory("Not a category name"));
     }
 
 
     /***** Difficulty.java *****/
     @Test
     public void testDifficultyProperties() {
-        assertEquals(5, Difficulty.EASY.getPoints());
-        assertEquals(10, Difficulty.MEDIUM.getPoints());
-        assertEquals(20, Difficulty.HARD.getPoints());
+        assertEquals(5, com.buzzit.logic.Difficulty.EASY.getPoints());
+        assertEquals(10, com.buzzit.logic.Difficulty.MEDIUM.getPoints());
+        assertEquals(20, com.buzzit.logic.Difficulty.HARD.getPoints());
     }
 
 
     @Test public void testConvert() {
-        assertEquals(Difficulty.EASY, Difficulty.convert(Difficulty.EASY.toString()));
-        assertEquals(Difficulty.MEDIUM, Difficulty.convert(Difficulty.MEDIUM.toString()));
-        assertEquals(Difficulty.HARD, Difficulty.convert(Difficulty.HARD.toString()));
-        assertEquals(null, Difficulty.convert("not convertible"));
+        assertEquals(com.buzzit.logic.Difficulty.EASY, com.buzzit.logic.Difficulty.convert(com.buzzit.logic.Difficulty.EASY.toString()));
+        assertEquals(com.buzzit.logic.Difficulty.MEDIUM, com.buzzit.logic.Difficulty.convert(com.buzzit.logic.Difficulty.MEDIUM.toString()));
+        assertEquals(com.buzzit.logic.Difficulty.HARD, com.buzzit.logic.Difficulty.convert(com.buzzit.logic.Difficulty.HARD.toString()));
+        assertEquals(null, com.buzzit.logic.Difficulty.convert("not convertible"));
     }
 
 
     /***** Question.java *****/
     @Test
     public void testQuestionProperties() {
-        Question question = getDefaultQuestion();
+        com.buzzit.logic.Question question = getDefaultQuestion();
 
         assertEquals(defaultQuestion, question.getQuestion());
         assertEquals(defaultCorrect, question.getCorrect());
@@ -78,7 +76,7 @@ public class BuzzTester {
 
     @Test
     public void testOptionsUnrepeated() {
-        Question question = getDefaultQuestion();
+        com.buzzit.logic.Question question = getDefaultQuestion();
         String[] options = question.generateOptions();
 
         for (int i = 0; i < options.length; i++) {
@@ -92,7 +90,7 @@ public class BuzzTester {
     @Test
     public void testOptionsRandomized() {
         // Generate options enough times, to verify that not a option is not always in the same index
-        Question question = getDefaultQuestion();
+        com.buzzit.logic.Question question = getDefaultQuestion();
         String[] options = question.generateOptions();
         String testString = options[0];
         boolean different = false;
@@ -113,7 +111,7 @@ public class BuzzTester {
     /***** Player.java *****/
     @Test
     public void testPlayerProperties() {
-        Player player = new Player("Gamer");
+        com.buzzit.logic.Player player = new com.buzzit.logic.Player("Gamer");
 
         assertEquals("Gamer", player.getName());
         assertEquals(0, player.getPoints());
@@ -124,10 +122,10 @@ public class BuzzTester {
 
     @Test
     public void testPlayerCompare() {
-        Player[] players = new Player[3];
-        players[0] = new Player("Player1");
-        players[1] = new Player("Player2");
-        players[2] = new Player("Player3");
+        com.buzzit.logic.Player[] players = new com.buzzit.logic.Player[3];
+        players[0] = new com.buzzit.logic.Player("Player1");
+        players[1] = new com.buzzit.logic.Player("Player2");
+        players[2] = new com.buzzit.logic.Player("Player3");
 
         players[0].addPoints(10);
         players[2].addPoints(20);
@@ -141,17 +139,17 @@ public class BuzzTester {
 
     @Test
     public void testPlayerSorting() {
-        Player[] players = new Player[3];
-        players[0] = new Player("Player1");
-        players[1] = new Player("Player2");
-        players[2] = new Player("Player3");
+        com.buzzit.logic.Player[] players = new com.buzzit.logic.Player[3];
+        players[0] = new com.buzzit.logic.Player("Player1");
+        players[1] = new com.buzzit.logic.Player("Player2");
+        players[2] = new com.buzzit.logic.Player("Player3");
 
         players[0].addPoints(10);
         players[2].addPoints(20);
 
-        Player[] clone = players.clone();
+        com.buzzit.logic.Player[] clone = players.clone();
 
-        Arrays.sort(clone, Collections.<Player>reverseOrder());
+        Arrays.sort(clone, Collections.<com.buzzit.logic.Player>reverseOrder());
 
         assertEquals(clone[0], players[2]);
         assertEquals(clone[1], players[0]);
@@ -161,11 +159,11 @@ public class BuzzTester {
 
     /***** Match.java *****/
     @Test public void testMatchProperties() {
-        Player player = new Player("player");
-        ArrayList<Category> categoriesChosen = new ArrayList<Category>();
-        categoriesChosen.add(Category.MUSIC); categoriesChosen.add(Category.SPORTS);
-        Match match = new Match(2, categoriesChosen, Difficulty.MEDIUM, player);
-        Question question1 = match.getCurrentQuestion();
+        com.buzzit.logic.Player player = new com.buzzit.logic.Player("player");
+        ArrayList<com.buzzit.logic.Category> categoriesChosen = new ArrayList<com.buzzit.logic.Category>();
+        categoriesChosen.add(com.buzzit.logic.Category.MUSIC); categoriesChosen.add(com.buzzit.logic.Category.SPORTS);
+        com.buzzit.logic.Match match = new com.buzzit.logic.Match(2, categoriesChosen, com.buzzit.logic.Difficulty.MEDIUM, player);
+        com.buzzit.logic.Question question1 = match.getCurrentQuestion();
 
         assertEquals(2, match.getTotalQuestions());
         assertEquals(player, match.getPlayer());
@@ -176,39 +174,39 @@ public class BuzzTester {
         match.nextQuestion();
         assertEquals(1, match.getQuestionIndex());
 
-        Question question2 = match.getCurrentQuestion();
+        com.buzzit.logic.Question question2 = match.getCurrentQuestion();
         assertNotEquals(question1, question2);
     }
 
 
     @Test
     public void testMatchCategoriesChosen() {
-        Player player = new Player("player");
-        ArrayList<Category> categoriesChosen = new ArrayList<Category>();
+        com.buzzit.logic.Player player = new com.buzzit.logic.Player("player");
+        ArrayList<com.buzzit.logic.Category> categoriesChosen = new ArrayList<com.buzzit.logic.Category>();
 
         // One category
-        categoriesChosen.add(Category.HISTORY);
-        Match match = new Match(2, categoriesChosen, Difficulty.MEDIUM, player);
+        categoriesChosen.add(com.buzzit.logic.Category.HISTORY);
+        com.buzzit.logic.Match match = new com.buzzit.logic.Match(2, categoriesChosen, com.buzzit.logic.Difficulty.MEDIUM, player);
         assertTrue(questionInCategories(match, categoriesChosen));
 
         // Two categories
-        categoriesChosen.add(Category.SPORTS);
-        match = new Match(4, categoriesChosen, Difficulty.MEDIUM, player);
+        categoriesChosen.add(com.buzzit.logic.Category.SPORTS);
+        match = new com.buzzit.logic.Match(4, categoriesChosen, com.buzzit.logic.Difficulty.MEDIUM, player);
         assertTrue(questionInCategories(match, categoriesChosen));
 
         // Three categories
-        categoriesChosen.add(Category.MUSIC);
-        match = new Match(4, categoriesChosen, Difficulty.MEDIUM, player);
+        categoriesChosen.add(com.buzzit.logic.Category.MUSIC);
+        match = new com.buzzit.logic.Match(4, categoriesChosen, com.buzzit.logic.Difficulty.MEDIUM, player);
         assertTrue(questionInCategories(match, categoriesChosen));
     }
 
     @Test
     public void testDifferentQuestions() {
-        Player player = new Player("player");
-        ArrayList<Category> categoriesChosen = new ArrayList<Category>();
-        categoriesChosen.add(Category.MUSIC); categoriesChosen.add(Category.SPORTS);
-        Match match = new Match(4, categoriesChosen, Difficulty.MEDIUM, player);
-        ArrayList<Question> questions = match.getQuestions();
+        com.buzzit.logic.Player player = new com.buzzit.logic.Player("player");
+        ArrayList<com.buzzit.logic.Category> categoriesChosen = new ArrayList<com.buzzit.logic.Category>();
+        categoriesChosen.add(com.buzzit.logic.Category.MUSIC); categoriesChosen.add(com.buzzit.logic.Category.SPORTS);
+        com.buzzit.logic.Match match = new com.buzzit.logic.Match(4, categoriesChosen, com.buzzit.logic.Difficulty.MEDIUM, player);
+        ArrayList<com.buzzit.logic.Question> questions = match.getQuestions();
         boolean different = false;
 
         outer_loop:
@@ -229,7 +227,7 @@ public class BuzzTester {
     @Test
     public void testScrambleBounds() {
         for (int i = 0; i < 100; i++) {
-            ArrayList<Integer> shuffled = Play.scramble(i);
+            ArrayList<Integer> shuffled = com.buzzit.logic.Play.scramble(i);
             assertTrue(inBounds(shuffled));
         }
     }
@@ -237,11 +235,11 @@ public class BuzzTester {
     @Test
     public void testScrambleRandomized() {
         boolean different = false;
-        ArrayList<Integer> shuffled = Play.scramble(100);
+        ArrayList<Integer> shuffled = com.buzzit.logic.Play.scramble(100);
         int testNumber = shuffled.get(0);
 
         for (int i = 0; i < 300; i++) {
-            shuffled = Play.scramble(100);
+            shuffled = com.buzzit.logic.Play.scramble(100);
 
             if (testNumber != shuffled.get(i)) {
                 different = true;
@@ -271,10 +269,10 @@ public class BuzzTester {
 
 
     /* Other functions */
-    private boolean questionInCategories(Match match, ArrayList<Category> categories) {
-        ArrayList<Question> questions = match.getQuestions();
+    private boolean questionInCategories(com.buzzit.logic.Match match, ArrayList<com.buzzit.logic.Category> categories) {
+        ArrayList<com.buzzit.logic.Question> questions = match.getQuestions();
 
-        for (Question q : questions) {
+        for (com.buzzit.logic.Question q : questions) {
             int i = 0;
             for (i = 0; i < categories.size(); i++) {
                 if (q.getCategory() == categories.get(i)) {
@@ -289,12 +287,12 @@ public class BuzzTester {
         return true;
     }
 
-    private Question getDefaultQuestion() {
+    private com.buzzit.logic.Question getDefaultQuestion() {
         ArrayList<String> wrong = new ArrayList<String>();
         wrong.add("This is wrong1");
         wrong.add("This is wrong2");
         wrong.add("This is wrong3");
 
-        return new Question(defaultQuestion, wrong, defaultCorrect, defaultDifficulty, defaultCategory);
+        return new com.buzzit.logic.Question(defaultQuestion, wrong, defaultCorrect, defaultDifficulty, defaultCategory);
     }
 }

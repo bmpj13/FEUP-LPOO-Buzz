@@ -1,4 +1,4 @@
-package com.buzzit.GUI.state;
+package com.buzzit.gui.state;
 
 public interface GameStrategy {
     void start();

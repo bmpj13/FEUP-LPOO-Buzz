@@ -1,4 +1,4 @@
-package com.buzzit.Logic;
+package com.buzzit.logic;
 
 
 public enum Difficulty {

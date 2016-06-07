@@ -1,4 +1,4 @@
-package com.buzzit.GUI;
+package com.buzzit.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;

@@ -1,13 +1,11 @@
-package com.buzzit.Logic;
-
-import com.badlogic.gdx.Gdx;
+package com.buzzit.logic;
 
 import java.util.ArrayList;
 
 
 public class Match {
 
-    private ArrayList<Question> questions;
+    private ArrayList<com.buzzit.logic.Question> questions;
     private int questionIndex;
     private int totalQuestions;
     private Player player;
@@ -33,18 +31,14 @@ public class Match {
      */
     public boolean isCorrect(String answer) {
         Question question = this.questions.get(questionIndex);
-
-        if (question.getCorrect().equals(answer))
-            return true;
-        else
-            return false;
+        return question.getCorrect().equals(answer);
     }
 
     /**
      * Gets current question
      * @return Question from ArrayList
      */
-    public Question getCurrentQuestion(){return questions.get(questionIndex);}
+    public com.buzzit.logic.Question getCurrentQuestion(){return questions.get(questionIndex);}
 
     /**
      * Sets index to next Question
@@ -57,7 +51,7 @@ public class Match {
      * Takes points in case the player doesn't answer in time
      */
     public void unanswered(){
-        Question question = questions.get(questionIndex);
+        com.buzzit.logic.Question question = questions.get(questionIndex);
         player.addPoints(-question.getDifficulty().getPoints());
     }
 
@@ -65,7 +59,7 @@ public class Match {
      *
      * @return Returns all questions in ArrayList
      */
-    public ArrayList<Question> getQuestions() {
+    public ArrayList<com.buzzit.logic.Question> getQuestions() {
         return questions;
     }
 

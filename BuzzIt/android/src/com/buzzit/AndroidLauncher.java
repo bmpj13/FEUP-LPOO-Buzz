@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.buzzit.GUI.BuzzIt;
+import com.buzzit.gui.BuzzIt;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override

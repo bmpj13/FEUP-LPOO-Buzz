@@ -1,10 +1,7 @@
-package com.buzzit.GUI;
+package com.buzzit.gui;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-
-import java.util.Random;
 
 public class OptionButton extends TextButton {
     private String prefix;
@@ -35,21 +32,12 @@ public class OptionButton extends TextButton {
         return content;
     }
 
-
-    public Color getUncheckedColor() {
-        return uncheckedColor;
-    }
-
     public Color getCheckedColor() {
         return checkedColor;
     }
 
     public void setUncheckedColor(Color uncheckedColor) {
         this.uncheckedColor = uncheckedColor;
-    }
-
-    public void setCheckedColor(Color checkedColor) {
-        this.checkedColor = checkedColor;
     }
 
     public TextButtonStyle getButtonStyle() {

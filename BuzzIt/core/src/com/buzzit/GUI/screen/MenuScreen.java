@@ -1,13 +1,11 @@
-package com.buzzit.GUI.screen;
+package com.buzzit.gui.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g3d.shaders.BaseShader;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -24,15 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.buzzit.GUI.AnimatedDrawable;
-import com.buzzit.GUI.AudioManager;
-import com.buzzit.Logic.Play;
+import com.buzzit.gui.AudioManager;
+import com.buzzit.logic.Play;
 
 import de.tomgrill.gdxdialogs.core.GDXDialogs;
 import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
@@ -90,12 +81,12 @@ public class MenuScreen implements Screen {
 
         settingsAtlas = new TextureAtlas(Gdx.files.internal("packs/settings/settings.pack"));
         Animation settingsAnimation = new Animation(1f/20f, settingsAtlas.getRegions());
-        AnimatedDrawable animatedDrawable = new AnimatedDrawable(settingsAnimation);
+        com.buzzit.gui.AnimatedDrawable animatedDrawable = new com.buzzit.gui.AnimatedDrawable(settingsAnimation);
         ImageButton btnSettings = new ImageButton(animatedDrawable, animatedDrawable);
 
         highscoreAtlas = new TextureAtlas(Gdx.files.internal("packs/highscore/highscore.pack"));
         Animation highscoreAnimation = new Animation(1f/20f, highscoreAtlas.getRegions());
-        animatedDrawable = new AnimatedDrawable(highscoreAnimation);
+        animatedDrawable = new com.buzzit.gui.AnimatedDrawable(highscoreAnimation);
         ImageButton btnHighscore = new ImageButton(animatedDrawable, animatedDrawable);
 
         /*** Creating stage ***/
@@ -116,7 +107,7 @@ public class MenuScreen implements Screen {
         backgroundTexture = new Texture(Gdx.files.internal("menu/background.jpg"));
         buttonsTable.background(new SpriteDrawable(new Sprite(backgroundTexture)));
 
-        stage = new Stage(new FitViewport(WIDTH, HEIGHT));
+        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
         stage.addActor(buttonsTable);
 
 
@@ -132,7 +123,7 @@ public class MenuScreen implements Screen {
                 }
                 else {
                     if(SettingsScreen.getNumQuestions() == 0)
-                        impossibleQuestionsDialog.setMessage("You have to answer at least 1 question to play");
+                        impossibleQuestionsDialog.setMessage("You must have questions!");
                     else impossibleQuestionsDialog.setMessage("We don't have that many questions for you");
                     impossibleQuestionsDialog.build().show();
                 }
@@ -229,6 +220,7 @@ public class MenuScreen implements Screen {
         settingsAtlas.dispose();
         highscoreAtlas.dispose();
         font.dispose();
+        generator.dispose();
     }
 
     @Override

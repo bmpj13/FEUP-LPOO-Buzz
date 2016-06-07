@@ -1,11 +1,8 @@
-package com.buzzit.GUI.state;
-
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.buzzit.GUI.Interactor;
+package com.buzzit.gui.state;
 
 public class Unanswered extends Decision {
 
-    public Unanswered(final Interactor interactor, final int pointsToAdd) {
+    public Unanswered(final com.buzzit.gui.Interactor interactor, final int pointsToAdd) {
         super(interactor, pointsToAdd);
     }
 

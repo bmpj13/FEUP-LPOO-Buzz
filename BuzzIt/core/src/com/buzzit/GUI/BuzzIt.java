@@ -1,14 +1,13 @@
-package com.buzzit.GUI;
+package com.buzzit.gui;
 
 import com.badlogic.gdx.Game;
-import com.buzzit.GUI.screen.*;
 
 public class BuzzIt extends Game {
 	
 	@Override
 	public void create () {
-		ScreenState.getInstance().setGame(this);
-		ScreenState.getInstance().changeState(ScreenState.ScreenType.MENU);
+		com.buzzit.gui.screen.ScreenState.getInstance().setGame(this);
+		com.buzzit.gui.screen.ScreenState.getInstance().changeState(com.buzzit.gui.screen.ScreenState.ScreenType.MENU);
 	}
 
 	@Override

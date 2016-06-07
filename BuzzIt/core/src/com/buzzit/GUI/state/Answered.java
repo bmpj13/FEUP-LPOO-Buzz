@@ -1,12 +1,11 @@
-package com.buzzit.GUI.state;
+package com.buzzit.gui.state;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Timer;
-import com.buzzit.GUI.Interactor;
-import com.buzzit.GUI.OptionButton;
+import com.buzzit.gui.Interactor;
+import com.buzzit.gui.OptionButton;
 
-public class Answered extends Decision implements GameStrategy {
+public class Answered extends Decision implements com.buzzit.gui.state.GameStrategy {
     private Interactor interactor;
     private OptionButton button;
     private int timerTicksCount;

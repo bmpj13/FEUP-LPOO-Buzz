@@ -1,9 +1,8 @@
-package com.buzzit.GUI.state;
+package com.buzzit.gui.state;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
-import com.buzzit.GUI.AudioManager;
-import com.buzzit.GUI.Interactor;
+import com.buzzit.gui.AudioManager;
+import com.buzzit.gui.Interactor;
 
 
 public class WaitingAnswer implements GameStrategy {

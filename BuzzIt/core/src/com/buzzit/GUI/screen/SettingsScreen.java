@@ -1,15 +1,12 @@
-package com.buzzit.GUI.screen;
+package com.buzzit.gui.screen;
 
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -18,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -26,9 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -36,15 +30,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.buzzit.GUI.AudioManager;
-import com.buzzit.Logic.Category;
-import com.buzzit.Logic.Difficulty;
-import com.buzzit.Logic.Play;
+import com.buzzit.gui.AudioManager;
+import com.buzzit.logic.Category;
+import com.buzzit.logic.Difficulty;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SettingsScreen implements Screen {
     ScreenState.ScreenType parentType;
@@ -66,7 +57,6 @@ public class SettingsScreen implements Screen {
     private Texture checkedBoxTexture;
     private Texture uncheckedBoxTexture;
     private Texture categoriesBackgroundTexture;
-    private Texture sliderTexture;
 
     /* Variables acessed by gameplay */
     static private ArrayList<CheckBox> checkBoxes;
@@ -326,15 +316,14 @@ public class SettingsScreen implements Screen {
      */
     public static ArrayList<Category> getCategories(){
         ArrayList<Category> c = new ArrayList<>();
-        for(CheckBox box: checkBoxes){
+        for (CheckBox box: checkBoxes) {
             if(box.isChecked())
                 c.add(Category.getCategory(box.getText().toString()));
         }
-        if(c.isEmpty()){
-            for(Category cat: Category.values()){
-                c.add(cat);
-            }
+        if (c.isEmpty()) {
+            c.addAll(Arrays.asList(Category.values()));
         }
+
         return c;
     }
 
