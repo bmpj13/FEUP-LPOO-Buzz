@@ -9,15 +9,20 @@ import com.buzzit.GUI.screen.SettingsScreen;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-//import java.util.Map;
 
+import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+
+//import java.util.Map;
+//sorry nao deu, ele nao reconheceu o client
 
 /**
  * Created by Rui Oliveira on 05/06/2016.
  */
 public class Server {
+    private Socket socket;
     private String id;
     private Client adminClient;
 
@@ -30,13 +35,14 @@ public class Server {
     private GameState gameState;
 
     public Server(){
+        this.socket = Multiplayer1stScreen.getSocket();
         Gdx.app.log("Server", "Creating server...");
         clients = new HashMap<>();
         serverSocketEventListener();
     }
 
     public void serverSocketEventListener(){
-        Multiplayer1stScreen.getSocket().on("newPlayer", new Emitter.Listener() {
+        socket.on("newPlayer", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 numPlayers++;
@@ -102,7 +108,7 @@ public class Server {
                             tryStart();
                         }
                     } catch (JSONException e) {
-                        Gdx.app.log("SERVER", "Error sending 'readyness'");
+                        Gdx.app.log("SERVER", "Error getting 'readyness'");
                     }
                 }
             }
@@ -122,7 +128,7 @@ public class Server {
                 entry.getValue().setReady(false);
             }
 
-            Gdx.app.log("SERVER", "Can Start the Game!! :D");
+            //Gdx.app.log("SERVER", "Can Start the Game!! :D");
 
             adminClient.setIsPlaying(true);
             startGame();
@@ -130,49 +136,49 @@ public class Server {
     }
 
     public boolean canStart(){
-        if(numPlayers < 1) {
+        if(numPlayers <= 1) {
             Gdx.app.log("SERVER", "Not enough players!");
             return false;
         }
 
         for(HashMap.Entry<String, Client> entry : clients.entrySet()){
             if(!entry.getValue().isReady()) {
-                Gdx.app.log("SERVER", "Both **NOT** ready!");
+                //Gdx.app.log("SERVER", "Both **NOT** ready!");
                 return false;
             }
         }
-        Gdx.app.log("SERVER", "Both ready!");
+        //Gdx.app.log("SERVER", "Both ready!");
         return true;
     }
 
     private void startGame() {
-        Gdx.app.log("SERVER", "I'm getting there");
         JSONObject data = new JSONObject();
         try{
-            Gdx.app.log("SERVER", "giving updateReady a rest");
             data.put("playing", "playing");
-            Multiplayer1stScreen.getSocket().emit("gameStart", data);
+            socket.emit("gameStart", data);
         } catch(JSONException e){
             Gdx.app.log("SOCKET.IO", "Error sending updated data");
         }
 
-        match = new Match(MultiplayerSettingsScreen.getNumQuestions(), MultiplayerSettingsScreen.getCategories(), Difficulty.EASY, adminClient.getPlayer());
+        match = new Match(MultiplayerSettingsScreen.getNumQuestions(), MultiplayerSettingsScreen.getCategories(), MultiplayerSettingsScreen.getDifficulty(), adminClient.getPlayer());
         Multiplayer2ndScreen.changeToGameScreen();
 
-
+        Gdx.app.log("SERVER", "Question: " + match.getCurrentQuestion().getQuestion());
+        sendQuestion(match.getCurrentQuestion());
+        /*
         int i = 0;
         gameState = gameState.RUNNING;
         while(match.getQuestionIndex() != match.getTotalQuestions()){
             if(gameState == GameState.RUNNING) {
                 i++;
                 Gdx.app.log("SERVER", "Question " + i + ": " + match.getCurrentQuestion().getQuestion());
-                //sendQuestion(match.getCurrentQuestion());
+                sendQuestion(match.getCurrentQuestion());
                 gameState = gameState.WAITING;
             } else {
                 match.nextQuestion();
                 gameState = gameState.RUNNING;
             }
-        }
+        }*/
     }
 
     public void addClient(Client client){
@@ -186,19 +192,43 @@ public class Server {
     public void removeClient(String clientId){
         clients.remove(clientId);
     }
-/*
+
     private void sendQuestion(Question question){
+        ArrayList<String> wrong = new ArrayList<>();
+        String[] options = question.generateOptions();
+        String[] wrongOptions = new String[options.length];
+        int j = 0;
+        for(int i=0; i < options.length; i++){
+            if(!options[i].equals(question.getCorrect())){
+                wrongOptions[j] = options[i];
+                wrong.add(options[i]);
+                j++;
+            }
+        }
+
+        String correctOption = question.getCorrect();
+        String wrongOption1 = wrongOptions[0];
+        String wrongOption2 = wrongOptions[1];
+        String wrongOption3 = wrongOptions[2];
+
         JSONObject data = new JSONObject();
         try{
-            //Gdx.app.log("CLIENT", "Player name: " + this.player.getName());
-            data.put("isReady", this.isReady);
-            data.put("playerName", this.player.getName());
-            socket.emit("playerIsReady", data);
+            data.put("questionString", question.getQuestion());
+            data.put("correctOption", correctOption);
+            data.put("wrongOption1", wrongOption1);
+            data.put("wrongOption2", wrongOption2);
+            data.put("wrongOption3", wrongOption3);
+            data.put("difficulty", question.getDifficulty().toString());
+            data.put("category", question.getCategory().toString());
+            socket.emit("sendQuestion", data);
+            Gdx.app.log("SERVER", "Sent question");
         } catch(JSONException e){
             Gdx.app.log("SOCKET.IO", "Error sending updated data");
         }
+
+
     }
-*/
+
     public void setAdminReady(boolean ready){
         this.adminClient.setReady(ready);
     }

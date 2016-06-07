@@ -7,6 +7,8 @@ import com.buzzit.GUI.screen.Multiplayer2ndScreen;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
@@ -17,8 +19,9 @@ public class Client {
     private final float UPDATE_TIME = 1/60f;
     float timer;
 
-    private Server server = null;
+    private Socket socket;
     private Player player;
+    private Question question;
     private String socketID;
 
     private boolean isReady = false;
@@ -28,6 +31,7 @@ public class Client {
 
     public Client(Player player, String id){
         Gdx.app.log("Client", "Creating client...");
+        this.socket = Multiplayer1stScreen.getSocket();
         this.player = player;
         this.socketID = id;
         this.playing = false;
@@ -37,12 +41,29 @@ public class Client {
     }
 
     private void clientSocketEventListener() {
-        Multiplayer1stScreen.getSocket().on("gameStart", new Emitter.Listener() {
+        socket.on("gameStart", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 setIsPlaying(true);
                 Gdx.app.log("CLIENT: ", "is Playing = " + isPlaying());
                 Multiplayer2ndScreen.changeToGameScreen();
+            }
+        }).on("sendQuestion", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Gdx.app.log("CLIENT", "Getting question");
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    ArrayList<String> wrong = new ArrayList<>();
+                    wrong.add(data.getString("wrongOption1"));
+                    wrong.add(data.getString("wrongOption2"));
+                    wrong.add(data.getString("wrongOption3"));
+
+                    question = new Question(data.getString("questionString"),wrong,data.getString("correctOption"),
+                            Difficulty.convert(data.getString("difficulty")), Category.getCategory(data.getString("category")));
+                } catch (JSONException e) {
+                    Gdx.app.log("CLIENT", "Error sending 'readyness'");
+                }
             }
         });
     }
