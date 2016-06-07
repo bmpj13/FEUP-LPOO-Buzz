@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 //import java.util.Map;
+//sorry nao deu, ele nao reconheceu o client
 
 import io.socket.emitter.Emitter;
 
