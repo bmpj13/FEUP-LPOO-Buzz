@@ -337,6 +337,7 @@ public class SettingsScreen implements Screen {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
+        this.dispose();
     }
 
     /**
@@ -354,4 +355,6 @@ public class SettingsScreen implements Screen {
 
         prefs.flush();
     }
+
+
 }

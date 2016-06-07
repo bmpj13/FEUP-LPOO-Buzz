@@ -2,6 +2,7 @@ package com.buzzit.GUI.state;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
+import com.buzzit.GUI.AudioManager;
 import com.buzzit.GUI.Interactor;
 
 
@@ -24,7 +25,7 @@ public class WaitingAnswer implements GameStrategy {
             public void run() {
                 interactor.labelStatus.setText(Integer.toString(secondsLeft));
                 secondsLeft--;
-
+                AudioManager.getInstance().getSound("clock").play();
                 if (secondsLeft == -1)
                     finished = true;
 

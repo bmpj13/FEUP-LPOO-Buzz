@@ -52,9 +52,5 @@ public class ScreenState {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        menu.dispose();
-        singlePlayer.dispose();
-        settings.dispose();
-        highScore.dispose();
     }
 }

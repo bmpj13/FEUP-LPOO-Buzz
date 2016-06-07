@@ -1,6 +1,7 @@
 package com.buzzit.GUI.state;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.buzzit.GUI.AudioManager;
 import com.buzzit.GUI.Interactor;
 
 public class Decision implements GameStrategy {
@@ -46,6 +48,7 @@ public class Decision implements GameStrategy {
         stage.addActor(labelPointsToAdd);
 
         timerTask = pointAnimationTask();
+
     }
 
 
@@ -87,6 +90,7 @@ public class Decision implements GameStrategy {
 
 
     private Timer.Task pointAnimationTask() {
+
         return new Timer.Task() {
             @Override
             public void run() {
@@ -94,7 +98,9 @@ public class Decision implements GameStrategy {
                 if (timerTicksCount == 0) {
                     labelPointsToAdd.addAction(Actions.moveTo(interactor.labelPoints.getX(),
                             interactor.labelPoints.getY(), MOVE_ANIMATION_TIME));
-
+                    if(pointsToAdd > 0)
+                        AudioManager.getInstance().getSound("correct").play();
+                    else AudioManager.getInstance().getSound("wrong").play();
                     timerTicksCount++;
                 }
                 else if (timerTicksCount == 1) {
@@ -119,14 +125,18 @@ public class Decision implements GameStrategy {
     private Timer.Task addPointsTask(final int pointsAdded) {
         final int increment = pointsAdded / Math.abs(pointsAdded);          // Works with positive or negative add of points
 
-        if (increment > 0)  interactor.labelPoints.setColor(interactor.RightColor);
-        else                interactor.labelPoints.setColor(interactor.WrongColor);
+        if (increment > 0) {interactor.labelPoints.setColor(interactor.RightColor); }
+        else { interactor.labelPoints.setColor(interactor.WrongColor);}
 
         return new Timer.Task() {
             @Override
             public void run () {
                 if (timerTicksCount == Math.abs(pointsAdded)) {
                     interactor.labelPoints.setColor(interactor.labelPointsStyle.fontColor);
+
+                    if(pointsToAdd > 0)AudioManager.getInstance().getSound("correct").stop();
+                    else AudioManager.getInstance().getSound("wrong").stop();
+
                     finished = true;
                 }
                 else {

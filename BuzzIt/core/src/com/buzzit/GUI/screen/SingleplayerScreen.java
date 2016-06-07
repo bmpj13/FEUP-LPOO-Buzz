@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.buzzit.GUI.AudioManager;
 import com.buzzit.GUI.OptionButton;
 import com.buzzit.GUI.state.*;
 import com.buzzit.GUI.Interactor;
@@ -252,8 +253,9 @@ public class SingleplayerScreen implements Screen {
     private void switchStrategy() {
 
 
-        if (strat instanceof ShowQuestion)
+        if (strat instanceof ShowQuestion) {
             strat = new WaitingAnswer(interactor, SECONDS_TO_ANSWER);
+        }
         else if (strat instanceof WaitingAnswer) {
             strat = new Unanswered(interactor, -match.getCurrentQuestion().getDifficulty().getPoints());
             match.unanswered();
@@ -301,6 +303,7 @@ public class SingleplayerScreen implements Screen {
         btnBackgroundTexture.dispose();
         questionBackgroundTexture.dispose();
         generator.dispose();
+
     }
 
 
@@ -333,7 +336,6 @@ public class SingleplayerScreen implements Screen {
             message += "\nTHAT'S TOP 10 WORTHY !!!";
             Play.getInstance().saveHighScores();
         }
-
         finishedDialog.setMessage(message);
         finishedDialog.build().show();
     }
@@ -354,4 +356,11 @@ public class SingleplayerScreen implements Screen {
         Timer.instance().stop();
         gameState = gameState.WAITING;
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        this.dispose();
+    }
+
 }

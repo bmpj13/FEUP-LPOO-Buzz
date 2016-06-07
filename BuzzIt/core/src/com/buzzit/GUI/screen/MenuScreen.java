@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.GUI.AnimatedDrawable;
+import com.buzzit.GUI.AudioManager;
 import com.buzzit.Logic.Play;
 
 import de.tomgrill.gdxdialogs.core.GDXDialogs;
@@ -122,7 +123,7 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-
+                AudioManager.getInstance().getMusic("background").stop();
                 if (Play.playable(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), SettingsScreen.getDifficulty()))
                     ScreenState.getInstance().changeState(ScreenState.ScreenType.SINGLEPLAYER);
                 else
@@ -156,6 +157,8 @@ public class MenuScreen implements Screen {
         notEnoughQuestionsDialog.addButton("Back");
 
         Gdx.input.setInputProcessor(stage);
+
+
     }
 
     /**
@@ -164,6 +167,7 @@ public class MenuScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        AudioManager.getInstance().getMusic("background").play();
     }
 
     /**
@@ -217,5 +221,11 @@ public class MenuScreen implements Screen {
         settingsAtlas.dispose();
         highscoreAtlas.dispose();
         font.dispose();
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        this.dispose();
     }
 }

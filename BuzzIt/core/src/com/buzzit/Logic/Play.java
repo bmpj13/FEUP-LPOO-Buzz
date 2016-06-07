@@ -128,6 +128,8 @@ public class Play {
 
 		try {
 			FileHandle file = Gdx.files.local(highScoresPath);
+			if(!file.exists())
+				return;
 			input = file.read();
 
 			if (input == null) throw new IllegalArgumentException(highScoresPath);

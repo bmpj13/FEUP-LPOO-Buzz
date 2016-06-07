@@ -199,4 +199,10 @@ public class HighscoreScreen implements Screen {
             count++;
         }
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        this.dispose();
+    }
 }
