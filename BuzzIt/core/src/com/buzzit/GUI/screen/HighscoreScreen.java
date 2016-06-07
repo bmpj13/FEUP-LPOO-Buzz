@@ -4,8 +4,10 @@ package com.buzzit.GUI.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -13,6 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.Logic.Play;
 import com.buzzit.Logic.Player;
 
@@ -29,11 +34,15 @@ public class HighscoreScreen implements Screen {
     private BitmapFont fontTitle;
     private FreeTypeFontGenerator generator;
     private Table highscoreTable, positionTable, nameTable, pointsTable;
+    private Viewport viewport;
+    private Camera camera;
 
     /* Constants */
-    final float bigPadX = Gdx.graphics.getWidth() / 10;
-    final float smallPadY = Gdx.graphics.getHeight() / 50;
-    final float bigPadY = Gdx.graphics.getHeight() / 10;
+    final int WIDTH = 1080;
+    final int HEIGHT = 1920;
+    final float bigPadX = WIDTH / 10;
+    final float smallPadY = HEIGHT / 50;
+    final float bigPadY = HEIGHT / 10;
 
     HighscoreScreen(ScreenState.ScreenType pType) {
         create();
@@ -41,6 +50,8 @@ public class HighscoreScreen implements Screen {
     }
 
     public void create() {
+        camera = new PerspectiveCamera();
+        viewport = new FillViewport(WIDTH, HEIGHT, camera);
         Gdx.input.setCatchBackKey(true);
 
         createSkin();
@@ -60,7 +71,7 @@ public class HighscoreScreen implements Screen {
         table.add(highscoreTable);
         table.setFillParent(true);
 
-        stage = new Stage();
+        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
         stage.addActor(table);
     }
 
@@ -70,16 +81,16 @@ public class HighscoreScreen implements Screen {
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/good_times.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = Gdx.graphics.getWidth() / 30;
+        parameter.size = WIDTH / 30;
 
         fontScores = generator.generateFont(parameter);
         skin.add("default", fontScores);
 
-        parameter.size = Gdx.graphics.getWidth() / 20;
+        parameter.size = WIDTH / 20;
         fontHeaders = generator.generateFont(parameter);
         skin.add("headers", fontHeaders);
 
-        parameter.size = Gdx.graphics.getWidth() / 10;
+        parameter.size = WIDTH / 10;
         fontTitle = generator.generateFont(parameter);
         skin.add("title", fontTitle);
 
@@ -124,7 +135,7 @@ public class HighscoreScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height, true);
     }
 
 

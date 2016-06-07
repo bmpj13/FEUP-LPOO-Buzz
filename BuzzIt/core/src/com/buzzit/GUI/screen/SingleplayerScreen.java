@@ -4,8 +4,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -18,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.GUI.OptionButton;
 import com.buzzit.GUI.state.*;
 import com.buzzit.GUI.Interactor;
@@ -42,11 +46,15 @@ public class SingleplayerScreen implements Screen {
     private Texture btnBackgroundTexture;
     private Texture questionBackgroundTexture;
     private Stage stage;
+    private Viewport viewport;
+    private Camera camera;
 
     /* Displayed elements */
     private Interactor interactor;
 
     /* Constants */
+    final int WIDTH = 1080;
+    final int HEIGHT = 1920;
     private enum GameState { RUNNING, WAITING }
     private final int SECONDS_TO_ANSWER = 10;
     private final float TIME_BETWEEN_QUESTIONS = 1f;
@@ -67,6 +75,8 @@ public class SingleplayerScreen implements Screen {
     }
 
     public void create() {
+        camera = new PerspectiveCamera();
+        viewport = new FillViewport(WIDTH, HEIGHT, camera);
         Gdx.input.setCatchBackKey(true);
 
         createSkin();
@@ -75,19 +85,19 @@ public class SingleplayerScreen implements Screen {
         /*** Creating stage ***/
         Table table = new Table();
 
-        table.add(interactor.labelPoints).minWidth((int) (Gdx.graphics.getWidth() * 0.1))
-                .padLeft((int) (Gdx.graphics.getWidth() * 0.7)).padBottom(80);
+        table.add(interactor.labelPoints).minWidth((int) (WIDTH * 0.1))
+                .padLeft((int) (WIDTH * 0.7)).padBottom(80);
         table.row();
 
-        table.add(interactor.labelCategory).minWidth(Gdx.graphics.getWidth()/2).minHeight(100).padBottom(50);
+        table.add(interactor.labelCategory).minWidth(WIDTH/2).minHeight(100).padBottom(50);
         table.row();
 
-        table.add(interactor.labelQuestion).minWidth((int) (Gdx.graphics.getWidth()/1.3)).minHeight(100).padBottom(150);
+        table.add(interactor.labelQuestion).minWidth((int) (WIDTH/1.3)).minHeight(100).padBottom(150);
         table.row();
 
 
         for(OptionButton button: interactor.btnOptions){
-            table.add(button).width(Gdx.graphics.getWidth()/2).height(100).padBottom(100);
+            table.add(button).width(WIDTH/2).height(100).padBottom(100);
             table.row();
         }
 
@@ -97,7 +107,7 @@ public class SingleplayerScreen implements Screen {
         table.setFillParent(true);
 
 
-        stage = new Stage();
+        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
         stage.addActor(table);
 
 
@@ -263,6 +273,7 @@ public class SingleplayerScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        viewport.update(width, height, true);
     }
 
     @Override

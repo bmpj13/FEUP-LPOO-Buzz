@@ -5,8 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -25,6 +27,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.Logic.Category;
 import com.buzzit.Logic.Difficulty;
 
@@ -33,6 +37,8 @@ import java.util.ArrayList;
 public class SettingsScreen implements Screen {
     ScreenState.ScreenType parentType;
 
+    final int WIDTH = 1080;
+    final int HEIGHT = 1920;
     final int FINAL_MAX_SIZE = 20;
     final int MAX_DIGIT_QUESTIONS = 2;
 
@@ -48,6 +54,8 @@ public class SettingsScreen implements Screen {
     private Texture checkedBoxTexture;
     private Texture uncheckedBoxTexture;
     private Texture categoriesBackgroundTexture;
+    private Viewport viewport;
+    private Camera camera;
 
     /* Variables acessed by gameplay */
     static private ArrayList<CheckBox> checkBoxes;
@@ -62,6 +70,8 @@ public class SettingsScreen implements Screen {
 
 
     protected void create() {
+        camera = new PerspectiveCamera();
+        viewport = new StretchViewport(WIDTH, HEIGHT, camera);
         Gdx.input.setCatchBackKey(true);
 
         createSkin();
@@ -83,10 +93,8 @@ public class SettingsScreen implements Screen {
         numQuestionsTextField.setMaxLength(MAX_DIGIT_QUESTIONS);
         numQuestionsTextField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
 
-        //TODO falta limitar o numero
-
-        final int smallPad = Gdx.graphics.getHeight()/60;
-        final int bigPad = Gdx.graphics.getHeight()/12;
+        final int smallPad = HEIGHT/60;
+        final int bigPad = HEIGHT/12;
 
         /* Categories wanted */
         checkBoxes = new ArrayList<>();
@@ -127,8 +135,10 @@ public class SettingsScreen implements Screen {
         Table table = new Table();
 
         table.add(nameLabel).padBottom(smallPad).row();
+        //table.add(nameLabel).row();
 
-        table.add(nameTextField).width(Gdx.graphics.getWidth()/2).padBottom(bigPad).row();
+       // table.add(nameTextField).width(Gdx.graphics.getWidth()/2).padBottom(bigPad).row();
+        table.add(nameTextField).width(WIDTH/2).padBottom(bigPad).row();
 
         table.add(numQuestionsLabel).padBottom(smallPad).row();
         table.add(numQuestionsTextField).padBottom(bigPad).row();
@@ -137,11 +147,12 @@ public class SettingsScreen implements Screen {
         table.add(scrollPane).height(bigPad*4).padBottom(bigPad).row();
 
         table.add(difficultyLabel).padBottom(smallPad).row();
+
         table.add(difficultySelectBox).row();
 
         table.setFillParent(true);
 
-        stage = new Stage();
+        stage = new Stage(new StretchViewport(WIDTH, HEIGHT));
         stage.addActor(table);
     }
 
@@ -150,7 +161,7 @@ public class SettingsScreen implements Screen {
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/good_times.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = Gdx.graphics.getWidth()/25;
+        parameter.size = WIDTH/25;
 
 
         font = generator.generateFont(parameter);
@@ -247,6 +258,7 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        viewport.update(width, height, true);
     }
 
     @Override

@@ -4,8 +4,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -21,6 +23,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.GUI.AnimatedDrawable;
 import com.buzzit.Logic.Play;
 
@@ -30,6 +37,9 @@ import de.tomgrill.gdxdialogs.core.dialogs.GDXButtonDialog;
 
 public class MenuScreen implements Screen {
     private ScreenState.ScreenType parentType;
+
+    final int WIDTH = 1080;
+    final int HEIGHT = 1920;
 
     /* Disposables */
     private Stage stage;
@@ -41,6 +51,8 @@ public class MenuScreen implements Screen {
     private TextureAtlas highscoreAtlas;
     private FreeTypeFontGenerator generator;
     private BitmapFont font;
+    private Viewport viewport;
+    private Camera camera;
 
     /* Dialogs */
     private GDXDialogs dialogs;
@@ -54,6 +66,8 @@ public class MenuScreen implements Screen {
 
 
     public void create() {
+        camera = new PerspectiveCamera();
+        viewport = new FillViewport(WIDTH, HEIGHT, camera);
         Gdx.input.setCatchBackKey(true);
 
         batch = new SpriteBatch();
@@ -111,7 +125,7 @@ public class MenuScreen implements Screen {
         backgroundTexture = new Texture(Gdx.files.internal("menu/background.jpg"));
         buttonsTable.background(new SpriteDrawable(new Sprite(backgroundTexture)));
 
-        stage = new Stage();
+        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
         stage.addActor(buttonsTable);
 
 
@@ -197,6 +211,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        viewport.update(width, height, true);
     }
 
     @Override

@@ -1,12 +1,16 @@
 package com.buzzit.GUI.state;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.GUI.Interactor;
 
 public class Decision implements GameStrategy {
@@ -19,11 +23,17 @@ public class Decision implements GameStrategy {
     private boolean finished;
     private int numberToDisplay;                // Variable used on updatePointsAnimation
     private Timer.Task timerTask;
+    private Viewport viewport;
+    private Camera camera;
 
+    final int WIDTH = 1080;
+    final int HEIGHT = 1920;
     private final float MOVE_ANIMATION_TIME = 0.8f;
     private final float DELAY = 0.8f;
 
     public Decision(final Interactor interactor, final int pointsToAdd) {
+        camera = new PerspectiveCamera();
+        viewport = new FillViewport(WIDTH, HEIGHT, camera);
         this.interactor = interactor;
         timerTicksCount = 0;
 
@@ -36,7 +46,7 @@ public class Decision implements GameStrategy {
         labelPointsToAdd.setPosition(interactor.labelQuestion.getX(), interactor.labelPoints.getY());
 
 
-        stage = new Stage();
+        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
         stage.addActor(labelPointsToAdd);
 
         timerTask = pointAnimationTask();
