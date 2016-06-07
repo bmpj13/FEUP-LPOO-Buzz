@@ -301,6 +301,7 @@ public class Play {
 	}
 
 	public static boolean playable(int numQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty) {
-		return numQuestions <= getQuestionsFromCategory(categoriesChosen, difficulty).size();
+		return (numQuestions > 0 &&
+				numQuestions <= getQuestionsFromCategory(categoriesChosen, difficulty).size());
 	}
 }

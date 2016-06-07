@@ -1,5 +1,6 @@
 package com.buzzit.GUI.screen;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -15,22 +16,33 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.buzzit.GUI.AudioManager;
 import com.buzzit.Logic.Category;
 import com.buzzit.Logic.Difficulty;
+import com.buzzit.Logic.Play;
 
 import java.util.ArrayList;
 
@@ -54,6 +66,7 @@ public class SettingsScreen implements Screen {
     private Texture checkedBoxTexture;
     private Texture uncheckedBoxTexture;
     private Texture categoriesBackgroundTexture;
+    private Texture sliderTexture;
 
     /* Variables acessed by gameplay */
     static private ArrayList<CheckBox> checkBoxes;
@@ -127,6 +140,11 @@ public class SettingsScreen implements Screen {
         String selectedName = prefs.getString("difficulty", Difficulty.EASY.toString());
         difficultySelectBox.setSelected(Difficulty.convert(selectedName));
 
+        Texture soundTexture = new Texture(Gdx.files.internal("settings/soundIcon.png"));
+        ImageButton btnSound = new ImageButton(new SpriteDrawable(new Sprite(soundTexture)));
+        btnSound.getImage().setScaling(Scaling.fit);
+
+
         // Main table
         Table table = new Table();
 
@@ -134,22 +152,34 @@ public class SettingsScreen implements Screen {
         //table.add(nameLabel).row();
 
        // table.add(nameTextField).width(Gdx.graphics.getWidth()/2).padBottom(bigPad).row();
-        table.add(nameTextField).width(WIDTH/2).padBottom(bigPad).row();
+        table.add(nameTextField).width(WIDTH/2).padBottom(smallPad).row();
 
         table.add(numQuestionsLabel).padBottom(smallPad).row();
         table.add(numQuestionsTextField).padBottom(bigPad).row();
 
         table.add(categoriesLabel).padBottom(smallPad).row();
-        table.add(scrollPane).height(bigPad*4).padBottom(bigPad).row();
+        table.add(scrollPane).height(bigPad*4).padBottom(smallPad).row();
 
         table.add(difficultyLabel).padBottom(smallPad).row();
 
-        table.add(difficultySelectBox).row();
+        table.add(difficultySelectBox).padBottom(smallPad).row();
+        table.add(btnSound).row();
 
         table.setFillParent(true);
 
-        stage = new Stage(new StretchViewport(WIDTH, HEIGHT));
+        stage = new Stage(new FitViewport(WIDTH, HEIGHT));
         stage.addActor(table);
+
+
+        btnSound.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                if(AudioManager.getInstance().isActive())
+                    AudioManager.getInstance().muteAll();
+                else AudioManager.getInstance().enableAll();
+            }
+        });
     }
 
     private void createSkin() {
@@ -204,7 +234,6 @@ public class SettingsScreen implements Screen {
         checkBoxStyle.checkboxOff = new SpriteDrawable(new Sprite(uncheckedBoxTexture));
         checkBoxStyle.font = skin.getFont("default");
         skin.add("default", checkBoxStyle);
-
 
         // Selectbox styles
         List.ListStyle listStyle = new List.ListStyle();
@@ -315,6 +344,8 @@ public class SettingsScreen implements Screen {
      * @return int from text field
      */
     public static int getNumQuestions(){
+        if(numQuestionsTextField.getText().equals(""))
+            return 0;
         return Integer.parseInt(numQuestionsTextField.getText());
     }
 

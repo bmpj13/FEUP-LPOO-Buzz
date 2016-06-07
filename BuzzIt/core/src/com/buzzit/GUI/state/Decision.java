@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.GUI.AudioManager;
 import com.buzzit.GUI.Interactor;
@@ -44,7 +46,7 @@ public class Decision implements GameStrategy {
         labelPointsToAdd.setPosition(interactor.labelQuestion.getX(), interactor.labelPoints.getY());
 
 
-        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
+        stage = new Stage(new FitViewport(WIDTH, HEIGHT));
         stage.addActor(labelPointsToAdd);
 
         timerTask = pointAnimationTask();
@@ -99,8 +101,8 @@ public class Decision implements GameStrategy {
                     labelPointsToAdd.addAction(Actions.moveTo(interactor.labelPoints.getX(),
                             interactor.labelPoints.getY(), MOVE_ANIMATION_TIME));
                     if(pointsToAdd > 0)
-                        AudioManager.getInstance().getSound("correct").play();
-                    else AudioManager.getInstance().getSound("wrong").play();
+                        AudioManager.getInstance().getSound("correct").play(AudioManager.getInstance().getVolume());
+                    else AudioManager.getInstance().getSound("wrong").play(AudioManager.getInstance().getVolume());
                     timerTicksCount++;
                 }
                 else if (timerTicksCount == 1) {

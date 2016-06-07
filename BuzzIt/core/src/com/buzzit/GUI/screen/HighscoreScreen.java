@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.Logic.Play;
@@ -67,7 +69,7 @@ public class HighscoreScreen implements Screen {
         table.add(highscoreTable);
         table.setFillParent(true);
 
-        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
+        stage = new Stage(new FitViewport(WIDTH, HEIGHT));
         stage.addActor(table);
     }
 

@@ -21,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.GUI.AudioManager;
 import com.buzzit.GUI.OptionButton;
@@ -104,7 +106,7 @@ public class SingleplayerScreen implements Screen {
         table.setFillParent(true);
 
 
-        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
+        stage = new Stage(new FitViewport(WIDTH, HEIGHT));
         stage.addActor(table);
 
 

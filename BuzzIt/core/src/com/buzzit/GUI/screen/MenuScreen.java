@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g3d.shaders.BaseShader;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.GUI.AnimatedDrawable;
@@ -54,7 +56,7 @@ public class MenuScreen implements Screen {
 
     /* Dialogs */
     private GDXDialogs dialogs;
-    private GDXButtonDialog notEnoughQuestionsDialog;
+    private GDXButtonDialog impossibleQuestionsDialog;
 
 
     public MenuScreen(ScreenState.ScreenType pType) {
@@ -104,17 +106,17 @@ public class MenuScreen implements Screen {
         buttonsTable.add(btnSingleplayer).width(400).height(400).padBottom(100);
         buttonsTable.row();
 
-        buttonsTable.add(btnSettings).padBottom(100);
+        buttonsTable.add(btnSettings).minWidth(200).minHeight(200).padBottom(100);
         buttonsTable.row();
 
-        buttonsTable.add(btnHighscore);
+        buttonsTable.add(btnHighscore).minWidth(200).minHeight(200);
         buttonsTable.row();
         buttonsTable.setFillParent(true);
 
         backgroundTexture = new Texture(Gdx.files.internal("menu/background.jpg"));
         buttonsTable.background(new SpriteDrawable(new Sprite(backgroundTexture)));
 
-        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
+        stage = new Stage(new FitViewport(WIDTH, HEIGHT));
         stage.addActor(buttonsTable);
 
 
@@ -126,8 +128,12 @@ public class MenuScreen implements Screen {
                 AudioManager.getInstance().getMusic("background").stop();
                 if (Play.playable(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), SettingsScreen.getDifficulty()))
                     ScreenState.getInstance().changeState(ScreenState.ScreenType.SINGLEPLAYER);
-                else
-                    notEnoughQuestionsDialog.build().show();
+                else {
+                    if(SettingsScreen.getNumQuestions() == 0)
+                        impossibleQuestionsDialog.setMessage("You have to answer at least 1 question to play");
+                    else impossibleQuestionsDialog.setMessage("We don't have that many questions for you");
+                    impossibleQuestionsDialog.build().show();
+                }
             }
         });
 
@@ -151,10 +157,9 @@ public class MenuScreen implements Screen {
         /*** Dialogs ***/
         dialogs = GDXDialogsSystem.install();
 
-        notEnoughQuestionsDialog = dialogs.newDialog(GDXButtonDialog.class);
-        notEnoughQuestionsDialog.setTitle("Slow down!");
-        notEnoughQuestionsDialog.setMessage("We don't have that many questions for you");
-        notEnoughQuestionsDialog.addButton("Back");
+        impossibleQuestionsDialog = dialogs.newDialog(GDXButtonDialog.class);
+        impossibleQuestionsDialog.setTitle("Slow down!");
+        impossibleQuestionsDialog.addButton("Back");
 
         Gdx.input.setInputProcessor(stage);
 
@@ -167,7 +172,8 @@ public class MenuScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        AudioManager.getInstance().getMusic("background").play();
+        if(!AudioManager.getInstance().getMusic("background").isPlaying())
+            AudioManager.getInstance().getMusic("background").play();
     }
 
     /**

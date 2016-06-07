@@ -25,7 +25,7 @@ public class WaitingAnswer implements GameStrategy {
             public void run() {
                 interactor.labelStatus.setText(Integer.toString(secondsLeft));
                 secondsLeft--;
-                AudioManager.getInstance().getSound("clock").play();
+                AudioManager.getInstance().getSound("clock").play(AudioManager.getInstance().getVolume());
                 if (secondsLeft == -1)
                     finished = true;
 
