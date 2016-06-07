@@ -3,8 +3,10 @@ package com.buzzit.GUI.screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -21,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.Logic.Client;
 import com.buzzit.Logic.Player;
 import com.buzzit.Logic.Server;
@@ -51,6 +55,11 @@ public class Multiplayer1stScreen extends SuperScreen {
     private Texture whiteTexture;
     private Texture connectTexture;
     static private TextField serverTextField;
+    private Viewport viewport;
+    private Camera camera;
+
+    final int WIDTH = 1080;
+    final int HEIGHT = 1920;
 
     Multiplayer1stScreen(ScreenState.ScreenType pType) {
         create();
@@ -60,6 +69,8 @@ public class Multiplayer1stScreen extends SuperScreen {
     @Override
     protected void create() {
         Gdx.input.setCatchBackKey(true);
+        camera = new PerspectiveCamera();
+        viewport = new FillViewport(WIDTH, HEIGHT, camera);
 
         super.create();
 
@@ -92,7 +103,7 @@ public class Multiplayer1stScreen extends SuperScreen {
 
         table.setFillParent(true);
 
-        stage = new Stage();
+        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
         stage.addActor(table);
 
 
@@ -238,7 +249,7 @@ public class Multiplayer1stScreen extends SuperScreen {
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
+        viewport.update(width, height, true);
     }
 
     @Override

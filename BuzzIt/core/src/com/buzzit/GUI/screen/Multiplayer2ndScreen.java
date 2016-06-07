@@ -2,8 +2,10 @@ package com.buzzit.GUI.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.Logic.Client;
 
 public class Multiplayer2ndScreen extends SuperScreen {
@@ -35,6 +39,11 @@ public class Multiplayer2ndScreen extends SuperScreen {
     private Texture checkedBoxTexture;
     private Texture uncheckedBoxTexture;
     static private CheckBox readyCheckBox;
+    private Viewport viewport;
+    private Camera camera;
+
+    final int WIDTH = 1080;
+    final int HEIGHT = 1920;
 
     Multiplayer2ndScreen(ScreenState.ScreenType pType) {
         create();
@@ -44,7 +53,8 @@ public class Multiplayer2ndScreen extends SuperScreen {
     @Override
     protected void create() {
         super.create();
-
+        camera = new PerspectiveCamera();
+        viewport = new FillViewport(WIDTH, HEIGHT, camera);
         createSkin();
 
         /* User name */
@@ -69,7 +79,7 @@ public class Multiplayer2ndScreen extends SuperScreen {
 
         table.setFillParent(true);
 
-        stage = new Stage();
+        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
         stage.addActor(table);
     }
 
@@ -173,7 +183,7 @@ public class Multiplayer2ndScreen extends SuperScreen {
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
+        viewport.update(width, height, true);
     }
 
     @Override

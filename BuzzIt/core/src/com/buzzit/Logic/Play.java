@@ -127,7 +127,7 @@ public class Play {
 		InputStream input = null;
 
 		try {
-			FileHandle file = Gdx.files.local(highScoresPath);
+			FileHandle file = Gdx.files.internal(highScoresPath);
 			input = file.read();
 
 			if (input == null) throw new IllegalArgumentException(highScoresPath);

@@ -97,7 +97,7 @@ public class SingleplayerScreen implements Screen {
 
 
         for(OptionButton button: interactor.btnOptions){
-            table.add(button).width(WIDTH/2).height(100).padBottom(100);
+            table.add(button).width(WIDTH/2).minHeight(100).padBottom(100);
             table.row();
         }
 

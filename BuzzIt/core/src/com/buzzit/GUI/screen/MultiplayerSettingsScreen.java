@@ -3,8 +3,10 @@ package com.buzzit.GUI.screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -27,6 +29,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.buzzit.Logic.Category;
 import com.buzzit.Logic.Difficulty;
 
@@ -48,6 +53,11 @@ public class MultiplayerSettingsScreen extends SuperScreen {
     private Texture uncheckedBoxTexture;
     private Texture categoriesBackgroundTexture;
     private Texture playTexture;
+    private Viewport viewport;
+    private Camera camera;
+
+    final int WIDTH = 1080;
+    final int HEIGHT = 1920;
 
     /* Variables acessed by gameplay */
     static private ArrayList<CheckBox> checkBoxes;
@@ -62,6 +72,8 @@ public class MultiplayerSettingsScreen extends SuperScreen {
     @Override
     protected void create() {
         Gdx.input.setCatchBackKey(true);
+        camera = new PerspectiveCamera();
+        viewport = new FillViewport(WIDTH, HEIGHT, camera);
 
         createSkin();
 
@@ -77,8 +89,8 @@ public class MultiplayerSettingsScreen extends SuperScreen {
         numQuestionsTextField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
 
 
-        final int smallPad = Gdx.graphics.getHeight()/60;
-        final int bigPad = Gdx.graphics.getHeight()/12;
+        final int smallPad = HEIGHT/60;
+        final int bigPad = HEIGHT/12;
 
         /* Categories wanted */
         checkBoxes = new ArrayList<CheckBox>();
@@ -121,19 +133,19 @@ public class MultiplayerSettingsScreen extends SuperScreen {
         table.add(ConnectionLabel).padBottom(smallPad).row();
 
         table.add(numQuestionsLabel).padBottom(smallPad).row();
-        table.add(numQuestionsTextField).padBottom(bigPad).row();
+        table.add(numQuestionsTextField).padBottom(smallPad).row();
 
         table.add(categoriesLabel).padBottom(smallPad).row();
-        table.add(scrollPane).height(600).padBottom(bigPad).row();
+        table.add(scrollPane).height(bigPad*4).padBottom(smallPad).row();
 
         table.add(difficultyLabel).padBottom(smallPad).row();
         table.add(difficultySelectBox).row();
 
-        table.add(btnPlay).width(200).height(200).padTop(100);
+        table.add(btnPlay).width(bigPad).height(bigPad).padTop(smallPad);
 
         table.setFillParent(true);
 
-        stage = new Stage();
+        stage = new Stage(new FillViewport(WIDTH, HEIGHT));
         stage.addActor(table);
 
         /* Listeners */
@@ -250,7 +262,7 @@ public class MultiplayerSettingsScreen extends SuperScreen {
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
+        viewport.update(width, height, true);
     }
 
     @Override
@@ -303,4 +315,7 @@ public class MultiplayerSettingsScreen extends SuperScreen {
         return Integer.parseInt(numQuestionsTextField.getText().toString());
     }
 
+    public static Difficulty getDifficulty(){
+        return difficultySelectBox.getSelected();
+    }
 }

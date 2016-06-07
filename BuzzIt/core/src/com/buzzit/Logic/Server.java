@@ -157,7 +157,7 @@ public class Server {
             Gdx.app.log("SOCKET.IO", "Error sending updated data");
         }
 
-        match = new Match(MultiplayerSettingsScreen.getNumQuestions(), MultiplayerSettingsScreen.getCategories(), Difficulty.EASY, adminClient.getPlayer());
+        match = new Match(MultiplayerSettingsScreen.getNumQuestions(), MultiplayerSettingsScreen.getCategories(), MultiplayerSettingsScreen.getDifficulty(), adminClient.getPlayer());
         Multiplayer2ndScreen.changeToGameScreen();
 
 
