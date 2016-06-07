@@ -2,6 +2,7 @@ package com.buzzit.Logic;
 
 import com.badlogic.gdx.Gdx;
 import com.buzzit.GUI.screen.Multiplayer1stScreen;
+import com.buzzit.GUI.screen.Multiplayer2ndScreen;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +42,7 @@ public class Client {
             public void call(Object... args) {
                 setIsPlaying(true);
                 Gdx.app.log("CLIENT: ", "is Playing = " + isPlaying());
+                Multiplayer2ndScreen.changeToGameScreen();
             }
         });
     }
@@ -58,10 +60,6 @@ public class Client {
                 Gdx.app.log("SOCKET.IO", "Error sending updated data");
             }
         }
-    }
-
-    public void pushAnswer(Player player, String answer){
-
     }
 
     public String getSocketID() {

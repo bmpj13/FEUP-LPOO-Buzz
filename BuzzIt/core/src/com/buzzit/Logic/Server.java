@@ -2,13 +2,15 @@ package com.buzzit.Logic;
 
 import com.badlogic.gdx.Gdx;
 import com.buzzit.GUI.screen.Multiplayer1stScreen;
+import com.buzzit.GUI.screen.Multiplayer2ndScreen;
+import com.buzzit.GUI.screen.MultiplayerSettingsScreen;
 import com.buzzit.GUI.screen.SettingsScreen;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;
+//import java.util.Map;
 
 import io.socket.emitter.Emitter;
 
@@ -17,12 +19,15 @@ import io.socket.emitter.Emitter;
  */
 public class Server {
     private String id;
-
     private Client adminClient;
-    private Match match;
+
     private HashMap<String, Client> clients;
     private int numPlayers = 0;
     private static boolean isPlaying = false;
+
+    private Match match;
+    private enum GameState { RUNNING, WAITING }
+    private GameState gameState;
 
     public Server(){
         Gdx.app.log("Server", "Creating server...");
@@ -86,7 +91,7 @@ public class Server {
                         //Gdx.app.log("SERVER", "Player " + playerID + " asks to be " + isReady);
 
                         if (clients.size() > 1) {
-                            for (Map.Entry<String, Client> entry : clients.entrySet()) {
+                            for (HashMap.Entry<String, Client> entry : clients.entrySet()) {
                                 //Gdx.app.log("SERVER", "Player " + entry.getKey() + " is ready? " + entry.getValue().isReady());
                                 //Gdx.app.log("SERVER", "can it change? " + playerID.equals(entry.getKey()));
                                 if (playerID.equals(entry.getKey())) {
@@ -113,7 +118,7 @@ public class Server {
         if(canStart()){
             isPlaying = true;
 
-            for(Map.Entry<String, Client> entry : clients.entrySet()){
+            for(HashMap.Entry<String, Client> entry : clients.entrySet()){
                 entry.getValue().setReady(false);
             }
 
@@ -130,7 +135,7 @@ public class Server {
             return false;
         }
 
-        for(Map.Entry<String, Client> entry : clients.entrySet()){
+        for(HashMap.Entry<String, Client> entry : clients.entrySet()){
             if(!entry.getValue().isReady()) {
                 Gdx.app.log("SERVER", "Both **NOT** ready!");
                 return false;
@@ -141,6 +146,7 @@ public class Server {
     }
 
     private void startGame() {
+        Gdx.app.log("SERVER", "I'm getting there");
         JSONObject data = new JSONObject();
         try{
             Gdx.app.log("SERVER", "giving updateReady a rest");
@@ -150,13 +156,29 @@ public class Server {
             Gdx.app.log("SOCKET.IO", "Error sending updated data");
         }
 
-        //match = new Match(MultiplayerSettingsScreen.getNumQuestions(), MultiplayerSettingsScreen.getCategories(), Difficulty.EASY, adminClient.getPlayer());
+        match = new Match(MultiplayerSettingsScreen.getNumQuestions(), MultiplayerSettingsScreen.getCategories(), Difficulty.EASY, adminClient.getPlayer());
+        Multiplayer2ndScreen.changeToGameScreen();
+
+
+        int i = 0;
+        gameState = gameState.RUNNING;
+        while(match.getQuestionIndex() != match.getTotalQuestions()){
+            if(gameState == GameState.RUNNING) {
+                i++;
+                Gdx.app.log("SERVER", "Question " + i + ": " + match.getCurrentQuestion().getQuestion());
+                //sendQuestion(match.getCurrentQuestion());
+                gameState = gameState.WAITING;
+            } else {
+                match.nextQuestion();
+                gameState = gameState.RUNNING;
+            }
+        }
     }
 
     public void addClient(Client client){
         Gdx.app.log("Server", "Adding Client...");
         clients.put(client.getSocketID(), client);
-        for(Map.Entry<String, Client> entry : clients.entrySet()){
+        for(HashMap.Entry<String, Client> entry : clients.entrySet()){
             Gdx.app.log("Player is on:", entry.getValue().getSocketID());
         }
     }
@@ -164,21 +186,25 @@ public class Server {
     public void removeClient(String clientId){
         clients.remove(clientId);
     }
-
+/*
+    private void sendQuestion(Question question){
+        JSONObject data = new JSONObject();
+        try{
+            //Gdx.app.log("CLIENT", "Player name: " + this.player.getName());
+            data.put("isReady", this.isReady);
+            data.put("playerName", this.player.getName());
+            socket.emit("playerIsReady", data);
+        } catch(JSONException e){
+            Gdx.app.log("SOCKET.IO", "Error sending updated data");
+        }
+    }
+*/
     public void setAdminReady(boolean ready){
         this.adminClient.setReady(ready);
     }
 
     public Client getAdminClient() {
         return adminClient;
-    }
-
-    public void addPoints(int PlayerID, int points){
-
-    }
-
-    public void pushQuestion(Question question){
-
     }
 
     public static boolean isServerPlaying(){
