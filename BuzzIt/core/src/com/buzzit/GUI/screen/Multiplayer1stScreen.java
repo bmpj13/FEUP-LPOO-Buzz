@@ -55,8 +55,6 @@ public class Multiplayer1stScreen extends SuperScreen {
     private Texture whiteTexture;
     private Texture connectTexture;
     static private TextField serverTextField;
-    private Viewport viewport;
-    private Camera camera;
 
     final int WIDTH = 1080;
     final int HEIGHT = 1920;
@@ -69,8 +67,6 @@ public class Multiplayer1stScreen extends SuperScreen {
     @Override
     protected void create() {
         Gdx.input.setCatchBackKey(true);
-        camera = new PerspectiveCamera();
-        viewport = new FillViewport(WIDTH, HEIGHT, camera);
 
         super.create();
 
@@ -249,7 +245,7 @@ public class Multiplayer1stScreen extends SuperScreen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

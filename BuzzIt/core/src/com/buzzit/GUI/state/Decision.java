@@ -23,8 +23,6 @@ public class Decision implements GameStrategy {
     private boolean finished;
     private int numberToDisplay;                // Variable used on updatePointsAnimation
     private Timer.Task timerTask;
-    private Viewport viewport;
-    private Camera camera;
 
     final int WIDTH = 1080;
     final int HEIGHT = 1920;
@@ -32,8 +30,6 @@ public class Decision implements GameStrategy {
     private final float DELAY = 0.8f;
 
     public Decision(final Interactor interactor, final int pointsToAdd) {
-        camera = new PerspectiveCamera();
-        viewport = new FillViewport(WIDTH, HEIGHT, camera);
         this.interactor = interactor;
         timerTicksCount = 0;
 

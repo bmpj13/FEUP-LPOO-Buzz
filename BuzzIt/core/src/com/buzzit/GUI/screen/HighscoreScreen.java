@@ -34,8 +34,6 @@ public class HighscoreScreen implements Screen {
     private BitmapFont fontTitle;
     private FreeTypeFontGenerator generator;
     private Table highscoreTable, positionTable, nameTable, pointsTable;
-    private Viewport viewport;
-    private Camera camera;
 
     /* Constants */
     final int WIDTH = 1080;
@@ -50,8 +48,6 @@ public class HighscoreScreen implements Screen {
     }
 
     public void create() {
-        camera = new PerspectiveCamera();
-        viewport = new FillViewport(WIDTH, HEIGHT, camera);
         Gdx.input.setCatchBackKey(true);
 
         createSkin();
@@ -135,7 +131,7 @@ public class HighscoreScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
 

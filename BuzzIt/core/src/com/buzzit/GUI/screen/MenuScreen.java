@@ -51,8 +51,6 @@ public class MenuScreen implements Screen {
     private TextureAtlas highscoreAtlas;
     private FreeTypeFontGenerator generator;
     private BitmapFont font;
-    private Viewport viewport;
-    private Camera camera;
 
     /* Dialogs */
     private GDXDialogs dialogs;
@@ -66,8 +64,6 @@ public class MenuScreen implements Screen {
 
 
     public void create() {
-        camera = new PerspectiveCamera();
-        viewport = new FillViewport(WIDTH, HEIGHT, camera);
         Gdx.input.setCatchBackKey(true);
 
         batch = new SpriteBatch();
@@ -211,7 +207,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

@@ -46,8 +46,6 @@ public class SingleplayerScreen implements Screen {
     private Texture btnBackgroundTexture;
     private Texture questionBackgroundTexture;
     private Stage stage;
-    private Viewport viewport;
-    private Camera camera;
 
     /* Displayed elements */
     private Interactor interactor;
@@ -75,8 +73,6 @@ public class SingleplayerScreen implements Screen {
     }
 
     public void create() {
-        camera = new PerspectiveCamera();
-        viewport = new FillViewport(WIDTH, HEIGHT, camera);
         Gdx.input.setCatchBackKey(true);
 
         createSkin();
@@ -273,7 +269,7 @@ public class SingleplayerScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

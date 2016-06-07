@@ -54,8 +54,6 @@ public class SettingsScreen implements Screen {
     private Texture checkedBoxTexture;
     private Texture uncheckedBoxTexture;
     private Texture categoriesBackgroundTexture;
-    private Viewport viewport;
-    private Camera camera;
 
     /* Variables acessed by gameplay */
     static private ArrayList<CheckBox> checkBoxes;
@@ -70,8 +68,6 @@ public class SettingsScreen implements Screen {
 
 
     protected void create() {
-        camera = new PerspectiveCamera();
-        viewport = new StretchViewport(WIDTH, HEIGHT, camera);
         Gdx.input.setCatchBackKey(true);
 
         createSkin();
@@ -258,7 +254,7 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

@@ -39,8 +39,6 @@ public class Multiplayer2ndScreen extends SuperScreen {
     private Texture checkedBoxTexture;
     private Texture uncheckedBoxTexture;
     static private CheckBox readyCheckBox;
-    private Viewport viewport;
-    private Camera camera;
 
     final int WIDTH = 1080;
     final int HEIGHT = 1920;
@@ -53,8 +51,6 @@ public class Multiplayer2ndScreen extends SuperScreen {
     @Override
     protected void create() {
         super.create();
-        camera = new PerspectiveCamera();
-        viewport = new FillViewport(WIDTH, HEIGHT, camera);
         createSkin();
 
         /* User name */
@@ -183,7 +179,7 @@ public class Multiplayer2ndScreen extends SuperScreen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
