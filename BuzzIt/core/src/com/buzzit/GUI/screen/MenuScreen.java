@@ -125,9 +125,11 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                AudioManager.getInstance().getMusic("background").stop();
-                if (Play.playable(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), SettingsScreen.getDifficulty()))
+                if (Play.playable(SettingsScreen.getNumQuestions(),
+                        SettingsScreen.getCategories(), SettingsScreen.getDifficulty())) {
+                    AudioManager.getInstance().getMusic("background").stop();
                     ScreenState.getInstance().changeState(ScreenState.ScreenType.SINGLEPLAYER);
+                }
                 else {
                     if(SettingsScreen.getNumQuestions() == 0)
                         impossibleQuestionsDialog.setMessage("You have to answer at least 1 question to play");

@@ -149,21 +149,20 @@ public class SettingsScreen implements Screen {
         Table table = new Table();
 
         table.add(nameLabel).padBottom(smallPad).row();
-        //table.add(nameLabel).row();
 
-       // table.add(nameTextField).width(Gdx.graphics.getWidth()/2).padBottom(bigPad).row();
         table.add(nameTextField).width(WIDTH/2).padBottom(smallPad).row();
 
         table.add(numQuestionsLabel).padBottom(smallPad).row();
-        table.add(numQuestionsTextField).padBottom(bigPad).row();
+        table.add(numQuestionsTextField).padBottom(smallPad * 4).row();
 
         table.add(categoriesLabel).padBottom(smallPad).row();
         table.add(scrollPane).height(bigPad*4).padBottom(smallPad).row();
 
         table.add(difficultyLabel).padBottom(smallPad).row();
 
-        table.add(difficultySelectBox).padBottom(smallPad).row();
-        table.add(btnSound).row();
+        table.add(difficultySelectBox).padBottom(smallPad * 2).row();
+
+        table.add(btnSound).width(btnSound.getWidth()/2).height(btnSound.getHeight()/2).row();
 
         table.setFillParent(true);
 
