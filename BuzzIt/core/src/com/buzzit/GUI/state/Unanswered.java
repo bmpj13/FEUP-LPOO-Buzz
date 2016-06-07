@@ -1,8 +1,10 @@
 package com.buzzit.gui.state;
 
+import com.buzzit.gui.Interactor;
+
 public class Unanswered extends Decision {
 
-    public Unanswered(final com.buzzit.gui.Interactor interactor, final int pointsToAdd) {
+    public Unanswered(final Interactor interactor, final int pointsToAdd) {
         super(interactor, pointsToAdd);
     }
 

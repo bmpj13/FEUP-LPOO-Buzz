@@ -21,6 +21,8 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.buzzit.gui.OptionButton;
 import com.buzzit.gui.Interactor;
+import com.buzzit.gui.state.*;
+import com.buzzit.logic.*;
 
 import de.tomgrill.gdxdialogs.core.GDXDialogs;
 import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
@@ -31,7 +33,7 @@ import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
 public class SingleplayerScreen implements Screen {
 
     private ScreenState.ScreenType parentType;
-    private com.buzzit.gui.state.GameStrategy strat = null;
+    private GameStrategy strat = null;
 
     /* Disposable elements */
     private Skin skin;
@@ -60,7 +62,7 @@ public class SingleplayerScreen implements Screen {
 
 
     /* Variables */
-    private com.buzzit.logic.Match match;
+    private Match match;
     private GameState gameState;
 
     public SingleplayerScreen(ScreenState.ScreenType pType) {
@@ -205,9 +207,9 @@ public class SingleplayerScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        com.buzzit.logic.Player player = new com.buzzit.logic.Player(SettingsScreen.getName());
-        match = new com.buzzit.logic.Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), SettingsScreen.getDifficulty(), player);
-        strat = new com.buzzit.gui.state.ShowQuestion(interactor, 0, SECONDS_TO_ANSWER, match.getCurrentQuestion());
+        Player player = new Player(SettingsScreen.getName());
+        match = new Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), SettingsScreen.getDifficulty(), player);
+        strat = new ShowQuestion(interactor, 0, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         interactor.hideElementsExceptPoints();
 
         run();
@@ -248,17 +250,17 @@ public class SingleplayerScreen implements Screen {
     private void switchStrategy() {
 
 
-        if (strat instanceof com.buzzit.gui.state.ShowQuestion) {
-            strat = new com.buzzit.gui.state.WaitingAnswer(interactor, SECONDS_TO_ANSWER);
+        if (strat instanceof ShowQuestion) {
+            strat = new WaitingAnswer(interactor, SECONDS_TO_ANSWER);
         }
-        else if (strat instanceof com.buzzit.gui.state.WaitingAnswer) {
-            strat = new com.buzzit.gui.state.Unanswered(interactor, -match.getCurrentQuestion().getDifficulty().getPoints());
+        else if (strat instanceof WaitingAnswer) {
+            strat = new Unanswered(interactor, -match.getCurrentQuestion().getDifficulty().getPoints());
             match.unanswered();
             match.nextQuestion();
         }
-        else if (strat instanceof com.buzzit.gui.state.Decision) {
+        else if (strat instanceof Decision) {
             interactor.nextQuestion(TIME_BETWEEN_QUESTIONS/2, TIME_BETWEEN_QUESTIONS/3);
-            strat = new com.buzzit.gui.state.ShowQuestion(interactor, TIME_BETWEEN_QUESTIONS, SECONDS_TO_ANSWER, match.getCurrentQuestion());
+            strat = new ShowQuestion(interactor, TIME_BETWEEN_QUESTIONS, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         }
 
         strat.start();
@@ -310,11 +312,11 @@ public class SingleplayerScreen implements Screen {
 
         if (match.isCorrect(button.getContent())) {
             match.getPlayer().addPoints(points);
-            strat = new com.buzzit.gui.state.Answered(interactor, button, points, true);
+            strat = new Answered(interactor, button, points, true);
         }
         else {
             match.getPlayer().addPoints(-points);
-            strat = new com.buzzit.gui.state.Answered(interactor, button, -points, false);
+            strat = new Answered(interactor, button, -points, false);
         }
 
         match.nextQuestion();
@@ -327,9 +329,9 @@ public class SingleplayerScreen implements Screen {
 
         String message = "Hey, " + match.getPlayer().getName() + " ! You got " + match.getPlayer().getPoints() + " points.";
 
-        if (com.buzzit.logic.Play.getInstance().addHighScore(match.getPlayer())) {
+        if (Play.getInstance().addHighScore(match.getPlayer())) {
             message += "\nTHAT'S TOP 10 WORTHY !!!";
-            com.buzzit.logic.Play.getInstance().saveHighScores();
+            Play.getInstance().saveHighScores();
         }
         finishedDialog.setMessage(message);
         finishedDialog.build().show();

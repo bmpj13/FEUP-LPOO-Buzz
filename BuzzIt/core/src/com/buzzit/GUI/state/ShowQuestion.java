@@ -2,12 +2,14 @@ package com.buzzit.gui.state;
 
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import com.buzzit.gui.Interactor;
+import com.buzzit.gui.OptionButton;
 import com.buzzit.logic.Question;
 
 
 public class ShowQuestion implements GameStrategy {
     private float timerTicksCount;
-    private com.buzzit.gui.Interactor interactor;
+    private Interactor interactor;
 
 
     private final float delay;
@@ -19,7 +21,7 @@ public class ShowQuestion implements GameStrategy {
     private Question question;
 
 
-    public ShowQuestion (final com.buzzit.gui.Interactor interactor, final float delay, final int secondsToAnswer, Question question) {
+    public ShowQuestion (final Interactor interactor, final float delay, final int secondsToAnswer, Question question) {
         this.timerTicksCount = 0;
         this.interactor = interactor;
 
@@ -45,7 +47,7 @@ public class ShowQuestion implements GameStrategy {
                     interactor.labelQuestion.addAction(Actions.fadeIn(duration));
                 }
                 else if (timerTicksCount == 2) {
-                    for(com.buzzit.gui.OptionButton button: interactor.btnOptions){
+                    for(OptionButton button: interactor.btnOptions){
                         button.addAction(Actions.fadeIn(duration));
                     }
 
@@ -72,7 +74,7 @@ public class ShowQuestion implements GameStrategy {
         interactor.labelCategory.setText(question.getCategory().getName());
 
         int i = 0;
-        for (com.buzzit.gui.OptionButton button: interactor.btnOptions){
+        for (OptionButton button: interactor.btnOptions){
             button.setText(options[i]);
             i++;
         }

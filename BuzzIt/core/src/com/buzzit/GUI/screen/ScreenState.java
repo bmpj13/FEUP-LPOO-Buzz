@@ -5,9 +5,9 @@ import com.badlogic.gdx.Game;
 public class ScreenState {
     private static Game game;
     private static MenuScreen menu;
-    private static com.buzzit.gui.screen.SingleplayerScreen singlePlayer;
-    private static com.buzzit.gui.screen.SettingsScreen settings;
-    private static com.buzzit.gui.screen.HighscoreScreen highScore;
+    private static SingleplayerScreen singlePlayer;
+    private static SettingsScreen settings;
+    private static HighscoreScreen highScore;
     private static ScreenState ourInstance = new ScreenState();
 
     public static ScreenState getInstance() { return ourInstance; }
@@ -18,9 +18,9 @@ public class ScreenState {
 
     private ScreenState() {
         menu = new MenuScreen(null);
-        singlePlayer = new com.buzzit.gui.screen.SingleplayerScreen(ScreenType.MENU);
-        settings = new com.buzzit.gui.screen.SettingsScreen(ScreenType.MENU);
-        highScore = new com.buzzit.gui.screen.HighscoreScreen(ScreenType.MENU);
+        singlePlayer = new SingleplayerScreen(ScreenType.MENU);
+        settings = new SettingsScreen(ScreenType.MENU);
+        highScore = new HighscoreScreen(ScreenType.MENU);
     }
 
     public void setGame(Game g) {

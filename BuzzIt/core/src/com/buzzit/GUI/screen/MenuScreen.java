@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.buzzit.gui.AnimatedDrawable;
 import com.buzzit.gui.AudioManager;
 import com.buzzit.logic.Play;
 
@@ -81,12 +82,12 @@ public class MenuScreen implements Screen {
 
         settingsAtlas = new TextureAtlas(Gdx.files.internal("packs/settings/settings.pack"));
         Animation settingsAnimation = new Animation(1f/20f, settingsAtlas.getRegions());
-        com.buzzit.gui.AnimatedDrawable animatedDrawable = new com.buzzit.gui.AnimatedDrawable(settingsAnimation);
+        AnimatedDrawable animatedDrawable = new AnimatedDrawable(settingsAnimation);
         ImageButton btnSettings = new ImageButton(animatedDrawable, animatedDrawable);
 
         highscoreAtlas = new TextureAtlas(Gdx.files.internal("packs/highscore/highscore.pack"));
         Animation highscoreAnimation = new Animation(1f/20f, highscoreAtlas.getRegions());
-        animatedDrawable = new com.buzzit.gui.AnimatedDrawable(highscoreAnimation);
+        animatedDrawable = new AnimatedDrawable(highscoreAnimation);
         ImageButton btnHighscore = new ImageButton(animatedDrawable, animatedDrawable);
 
         /*** Creating stage ***/
