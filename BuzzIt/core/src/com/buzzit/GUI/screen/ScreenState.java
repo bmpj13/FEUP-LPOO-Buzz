@@ -12,13 +12,14 @@ public class ScreenState {
     private static Multiplayer1stScreen multiPlayer1;
     private static Multiplayer2ndScreen multiPlayer2;
     private static MultiplayerSettingsScreen multiPlayerSettingsScreen;
+    private static MultiplayerGameScreen multiplayerGameScreen;
 
     private static ScreenState ourInstance = new ScreenState();
 
     public static ScreenState getInstance() { return ourInstance; }
 
 
-    public enum ScreenType { MENU, SINGLEPLAYER, SETTINGS, HIGHSCORE, MULTIPLAYER1, MULTIPLAYER2, MULTIPLAYERSETTINGS };
+    public enum ScreenType { MENU, SINGLEPLAYER, SETTINGS, HIGHSCORE, MULTIPLAYER1, MULTIPLAYER2, MULTIPLAYERSETTINGS, MULTIPLAYERGAMESCREEN };
 
 
     private ScreenState() {
@@ -29,6 +30,7 @@ public class ScreenState {
         multiPlayer1 = new Multiplayer1stScreen(ScreenType.MENU);
         multiPlayer2 = new Multiplayer2ndScreen(ScreenType.MENU);
         multiPlayerSettingsScreen = new MultiplayerSettingsScreen(ScreenType.MENU);
+        multiplayerGameScreen = new MultiplayerGameScreen(ScreenType.MENU);
     }
 
     public void setGame(Game g) {
@@ -65,6 +67,10 @@ public class ScreenState {
             case MULTIPLAYER2:
                 game.setScreen(multiPlayer2);
                 break;
+
+            case MULTIPLAYERGAMESCREEN:
+                game.setScreen(multiplayerGameScreen);
+                break;
         }
     }
 
@@ -78,6 +84,7 @@ public class ScreenState {
         multiPlayer1.dispose();
         multiPlayer2.dispose();
         multiPlayerSettingsScreen.dispose();
+        multiplayerGameScreen.dispose();
         highScore.dispose();
     }
 }

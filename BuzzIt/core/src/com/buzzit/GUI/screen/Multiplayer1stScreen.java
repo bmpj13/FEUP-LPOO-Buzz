@@ -151,7 +151,7 @@ public class Multiplayer1stScreen extends SuperScreen {
                         ScreenState.getInstance().changeState(ScreenState.ScreenType.MULTIPLAYERSETTINGS);
                     } else {
                         Gdx.app.log("Multiplayer 1st Screen", "Creating client!");
-                        client = new Client(player, id);
+                        client = new Client(new Player(SettingsScreen.getName()), id);
 
                         ScreenState.getInstance().changeState(ScreenState.ScreenType.MULTIPLAYER2);
                     }

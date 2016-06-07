@@ -171,20 +171,6 @@ public class Multiplayer2ndScreen extends SuperScreen {
         stage.draw();
     }
 
-    private void tryUpdateReady() {
-        if(isAdmin()){
-            //Gdx.app.log("MULTI2SCREEN: ", "is Admin & is " + getAdminClient().isPlaying() + "playing");
-            if(!getAdminClient().isPlaying()){
-                updateReady();
-            }
-        } else {
-            //Gdx.app.log("MULTI2SCREEN: ", "is NOT Admin & is " + getClient().isPlaying() + "playing");
-            if(!getClient().isPlaying()){
-                updateReady();
-            }
-        }
-    }
-
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
@@ -226,6 +212,20 @@ public class Multiplayer2ndScreen extends SuperScreen {
         generator.dispose();
     }
 
+    private void tryUpdateReady() {
+        if(isAdmin()){
+            //Gdx.app.log("MULTI2SCREEN: ", "is Admin & is " + getAdminClient().isPlaying() + "playing");
+            if(!getAdminClient().isPlaying()){
+                updateReady();
+            }
+        } else {
+            //Gdx.app.log("MULTI2SCREEN: ", "is NOT Admin & is " + getClient().isPlaying() + "playing");
+            if(!getClient().isPlaying()){
+                updateReady();
+            }
+        }
+    }
+
     public static void updateReady() {
         if(isAdmin()){
             if (readyCheckBox.isChecked()) {
@@ -258,6 +258,10 @@ public class Multiplayer2ndScreen extends SuperScreen {
 
     private static Client getClient(){
         return Multiplayer1stScreen.getClient();
+    }
+
+    public static void changeToGameScreen(){
+        ScreenState.getInstance().changeState(ScreenState.ScreenType.MULTIPLAYERGAMESCREEN);
     }
 }
 
