@@ -319,8 +319,15 @@ public class SingleplayerScreen implements Screen {
 
     private void endGame() {
         stop();
-        finishedDialog.setMessage("Hey, " + match.getPlayer().getName() + " !\n" +
-                "You got " + match.getPlayer().getPoints() + " points.");
+
+        String message = "Hey, " + match.getPlayer().getName() + " ! You got " + match.getPlayer().getPoints() + " points.";
+
+        if (Play.getInstance().addHighScore(match.getPlayer())) {
+            message += "\nTHAT'S TOP 10 WORTHY !!!";
+            Play.getInstance().saveHighScores();
+        }
+
+        finishedDialog.setMessage(message);
         finishedDialog.build().show();
     }
 

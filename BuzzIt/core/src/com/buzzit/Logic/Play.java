@@ -2,6 +2,7 @@ package com.buzzit.Logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +21,7 @@ public class Play {
 	final String easyPath = "data/easy.properties";
 	final String mediumPath = "data/medium.properties";
 	final String hardPath = "data/hard.properties";
-	private final String highScoresPath = "data/highscores.properties";
+	final String highScoresPath = "data/highscores.properties";
 
 
 	/**
@@ -126,7 +127,7 @@ public class Play {
 		InputStream input = null;
 
 		try {
-			FileHandle file = Gdx.files.internal(highScoresPath);
+			FileHandle file = Gdx.files.local(highScoresPath);
 			input = file.read();
 
 			if (input == null) throw new IllegalArgumentException(highScoresPath);
@@ -145,10 +146,12 @@ public class Play {
 				highScores.add(player);
 			}
 
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			Gdx.app.log("EXCEPTION","IO Exception");
-		} finally{
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (GdxRuntimeException e) {
+			// File doesn't exist yet
+			return;
+		} finally {
 			if(input!=null){
 				try {
 					input.close();
@@ -167,7 +170,7 @@ public class Play {
 		OutputStream output = null;
 
 		try {
-			FileHandle file = Gdx.files.internal(highScoresPath);
+			FileHandle file = Gdx.files.local(highScoresPath);
 			output = file.write(true);
 
 			if (output == null) throw new IllegalArgumentException(highScoresPath);
@@ -197,7 +200,7 @@ public class Play {
 	 * @param player Player to compare points
 	 * @return Returns index of position if that score has fewer points; -1 if it's not better than any preiou score
 	 */
-	static public boolean isHighScore(Player player) {
+	 public boolean isHighScore(Player player) {
 
 		if (highScores.size() < MAX_NUMBER_HIGHSCORE_ENTRIES)
 			return true;
@@ -212,7 +215,7 @@ public class Play {
 	 * @param player Player to add to ArrayList
 	 * @return Returns true if it set a new highScore; false if not
 	 */
-	static public boolean addHighScore(Player player) {
+	 public boolean addHighScore(Player player) {
 
 		if (isHighScore(player)) {
 
