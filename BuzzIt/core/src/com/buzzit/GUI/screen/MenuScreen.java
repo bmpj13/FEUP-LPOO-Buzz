@@ -46,7 +46,6 @@ public class MenuScreen implements Screen {
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private Texture playTexture;
-    private Texture multiPlayTexture;
     private TextureAtlas settingsAtlas;
     private TextureAtlas highscoreAtlas;
     private FreeTypeFontGenerator generator;
@@ -86,10 +85,6 @@ public class MenuScreen implements Screen {
         ImageButton btnSingleplayer = new ImageButton(new SpriteDrawable(new Sprite(playTexture)));
         btnSingleplayer.getImage().setScaling(Scaling.fit);
 
-        multiPlayTexture = new Texture(Gdx.files.internal("menu/multiplayer.png"));
-        ImageButton btnMultiplayer = new ImageButton(new SpriteDrawable(new Sprite(multiPlayTexture)));
-        btnMultiplayer.getImage().setScaling(Scaling.fit);
-
         settingsAtlas = new TextureAtlas(Gdx.files.internal("packs/settings/settings.pack"));
         Animation settingsAnimation = new Animation(1f/20f, settingsAtlas.getRegions());
         AnimatedDrawable animatedDrawable = new AnimatedDrawable(settingsAnimation);
@@ -106,9 +101,6 @@ public class MenuScreen implements Screen {
         buttonsTable.row();
 
         buttonsTable.add(btnSingleplayer).width(400).height(400).padBottom(100);
-        buttonsTable.row();
-
-        buttonsTable.add(btnMultiplayer).width(300).height(300).padBottom(90);
         buttonsTable.row();
 
         buttonsTable.add(btnSettings).padBottom(100);
@@ -135,14 +127,6 @@ public class MenuScreen implements Screen {
                     ScreenState.getInstance().changeState(ScreenState.ScreenType.SINGLEPLAYER);
                 else
                     notEnoughQuestionsDialog.build().show();
-            }
-        });
-
-        btnMultiplayer.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                ScreenState.getInstance().changeState(ScreenState.ScreenType.MULTIPLAYER1);
             }
         });
 
@@ -228,7 +212,6 @@ public class MenuScreen implements Screen {
     public void dispose() {
         backgroundTexture.dispose();
         playTexture.dispose();
-        multiPlayTexture.dispose();
         stage.dispose();
         batch.dispose();
         settingsAtlas.dispose();
