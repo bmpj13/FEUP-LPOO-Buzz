@@ -5,8 +5,7 @@ var io = require('socket.io')(server);
 var clients = 0;
 var players = [];
 
-var question;
-var answerOptions;
+var currentQuestion;
 
 server.listen(8080, function(){
 	console.log("Server is now running...")
@@ -52,9 +51,14 @@ io.on('connection' , function(socket){
 
 	socket.on('gameStart', function(){
 		console.log("Starting Game");
-
+        //currentQuestion = new question("","","","","");
 		socket.broadcast.emit('gameStart', "gameStart")
 	});
+
+    socket.on('sendQuestion', function(data){
+        data.id = socket.id;
+        socket.broadcast.emit('sendQuestion', data);
+    });
 
 	players.push(new player("playerName"), socket.id);
 });
@@ -64,15 +68,4 @@ function player(name, id){
     this.name = name;
     this.points = 0;
     this.isReady = false;
-}
-
-function question(questionString){
-    this.questionString = questionString;
-}
-
-function answerOptions(optionA, optionB, optionC, optionD){
-    this.optionA = optionA;
-    this.optionB = optionB;
-    this.optionC = optionC;
-    this.optionD = optionD;
 }
