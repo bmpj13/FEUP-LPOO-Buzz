@@ -19,8 +19,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.buzzit.gui.OptionButton;
 import com.buzzit.gui.Interactor;
+import com.buzzit.gui.OptionButton;
+import com.buzzit.gui.state.Answered;
+import com.buzzit.gui.state.Decision;
+import com.buzzit.gui.state.GameStrategy;
+import com.buzzit.gui.state.ShowQuestion;
+import com.buzzit.gui.state.Unanswered;
+import com.buzzit.gui.state.WaitingAnswer;
 
 import de.tomgrill.gdxdialogs.core.GDXDialogs;
 import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
@@ -31,7 +37,7 @@ import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
 public class SingleplayerScreen implements Screen {
 
     private ScreenState.ScreenType parentType;
-    private com.buzzit.gui.state.GameStrategy strat = null;
+    private GameStrategy strat = null;
 
     /* Disposable elements */
     private Skin skin;
@@ -207,7 +213,7 @@ public class SingleplayerScreen implements Screen {
 
         com.buzzit.logic.Player player = new com.buzzit.logic.Player(SettingsScreen.getName());
         match = new com.buzzit.logic.Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), SettingsScreen.getDifficulty(), player);
-        strat = new com.buzzit.gui.state.ShowQuestion(interactor, 0, SECONDS_TO_ANSWER, match.getCurrentQuestion());
+        strat = new ShowQuestion(interactor, 0, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         interactor.hideElementsExceptPoints();
 
         run();
@@ -248,17 +254,17 @@ public class SingleplayerScreen implements Screen {
     private void switchStrategy() {
 
 
-        if (strat instanceof com.buzzit.gui.state.ShowQuestion) {
-            strat = new com.buzzit.gui.state.WaitingAnswer(interactor, SECONDS_TO_ANSWER);
+        if (strat instanceof ShowQuestion) {
+            strat = new WaitingAnswer(interactor, SECONDS_TO_ANSWER);
         }
-        else if (strat instanceof com.buzzit.gui.state.WaitingAnswer) {
-            strat = new com.buzzit.gui.state.Unanswered(interactor, -match.getCurrentQuestion().getDifficulty().getPoints());
+        else if (strat instanceof WaitingAnswer) {
+            strat = new Unanswered(interactor, -match.getCurrentQuestion().getDifficulty().getPoints());
             match.unanswered();
             match.nextQuestion();
         }
-        else if (strat instanceof com.buzzit.gui.state.Decision) {
+        else if (strat instanceof Decision) {
             interactor.nextQuestion(TIME_BETWEEN_QUESTIONS/2, TIME_BETWEEN_QUESTIONS/3);
-            strat = new com.buzzit.gui.state.ShowQuestion(interactor, TIME_BETWEEN_QUESTIONS, SECONDS_TO_ANSWER, match.getCurrentQuestion());
+            strat = new ShowQuestion(interactor, TIME_BETWEEN_QUESTIONS, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         }
 
         strat.start();
@@ -303,18 +309,18 @@ public class SingleplayerScreen implements Screen {
 
 
 
-    private void handleButton(OptionButton button) {
+    private void handleButton(com.buzzit.gui.OptionButton button) {
         strat.finish();
 
         int points = match.getCurrentQuestion().getDifficulty().getPoints();
 
         if (match.isCorrect(button.getContent())) {
             match.getPlayer().addPoints(points);
-            strat = new com.buzzit.gui.state.Answered(interactor, button, points, true);
+            strat = new Answered(interactor, button, points, true);
         }
         else {
             match.getPlayer().addPoints(-points);
-            strat = new com.buzzit.gui.state.Answered(interactor, button, -points, false);
+            strat = new Answered(interactor, button, -points, false);
         }
 
         match.nextQuestion();

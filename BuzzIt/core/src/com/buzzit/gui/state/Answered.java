@@ -3,11 +3,10 @@ package com.buzzit.gui.state;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Timer;
 import com.buzzit.gui.Interactor;
-import com.buzzit.gui.OptionButton;
 
 public class Answered extends Decision implements com.buzzit.gui.state.GameStrategy {
     private Interactor interactor;
-    private OptionButton button;
+    private com.buzzit.gui.OptionButton button;
     private int timerTicksCount;
     private final int numberAnimations;
     private Color color;
@@ -18,7 +17,7 @@ public class Answered extends Decision implements com.buzzit.gui.state.GameStrat
     private final Color finalColor;
     private boolean finished;
 
-    public Answered(final Interactor interactor, OptionButton button, int pointsToAdd, boolean answeredCorrectly) {
+    public Answered(final Interactor interactor, com.buzzit.gui.OptionButton button, int pointsToAdd, boolean answeredCorrectly) {
         super(interactor, pointsToAdd);
 
         this.interactor = interactor;

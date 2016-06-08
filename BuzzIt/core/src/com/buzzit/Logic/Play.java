@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class Play {
 	static private int MAX_NUMBER_HIGHSCORE_ENTRIES = 10;
-	static private ArrayList<com.buzzit.logic.Player> highScores;
+	static private ArrayList<Player> highScores;
 	static private ArrayList<Question>[][] questions;
 
 	final String easyPath = "data/easy.properties";
@@ -42,22 +42,22 @@ public class Play {
 	 */
 	private Play() {
 		highScores = new ArrayList<>();
-		questions = new ArrayList[com.buzzit.logic.Difficulty.values().length][com.buzzit.logic.Category.values().length];
-		for(com.buzzit.logic.Category category : com.buzzit.logic.Category.values()){
+		questions = new ArrayList[Difficulty.values().length][Category.values().length];
+		for(Category category : Category.values()){
 			ArrayList<Question> q = new ArrayList<>();
-			questions[com.buzzit.logic.Difficulty.EASY.getIndex()][category.getIndex()] = q;
+			questions[Difficulty.EASY.getIndex()][category.getIndex()] = q;
 
 			q = new ArrayList<>();
-			questions[com.buzzit.logic.Difficulty.MEDIUM.getIndex()][category.getIndex()] = q;
+			questions[Difficulty.MEDIUM.getIndex()][category.getIndex()] = q;
 
 			q = new ArrayList<>();
-			questions[com.buzzit.logic.Difficulty.HARD.getIndex()][category.getIndex()] = q;
+			questions[Difficulty.HARD.getIndex()][category.getIndex()] = q;
 		}
 
 
-		readFile(com.buzzit.logic.Difficulty.EASY, questions[com.buzzit.logic.Difficulty.EASY.getIndex()], easyPath);
-		readFile(com.buzzit.logic.Difficulty.MEDIUM, questions[com.buzzit.logic.Difficulty.MEDIUM.getIndex()], mediumPath);
-		readFile(com.buzzit.logic.Difficulty.HARD, questions[com.buzzit.logic.Difficulty.HARD.getIndex()], hardPath);
+		readFile(Difficulty.EASY, questions[Difficulty.EASY.getIndex()], easyPath);
+		readFile(Difficulty.MEDIUM, questions[Difficulty.MEDIUM.getIndex()], mediumPath);
+		readFile(Difficulty.HARD, questions[Difficulty.HARD.getIndex()], hardPath);
 		readHighScores();
 	}
 
@@ -67,7 +67,7 @@ public class Play {
 	 * @param questionsByCategory BiDimensional Array to keep questions organized by category
 	 * @param filepath Path of file
 	 */
-	public void readFile(com.buzzit.logic.Difficulty difficulty, ArrayList<Question>[] questionsByCategory, String filepath) {
+	public void readFile(Difficulty difficulty, ArrayList<Question>[] questionsByCategory, String filepath) {
 		Properties prop = new Properties();
 		InputStream input = null;
 
@@ -87,7 +87,7 @@ public class Play {
 				String question = prop.getProperty("question" + i);
 				int answers = Integer.parseInt(prop.getProperty("numanswers" + i));
 				String categoryName = prop.getProperty("category" + i);
-				com.buzzit.logic.Category category = com.buzzit.logic.Category.getCategory(categoryName);
+				Category category = Category.getCategory(categoryName);
 				int categoryIndex = category.getIndex();
 
 				String correct = new String();
@@ -143,7 +143,7 @@ public class Play {
 				String name = prop.getProperty("name" + i);
 				int points =  Integer.parseInt(prop.getProperty("points" + i));
 
-				com.buzzit.logic.Player player = new com.buzzit.logic.Player(name);
+				Player player = new Player(name);
 				player.setPoints(points);
 				highScores.add(player);
 			}
@@ -202,7 +202,7 @@ public class Play {
 	 * @param player Player to compare points
 	 * @return Returns index of position if that score has fewer points; -1 if it's not better than any preiou score
 	 */
-	 public boolean isHighScore(com.buzzit.logic.Player player) {
+	 public boolean isHighScore(Player player) {
 
 		if (highScores.size() < MAX_NUMBER_HIGHSCORE_ENTRIES)
 			return true;
@@ -217,7 +217,7 @@ public class Play {
 	 * @param player Player to add to ArrayList
 	 * @return Returns true if it set a new highScore; false if not
 	 */
-	 public boolean addHighScore(com.buzzit.logic.Player player) {
+	 public boolean addHighScore(Player player) {
 
 		if (isHighScore(player)) {
 
@@ -263,10 +263,10 @@ public class Play {
 	 * @param difficulty Enum of chosen difficulty
 	 * @return Return all questions from given categories
 	 */
-	private static ArrayList<Question> getQuestionsFromCategory(ArrayList<com.buzzit.logic.Category> categoriesChosen, com.buzzit.logic.Difficulty difficulty){
+	private static ArrayList<Question> getQuestionsFromCategory(ArrayList<Category> categoriesChosen, Difficulty difficulty){
 
 		ArrayList<Question> q = new ArrayList<>();
-		for(com.buzzit.logic.Category cat:categoriesChosen){
+		for(Category cat:categoriesChosen){
 			q.addAll(Play.questions[difficulty.getIndex()][cat.getIndex()]);
 		}
 		return q;
@@ -279,7 +279,7 @@ public class Play {
 	 * @param difficulty Difficulty of questions
 	 * @return ArrayList of Question
 	 */
-	public ArrayList<Question> play(int totalQuestions, ArrayList<com.buzzit.logic.Category> categoriesChosen, com.buzzit.logic.Difficulty difficulty){
+	public ArrayList<Question> play(int totalQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty){
 		ArrayList<Question> q = new ArrayList<>();
 
 		// gets all questions from selected categories
@@ -296,11 +296,11 @@ public class Play {
 	}
 
 
-	public ArrayList<com.buzzit.logic.Player> getHighScores() {
+	public ArrayList<Player> getHighScores() {
 		return highScores;
 	}
 
-	public static boolean playable(int numQuestions, ArrayList<com.buzzit.logic.Category> categoriesChosen, com.buzzit.logic.Difficulty difficulty) {
+	public static boolean playable(int numQuestions, ArrayList<Category> categoriesChosen, Difficulty difficulty) {
 		return (numQuestions > 0 &&
 				numQuestions <= getQuestionsFromCategory(categoriesChosen, difficulty).size());
 	}

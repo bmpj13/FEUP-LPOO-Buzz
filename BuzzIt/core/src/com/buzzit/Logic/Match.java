@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Match {
 
-    private ArrayList<com.buzzit.logic.Question> questions;
+    private ArrayList<Question> questions;
     private int questionIndex;
     private int totalQuestions;
     private Player player;
@@ -38,7 +38,7 @@ public class Match {
      * Gets current question
      * @return Question from ArrayList
      */
-    public com.buzzit.logic.Question getCurrentQuestion(){return questions.get(questionIndex);}
+    public Question getCurrentQuestion(){return questions.get(questionIndex);}
 
     /**
      * Sets index to next Question
@@ -51,7 +51,7 @@ public class Match {
      * Takes points in case the player doesn't answer in time
      */
     public void unanswered(){
-        com.buzzit.logic.Question question = questions.get(questionIndex);
+        Question question = questions.get(questionIndex);
         player.addPoints(-question.getDifficulty().getPoints());
     }
 
@@ -59,7 +59,7 @@ public class Match {
      *
      * @return Returns all questions in ArrayList
      */
-    public ArrayList<com.buzzit.logic.Question> getQuestions() {
+    public ArrayList<Question> getQuestions() {
         return questions;
     }
 
