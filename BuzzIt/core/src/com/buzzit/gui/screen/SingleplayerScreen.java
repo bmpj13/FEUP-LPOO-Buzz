@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.buzzit.gui.Interactor;
-<<<<<<< HEAD:BuzzIt/core/src/com/buzzit/gui/screen/SingleplayerScreen.java
+
 import com.buzzit.gui.OptionButton;
 import com.buzzit.gui.state.Answered;
 import com.buzzit.gui.state.Decision;
@@ -28,10 +28,7 @@ import com.buzzit.gui.state.GameStrategy;
 import com.buzzit.gui.state.ShowQuestion;
 import com.buzzit.gui.state.Unanswered;
 import com.buzzit.gui.state.WaitingAnswer;
-=======
-import com.buzzit.gui.state.*;
 import com.buzzit.logic.*;
->>>>>>> 54f063b275a656d66f13c4695856cf06444d0915:BuzzIt/core/src/com/buzzit/GUI/screen/SingleplayerScreen.java
 
 import de.tomgrill.gdxdialogs.core.GDXDialogs;
 import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
@@ -216,13 +213,10 @@ public class SingleplayerScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-<<<<<<< HEAD:BuzzIt/core/src/com/buzzit/gui/screen/SingleplayerScreen.java
-        com.buzzit.logic.Player player = new com.buzzit.logic.Player(SettingsScreen.getName());
-        match = new com.buzzit.logic.Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), SettingsScreen.getDifficulty(), player);
-=======
+
         Player player = new Player(SettingsScreen.getName());
         match = new Match(SettingsScreen.getNumQuestions(), SettingsScreen.getCategories(), SettingsScreen.getDifficulty(), player);
->>>>>>> 54f063b275a656d66f13c4695856cf06444d0915:BuzzIt/core/src/com/buzzit/GUI/screen/SingleplayerScreen.java
+
         strat = new ShowQuestion(interactor, 0, SECONDS_TO_ANSWER, match.getCurrentQuestion());
         interactor.hideElementsExceptPoints();
 
