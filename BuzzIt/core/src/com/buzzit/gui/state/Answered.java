@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Timer;
 import com.buzzit.gui.Interactor;
 
-public class Answered extends Decision implements com.buzzit.gui.state.GameStrategy {
+public class Answered extends Decision implements GameStrategy {
     private Interactor interactor;
     private com.buzzit.gui.OptionButton button;
     private int timerTicksCount;
